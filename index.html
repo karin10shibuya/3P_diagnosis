@@ -81,7 +81,16 @@
         .hachiko-visible { opacity: 1 !important; display: block !important; animation: fadeIn 1.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .logo-title { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
+        /* ロゴ画像用スタイル */
+        .logo-img { 
+            width: 100%; 
+            max-width: 320px; 
+            height: auto; 
+            margin-bottom: 20px; 
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
         
         .hachiko-img { 
             width: 100%; 
@@ -186,7 +195,9 @@
 
 <div id="game-box">
     <div id="title-screen">
-        <div class="logo-title">かりんと渋谷店<br>理想の3P診断</div>
+        <!-- ロゴ画像に差し替え -->
+        <img src="logo.png" class="logo-img" alt="かりんと渋谷店 理想の3P診断">
+        
         <!-- タイトル画面用のハチコ画像 -->
         <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
         <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
@@ -224,9 +235,9 @@
     </div>
 </div>
 
-<!-- 紹介文とメニュー -->
-<div class="intro-container">
-    <div class="intro-title">🐾 ハチコが贈る 渋谷の3Pメニュー 🐾</div>
+<!-- 紹介文とメニュー（最初はhiddenで非表示） -->
+<div id="menu-container" class="intro-container hidden">
+    <div class="intro-title">🐾 他にもこんな3Pスタイルがあるワン！ 🐾</div>
 
     <div class="job-card">
         <div class="job-card-header"><span class="job-card-name">1. W女王様のサンドイッチ型</span></div>
@@ -282,10 +293,14 @@
     
     const scriptURL = '';
 
-    // ハチコ画像（1～6）の中からランダムなファイル名を返す関数
+    // 拡張子の違い（1は.jpg、2〜6は.jpeg）に対応したランダム選出関数
     function getRandomHachikoImage() {
-        const randomIndex = Math.floor(Math.random() * 6) + 1; // 1〜6のランダム整数
-        return `hachiko${randomIndex}.jpg`;
+        const randomIndex = Math.floor(Math.random() * 6) + 1;
+        if (randomIndex === 1) {
+            return `hachiko1.jpg`;
+        } else {
+            return `hachiko${randomIndex}.jpeg`;
+        }
     }
 
     // 画面読み込み時の処理
@@ -354,142 +369,4 @@
             {t: "グラマラスなW濃厚系美女", j: "flower"},
             {t: "体力無限大のWドS美女", j: "drain"}
         ]},
-        { q: "2人から同時に何をおねだりされたい？", a: [
-            {t: "「もっと私達に跪きなさい」という命令", j: "sandwich"},
-            {t: "「どっちの言うことを聞くの？」という嫌がらせ", j: "tsundere"},
-            {t: "「ハチコと一緒に『ワン』って言って？」という言葉", j: "hachiko"},
-            {t: "「力を抜いて全部預けて？」という甘やかし", j: "heal"}
-        ]},
-        { q: "身体の自由を制限されるとしたら？", a: [
-            {t: "2人の重みで完全に押し潰される", j: "sandwich"},
-            {t: "首輪を繋がれて2人に引っぱられる", j: "hachiko"},
-            {t: "絶え間ない愛撫で動けなくされる", j: "flower"},
-            {t: "拘束具でがっちり固定される", j: "lock"}
-        ]},
-        { q: "プレイが終わった直後、どうされていたい？", a: [
-            {t: "「威張ってた割に可愛かったね」と笑われたい", j: "pet"},
-            {t: "抜け殻みたいに体力を絞り尽くされていたい", j: "drain"},
-            {t: "2人の胸に包まれてそのまま眠りたい", j: "heal"},
-            {t: "縛られたまま放置されて余韻に浸りたい", j: "lock"}
-        ]},
-        { q: "あなたが密かに憧れている「シチュエーション」は？", a: [
-            {t: "主導権を握ろうとして結局ダブルで搾取される", j: "pet"},
-            {t: "全身の肌という肌を同時に舐め回される", j: "flower"},
-            {t: "息つく暇もなく交互にイジられ続ける", j: "drain"},
-            {t: "ツンとデレの温度差で脳がバグる", j: "tsundere"}
-        ]},
-        { q: "ハチコに「ご主人様、どんなお仕置きが好きワン？」と聞かれたら？", a: [
-            {t: "「2人で順番に踏みつけてほしい」", j: "sandwich"},
-            {t: "「ハチコと一緒にご褒美をもらいたい」", j: "hachiko"},
-            {t: "「代わる代わる搾り取ってほしい」", j: "drain"},
-            {t: "「絶対に逃げられないようにしてほしい」", j: "lock"}
-        ]},
-        { q: "最後に……あなたが渋谷店で本当に体験したいのは？", a: [
-            {t: "ツンデレと小悪魔の翻弄", j: "tsundere"},
-            {t: "主従逆転の屈辱体験", j: "pet"},
-            {t: "左右からの濃厚ダブル愛撫", j: "flower"},
-            {t: "バブみ溢れるWお姉さんの癒やし", j: "heal"}
-        ]}
-    ];
-
-    function goToNameInput() {
-        document.getElementById('title-screen').classList.add('hidden');
-        document.getElementById('name-input-screen').classList.remove('hidden');
-    }
-
-    function transitionToHachiko() {
-        userName = document.getElementById('user-name').value || "ご主人様";
-        document.getElementById('name-input-screen').classList.add('hidden');
-        const hachikoWrap = document.getElementById('hachiko-wrap');
-        const commentBox = document.getElementById('hachiko-comment');
-        
-        // 診断画面へ進むタイミングでも別のランダムハチコ画像に切り替え！
-        const quizImg = document.getElementById('quiz-hachiko-img');
-        if (quizImg) quizImg.src = getRandomHachikoImage();
-
-        hachikoWrap.classList.add('hachiko-visible');
-        commentBox.innerText = `クゥ〜ン！${userName}ご主人様、いらっしゃいませだワン！ハチコが最高の3Pスタイルを診断してあげるから、正直に答えてほしいワン！`;
-        commentBox.classList.remove('hidden');
-    }
-
-    function handleHachikoClick() {
-        if (!canClickBubble) return; 
-        document.getElementById('hachiko-comment').classList.add('hidden');
-        startQuiz();
-    }
-
-    function startQuiz() {
-        document.getElementById('quiz').classList.remove('hidden');
-        Object.keys(types).forEach(key => scores[key] = 0);
-        showQ();
-    }
-
-    function showQ() {
-        if(currentQ < qs.length) {
-            document.getElementById('q-num').innerText = `STEP ${currentQ + 1} / 10`;
-            document.getElementById('q-text').innerText = qs[currentQ].q;
-            const div = document.getElementById('choices');
-            div.innerHTML = '';
-            qs[currentQ].a.forEach(ans => {
-                const btn = document.createElement('button');
-                btn.innerText = ans.t;
-                btn.onclick = () => { scores[ans.j]++; currentQ++; showQ(); };
-                div.appendChild(btn);
-            });
-        } else { showResult(); }
-    }
-
-    function sendToSheet(name, job) {
-        if(!scriptURL) return;
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, job: job })
-        }).catch(err => console.error("Sheet Sync Error:", err));
-    }
-
-    function showResult() {
-        canClickBubble = false; 
-        document.getElementById('hachiko-comment').classList.add('no-click');
-        document.getElementById('quiz').classList.add('hidden');
-        document.getElementById('result').classList.remove('hidden');
-        
-        const commentBox = document.getElementById('hachiko-comment');
-        
-        let maxScore = -1;
-        let topTypes = [];
-        
-        for (let key in scores) {
-            if (scores[key] > maxScore) {
-                maxScore = scores[key];
-                topTypes = [key];
-            } else if (scores[key] === maxScore) {
-                topTypes.push(key);
-            }
-        }
-        
-        let selectedKey = topTypes[Math.floor(Math.random() * topTypes.length)];
-        const resultType = types[selectedKey];
-        
-        sendToSheet(userName, resultType.n);
-        
-        document.getElementById('res-name-label').innerText = userName;
-        document.getElementById('job-name').innerText = resultType.n;
-        
-        commentBox.innerText = `鑑定完了だワン！${userName}ご主人様にピッタリなのは「${resultType.n}」だワン！`;
-        commentBox.classList.remove('hidden');
-
-        document.getElementById('detail').innerHTML = `
-            <strong>ハチコの評価：</strong><br>${resultType.c}
-        `;
-        
-        document.getElementById('btn-share').onclick = () => {
-            const pureUrl = window.location.origin + window.location.pathname;
-            const text = encodeURIComponent(`【かりんと渋谷店 理想の3P診断】\n${userName}ご主人様の理想の3Pは「${resultType.n}」！\n#かりんと渋谷店 #理想の3P診断`);
-            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(pureUrl)}`, '_blank');
-        };
-    }
-</script>
-</body>
-</html>
+        { q: "2人から同時に何をおねだりされたい？", a:
