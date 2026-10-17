@@ -81,6 +81,17 @@
         .hachiko-visible { opacity: 1 !important; display: block !important; animation: fadeIn 1.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* ロゴ画像用スタイル */
+        .logo-img { 
+            width: 100%; 
+            max-width: 320px; 
+            height: auto; 
+            margin-bottom: 20px; 
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .logo-title { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
         
         .hachiko-img { 
@@ -176,9 +187,8 @@
 <!-- 全画面動画再生エリア -->
 <div id="video-overlay" class="hidden">
     <button class="btn-skip" onclick="closeVideo()">SKIP ✕</button>
-    <video id="op-video" playsinline muted autoplay onended="closeVideo()">
+    <video id="op-video" playsinline muted autoplay onended="closeVideo()" onerror="closeVideo()">
         <source src="opening.mp4" type="video/mp4">
-        お使いのブラウザは動画再生に対応していません。
     </video>
 </div>
 
@@ -186,9 +196,12 @@
 
 <div id="game-box">
     <div id="title-screen">
-        <div class="logo-title">かりんと渋谷店<br>理想の3P診断</div>
+        <!-- ロゴ画像（フォールバック機能付き） -->
+        <img id="main-logo-img" src="logo.png" class="logo-img" alt="ロゴ" onerror="handleLogoError(this)">
+        <div id="fallback-title" class="logo-title hidden">かりんと渋谷店<br>理想の3P診断</div>
+        
         <!-- タイトル画面用のハチコ画像 -->
-        <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
+        <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="handleHachikoImgError(this, 1)">
         <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
         <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
     </div>
@@ -202,7 +215,7 @@
     <div id="hachiko-wrap" class="hachiko-content">
         <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
             <!-- 診断中のハチコ画像 -->
-            <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
+            <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="handleHachikoImgError(this, currentHachikoIndex)">
             <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
         </div>
 
@@ -224,9 +237,9 @@
     </div>
 </div>
 
-<!-- 紹介文とメニュー -->
-<div class="intro-container">
-    <div class="intro-title">🐾 ハチコが贈る 渋谷の3Pメニュー 🐾</div>
+<!-- 紹介文とメニュー（リザルト時に表示） -->
+<div id="menu-container" class="intro-container hidden">
+    <div class="intro-title">🐾 他にもこんな3Pスタイルがあるワン！ 🐾</div>
 
     <div class="job-card">
         <div class="job-card-header"><span class="job-card-name">1. W女王様のサンドイッチ型</span></div>
@@ -279,47 +292,67 @@
     let currentQ = 0;
     let scores = {};
     let canClickBubble = true;
+    let currentHachikoIndex = 1;
     
     const scriptURL = '';
 
-    // ★拡張子の違い（1は.jpg、2〜6は.jpeg）に対応したランダム選出関数
-    function getRandomHachikoImage() {
-        const randomIndex = Math.floor(Math.random() * 6) + 1;
-        if (randomIndex === 1) {
-            return `hachiko1.jpg`;
-        } else {
-            return `hachiko${randomIndex}.jpeg`;
+    // ロゴ読み込み時のエラーハンドリング（拡張子・大文字対応）
+    function handleLogoError(img) {
+        const src = img.src;
+        if (src.endsWith('logo.png')) img.src = 'logo.PNG';
+        else if (src.endsWith('logo.PNG')) img.src = 'logo.jpg';
+        else if (src.endsWith('logo.jpg')) img.src = 'logo.jpeg';
+        else {
+            img.style.display = 'none';
+            document.getElementById('fallback-title').classList.remove('hidden');
         }
     }
 
-    // 画面読み込み時の処理
-    window.addEventListener('DOMContentLoaded', () => {
-        // タイトル画面のハチコ画像をランダム設定
-        const titleImg = document.getElementById('title-hachiko-img');
-        if (titleImg) titleImg.src = getRandomHachikoImage();
+    // ハチコ画像読み込み時のエラーハンドリング（拡張子・大文字自動フォールバック）
+    function handleHachikoImgError(img, idx) {
+        const src = img.src;
+        if (src.endsWith(`.jpg`)) img.src = `hachiko${idx}.jpeg`;
+        else if (src.endsWith(`.jpeg`)) img.src = `hachiko${idx}.png`;
+        else if (src.endsWith(`.png`)) img.src = `hachiko${idx}.PNG`;
+        else img.style.display = 'none';
+    }
 
-        // 動画自動再生処理
-        const hasSeenVideo = sessionStorage.getItem('hasSeen3pVideo');
+    function setRandomHachiko(imgId) {
+        currentHachikoIndex = Math.floor(Math.random() * 6) + 1;
+        const img = document.getElementById(imgId);
+        if (img) {
+            img.style.display = 'block';
+            img.src = `hachiko${currentHachikoIndex}.jpg`;
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        setRandomHachiko('title-hachiko-img');
+
         const overlay = document.getElementById('video-overlay');
         const video = document.getElementById('op-video');
+        const hasSeenVideo = sessionStorage.getItem('hasSeen3pVideo');
 
         if (!hasSeenVideo) {
             overlay.classList.remove('hidden');
-            video.play().catch(() => {
-                closeVideo();
-            });
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => closeVideo());
+            }
         }
     });
 
     function closeVideo() {
         const overlay = document.getElementById('video-overlay');
         const video = document.getElementById('op-video');
-        video.pause();
-        overlay.style.opacity = '0';
-        setTimeout(() => {
-            overlay.classList.add('hidden');
-            sessionStorage.setItem('hasSeen3pVideo', 'true');
-        }, 800);
+        if (video) video.pause();
+        if (overlay) {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                sessionStorage.setItem('hasSeen3pVideo', 'true');
+            }, 800);
+        }
     }
 
     const types = {
@@ -407,9 +440,7 @@
         const hachikoWrap = document.getElementById('hachiko-wrap');
         const commentBox = document.getElementById('hachiko-comment');
         
-        // 診断画面に進む際もランダムなハチコ画像を設定
-        const quizImg = document.getElementById('quiz-hachiko-img');
-        if (quizImg) quizImg.src = getRandomHachikoImage();
+        setRandomHachiko('quiz-hachiko-img');
 
         hachikoWrap.classList.add('hachiko-visible');
         commentBox.innerText = `クゥ〜ン！${userName}ご主人様、いらっしゃいませだワン！ハチコが最高の3Pスタイルを診断してあげるから、正直に答えてほしいワン！`;
@@ -458,6 +489,8 @@
         document.getElementById('hachiko-comment').classList.add('no-click');
         document.getElementById('quiz').classList.add('hidden');
         document.getElementById('result').classList.remove('hidden');
+        
+        document.getElementById('menu-container').classList.remove('hidden');
         
         const commentBox = document.getElementById('hachiko-comment');
         
