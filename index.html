@@ -73,6 +73,11 @@
             position: relative;
             box-sizing: border-box;
             margin-bottom: 20px;
+            
+            /* ハチ公前などの背景画像を薄く敷く設定（shibuya.jpgが無い場合は単色背景） */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url('shibuya.jpg');
+            background-size: cover;
+            background-position: center;
         }
         
         #white-out { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: none; opacity: 0; transition: opacity 0.8s; pointer-events: none; }
@@ -92,9 +97,10 @@
             margin-right: auto;
         }
         
+        /* ハチコ画像を拡大（max-widthを260pxに変更） */
         .hachiko-img { 
             width: 100%; 
-            max-width: 200px; 
+            max-width: 260px; 
             height: auto; 
             border: 2px solid var(--primary); 
             background: #eee; 
@@ -194,10 +200,10 @@
 
 <div id="game-box">
     <div id="title-screen">
-        <!-- ロゴ画像（直接ロード） -->
+        <!-- ロゴ画像 -->
         <img src="logo.jpg" class="logo-img" alt="かりんと渋谷店 理想の3P診断">
         
-        <!-- タイトル画面用のハチコ画像 -->
+        <!-- タイトル画面用のハチコ画像（拡大版） -->
         <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
         <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
         <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
@@ -210,8 +216,8 @@
     </div>
 
     <div id="hachiko-wrap" class="hachiko-content">
-        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-            <!-- 診断中のハチコ画像 -->
+        <div style="background: rgba(249, 249, 249, 0.9); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+            <!-- 診断中のハチコ画像（拡大版） -->
             <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
             <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
         </div>
@@ -376,7 +382,7 @@
         ]},
         { q: "身体の自由を制限されるとしたら？", a: [
             {t: "2人の重みで完全に押し潰される", j: "sandwich"},
-            {t: "首輪を繋がれて2人に引っぱられる", j: "hachiko"},
+            {t: "首輪を繋가れて2人に引っぱられる", j: "hachiko"},
             {t: "絶え間ない愛撫で動けなくされる", j: "flower"},
             {t: "拘束具でがっちり固定される", j: "lock"}
         ]},
@@ -395,7 +401,7 @@
         { q: "ハチコに「ご主人様、どんなお仕置きが好きワン？」と聞かれたら？", a: [
             {t: "「2人で順番に踏みつけてほしい」", j: "sandwich"},
             {t: "「ハチコと一緒にご褒美をもらいたい」", j: "hachiko"},
-            {t: "「代わる代わる搾り取ってほしい」", j: "drain"},
+            {t: "「代わる代わる搾取してほしい」", j: "drain"},
             {t: "「絶対に逃げられないようにしてほしい」", j: "lock"}
         ]},
         { q: "最後に……あなたが渋谷店で本当に体験したいのは？", a: [
