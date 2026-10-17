@@ -196,12 +196,11 @@
 
 <div id="game-box">
     <div id="title-screen">
-        <!-- ロゴ画像（png, jpg, jpeg を自動で切り替えて探す最強エラー対策付き） -->
-        <img id="main-logo-img" src="logo.png" class="logo-img" alt="ロゴ" onerror="handleLogoError(this)">
-        <div id="fallback-title" class="logo-title hidden">かりんと渋谷店<br>理想の3P診断</div>
+        <!-- logo.jpg を直接指定 -->
+        <img id="main-logo-img" src="logo.jpg" class="logo-img" alt="かりんと渋谷店 理想の3P診断">
         
         <!-- タイトル画面用のハチコ画像 -->
-        <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="handleHachikoImgError(this, 1)">
+        <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
         <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
         <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
     </div>
@@ -215,7 +214,7 @@
     <div id="hachiko-wrap" class="hachiko-content">
         <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
             <!-- 診断中のハチコ画像 -->
-            <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="handleHachikoImgError(this, currentHachikoIndex)">
+            <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
             <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
         </div>
 
@@ -296,27 +295,7 @@
     
     const scriptURL = '';
 
-    // ロゴの拡張子違いを自動で順に試すフォールバック関数
-    function handleLogoError(img) {
-        const src = img.src;
-        if (src.endsWith('logo.png')) img.src = 'logo.jpg';
-        else if (src.endsWith('logo.jpg')) img.src = 'logo.jpeg';
-        else if (src.endsWith('logo.jpeg')) img.src = 'logo.PNG';
-        else {
-            img.style.display = 'none';
-            document.getElementById('fallback-title').classList.remove('hidden');
-        }
-    }
-
-    // ハチコ画像の拡張子違いを自動で順に試すフォールバック関数
-    function handleHachikoImgError(img, idx) {
-        const src = img.src;
-        if (src.endsWith(`.jpg`)) img.src = `hachiko${idx}.jpeg`;
-        else if (src.endsWith(`.jpeg`)) img.src = `hachiko${idx}.png`;
-        else if (src.endsWith(`.png`)) img.src = `hachiko${idx}.JPG`;
-        else img.style.display = 'none';
-    }
-
+    // ハチコ画像（1〜6.jpg）をランダム選出
     function setRandomHachiko(imgId) {
         currentHachikoIndex = Math.floor(Math.random() * 6) + 1;
         const img = document.getElementById(imgId);
@@ -360,7 +339,7 @@
         tsundere: { n: "ツンデレ＆小悪魔の挟み撃ち型", c: "ツンツンされた後に小悪魔に甘えられたら、もう頭がパニックだワン！甘さと辛さの連続攻撃でとろけちゃえワン！" },
         pet: { n: "主従逆転・Wペット従属型", c: "「2人を従えるご主人様」気取りだったのに、いつの間にか立場が逆転して玩具にされるのが一番興奮するんだワン！" },
         flower: { n: "両手に華・W濃厚密着型", c: "左右からの吐息と愛撫で脳みそが溶けちゃうワン！贅沢すぎる密着で感度限界突破間違いなしだワン！" },
-        hachiko: { n: "ハチコとお給仕・人間犬乱宴型", c: "クゥ〜ン！ハチコと一緒に四つんばいになって可愛がられたい変態さん発見ワン！2人のご主人様に一生付き従うワン！" },
+        hachiko: { n: "Hachikoとお給仕・人間犬乱宴型", c: "クゥ〜ン！ハチコと一緒に四つんばいになって可愛がられたい変態さん発見ワン！2人のご主人様に一生付き従うワン！" },
         drain: { n: "代わる代わる搾取・魔力二重奏型", c: "息をつく暇もない連続アタックだワン！体力が空っぽになるまで絞り尽くされちゃうワン……！" },
         heal: { n: "Wお姉さんの包容＆甘やかし型", c: "日頃の疲れを全て包み込んでもらうワン。赤ちゃんに戻ったみたいに甘やかされて骨抜きにされるワン～。" },
         lock: { n: "終身拘束・ダブルロック型", c: "2人がかりでがっちり固定されて逃げ場ゼロワン！自由を奪われてなす術なく攻め立てられる最高の屈辱だワン！" }
