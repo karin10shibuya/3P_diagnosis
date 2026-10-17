@@ -196,7 +196,7 @@
 
 <div id="game-box">
     <div id="title-screen">
-        <!-- ロゴ画像（フォールバック機能付き） -->
+        <!-- ロゴ画像（png, jpg, jpeg を自動で切り替えて探す最強エラー対策付き） -->
         <img id="main-logo-img" src="logo.png" class="logo-img" alt="ロゴ" onerror="handleLogoError(this)">
         <div id="fallback-title" class="logo-title hidden">かりんと渋谷店<br>理想の3P診断</div>
         
@@ -296,24 +296,24 @@
     
     const scriptURL = '';
 
-    // ロゴ読み込み時のエラーハンドリング（拡張子・大文字対応）
+    // ロゴの拡張子違いを自動で順に試すフォールバック関数
     function handleLogoError(img) {
         const src = img.src;
-        if (src.endsWith('logo.png')) img.src = 'logo.PNG';
-        else if (src.endsWith('logo.PNG')) img.src = 'logo.jpg';
+        if (src.endsWith('logo.png')) img.src = 'logo.jpg';
         else if (src.endsWith('logo.jpg')) img.src = 'logo.jpeg';
+        else if (src.endsWith('logo.jpeg')) img.src = 'logo.PNG';
         else {
             img.style.display = 'none';
             document.getElementById('fallback-title').classList.remove('hidden');
         }
     }
 
-    // ハチコ画像読み込み時のエラーハンドリング（拡張子・大文字自動フォールバック）
+    // ハチコ画像の拡張子違いを自動で順に試すフォールバック関数
     function handleHachikoImgError(img, idx) {
         const src = img.src;
         if (src.endsWith(`.jpg`)) img.src = `hachiko${idx}.jpeg`;
         else if (src.endsWith(`.jpeg`)) img.src = `hachiko${idx}.png`;
-        else if (src.endsWith(`.png`)) img.src = `hachiko${idx}.PNG`;
+        else if (src.endsWith(`.png`)) img.src = `hachiko${idx}.JPG`;
         else img.style.display = 'none';
     }
 
