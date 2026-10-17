@@ -23,6 +23,44 @@
             padding: 20px 0;
         }
 
+        /* 全画面動画オーバーレイ用CSS */
+        #video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+
+        #op-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-skip {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            z-index: 10001;
+            width: auto !important;
+            box-shadow: none !important;
+        }
+
         #game-box { 
             width: 90%; 
             max-width: 480px; 
@@ -135,12 +173,22 @@
 </head>
 <body>
 
+<!-- 全画面動画再生エリア -->
+<div id="video-overlay" class="hidden">
+    <button class="btn-skip" onclick="closeVideo()">SKIP ✕</button>
+    <video id="op-video" playsinline muted autoplay onended="closeVideo()">
+        <source src="opening.mp4" type="video/mp4">
+        お使いのブラウザは動画再生に対応していません。
+    </video>
+</div>
+
 <div id="white-out"></div>
 
 <div id="game-box">
     <div id="title-screen">
         <div class="logo-title">かりんと渋谷店<br>理想の3P診断</div>
-        <img src="hachiko.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
+        <!-- タイトル画面用のハチコ画像 -->
+        <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
         <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
         <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
     </div>
@@ -153,7 +201,8 @@
 
     <div id="hachiko-wrap" class="hachiko-content">
         <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-            <img src="hachiko.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
+            <!-- 診断中のハチコ画像 -->
+            <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
             <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
         </div>
 
@@ -231,8 +280,43 @@
     let scores = {};
     let canClickBubble = true;
     
-    // 必要に応じてGASのURLを設定してください
     const scriptURL = '';
+
+    // ハチコ画像（1～6）の中からランダムなファイル名を返す関数
+    function getRandomHachikoImage() {
+        const randomIndex = Math.floor(Math.random() * 6) + 1; // 1〜6のランダム整数
+        return `hachiko${randomIndex}.jpg`;
+    }
+
+    // 画面読み込み時の処理
+    window.addEventListener('DOMContentLoaded', () => {
+        // タイトル画面のハチコ画像をランダム設定
+        const titleImg = document.getElementById('title-hachiko-img');
+        if (titleImg) titleImg.src = getRandomHachikoImage();
+
+        // 動画自動再生処理
+        const hasSeenVideo = sessionStorage.getItem('hasSeen3pVideo');
+        const overlay = document.getElementById('video-overlay');
+        const video = document.getElementById('op-video');
+
+        if (!hasSeenVideo) {
+            overlay.classList.remove('hidden');
+            video.play().catch(() => {
+                closeVideo();
+            });
+        }
+    });
+
+    function closeVideo() {
+        const overlay = document.getElementById('video-overlay');
+        const video = document.getElementById('op-video');
+        video.pause();
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            sessionStorage.setItem('hasSeen3pVideo', 'true');
+        }, 800);
+    }
 
     const types = {
         sandwich: { n: "W女王様のサンドイッチ型", c: "ご主人様、2人のドSなお姉様に挟まれて身動きが取れなくなるのがお望みなんだワン？徹底的にいじめ抜かれてひれ伏すといいワン！" },
@@ -245,7 +329,6 @@
         lock: { n: "終身拘束・ダブルロック型", c: "2人がかりでがっちり固定されて逃げ場ゼロワン！自由を奪われてなす術なく攻め立てられる最高の屈辱だワン！" }
     };
 
-    // 10問の設問（8タイプが均等に5回ずつ出現するように配置）
     const qs = [
         { q: "2人の女の子に攻められるなら、どんな配置が理想？", a: [
             {t: "左右から挟まれて身動きを奪われたい", j: "sandwich"},
@@ -253,7 +336,7 @@
             {t: "2人に膝枕されながら見下ろされたい", j: "heal"},
             {t: "両手両足をがっちり押さえ込まれたい", j: "lock"}
         ]},
-        { q: "お店で最初にかけてほしい言葉は？", a: [
+        { q: "お店で最初にかける言葉は？", a: [
             {t: "「今日から私達の玩具ね」と冷たく笑われる", j: "sandwich"},
             {t: "「ご主人様、ハチコと一緒に遊ぶワン！」", j: "hachiko"},
             {t: "「よしよし、たくさん疲れたのね」と抱きしめられる", j: "heal"},
@@ -319,6 +402,10 @@
         document.getElementById('name-input-screen').classList.add('hidden');
         const hachikoWrap = document.getElementById('hachiko-wrap');
         const commentBox = document.getElementById('hachiko-comment');
+        
+        // 診断画面へ進むタイミングでも別のランダムハチコ画像に切り替え！
+        const quizImg = document.getElementById('quiz-hachiko-img');
+        if (quizImg) quizImg.src = getRandomHachikoImage();
 
         hachikoWrap.classList.add('hachiko-visible');
         commentBox.innerText = `クゥ〜ン！${userName}ご主人様、いらっしゃいませだワン！ハチコが最高の3Pスタイルを診断してあげるから、正直に答えてほしいワン！`;
@@ -370,7 +457,6 @@
         
         const commentBox = document.getElementById('hachiko-comment');
         
-        // 得点集計＆同点時シャッフルによる確率ならし
         let maxScore = -1;
         let topTypes = [];
         
@@ -383,7 +469,6 @@
             }
         }
         
-        // 同点の場合はランダム選出
         let selectedKey = topTypes[Math.floor(Math.random() * topTypes.length)];
         const resultType = types[selectedKey];
         
