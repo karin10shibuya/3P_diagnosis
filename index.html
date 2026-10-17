@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>かりんと渋谷店 理想の3P診断</title>
+    <style>
+        :root { --primary: #e91e63; --bg: #12001a; --text: #ffffff; --gold: #ffeb3b; }
+        
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            touch-action: pan-y; 
+        }
+
+        body { 
+            background: var(--bg); color: var(--text); font-family: sans-serif; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        #game-box { 
+            width: 90%; 
+            max-width: 480px; 
+            background: #ffffff; 
+            color: #000000;      
+            padding: 25px; 
+            border: 4px solid var(--primary); 
+            text-align: center; 
+            box-shadow: 10px 10px 0px #000; 
+            position: relative;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        
+        #white-out { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: none; opacity: 0; transition: opacity 0.8s; pointer-events: none; }
+        
+        .hachiko-content { opacity: 0; display: none; }
+        .hachiko-visible { opacity: 1 !important; display: block !important; animation: fadeIn 1.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .logo-title { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin-bottom: 15px; text-shadow: 2px 2px 0px #000; }
+        
+        .hachiko-img { 
+            width: 100%; 
+            max-width: 200px; 
+            height: auto; 
+            border: 2px solid var(--primary); 
+            background: #eee; 
+            display: block; 
+            margin: 0 auto; 
+            border-radius: 8px; 
+        }
+        
+        .msg-bubble { background: #f0f0f0; color: #000; padding: 20px; border-radius: 12px; margin-top: 15px; margin-bottom: 20px; font-weight: bold; font-size: 0.9rem; line-height: 1.6; position: relative; cursor: pointer; border: 3px solid var(--primary); text-align: left; box-sizing: border-box; }
+        .msg-bubble::after { content: "▼ CLICK"; position: absolute; bottom: 5px; right: 15px; font-size: 0.6rem; color: var(--primary); animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        .msg-bubble.no-click { cursor: default; }
+        .msg-bubble.no-click::after { display: none; }
+
+        #user-name { padding: 12px; width: 100%; max-width: 300px; margin-bottom: 20px; border-radius: 5px; border: 2px solid var(--primary); text-align: center; font-size: 1rem; background: #fff; color: #000; box-sizing: border-box; }
+        .choices { display: grid; gap: 10px; width: 100%; }
+
+        button { 
+            background: #eee; border: 2px solid #ccc; padding: 15px; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 0px #666; font-size: 0.95rem; color: #000; transition: 0.1s; width: 100%; text-align: left; -webkit-tap-highlight-color: transparent; box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        @media (hover: hover) {
+            button:hover { background: var(--gold); transform: translate(2px, 2px); box-shadow: 2px 2px 0px #666; }
+        }
+
+        button:active { background: var(--gold) !important; transform: translate(2px, 2px); box-shadow: 2px 2px 0px #666; }
+
+        .hidden { display: none !important; }
+        
+        .job-res { font-size: 1.4rem; color: var(--primary); text-shadow: 1px 1px #ccc; margin: 10px 0; font-weight: bold; word-wrap: break-word; }
+        
+        .stats { text-align: left; background: #f9f9f9; padding: 15px; border: 1px dashed var(--primary); font-size: 0.85rem; color: #333; line-height: 1.6; box-sizing: border-box; }
+        
+        .intro-container {
+            width: 90%;
+            max-width: 480px;
+            background: #fff;
+            color: #333;
+            text-align: left;
+            padding: 20px;
+            border: 4px solid var(--primary);
+            box-shadow: 10px 10px 0px #000;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+
+        .intro-title {
+            color: var(--primary);
+            font-weight: bold;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .job-card {
+            background: #fdfbff;
+            border: 1px solid #ddd;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 12px;
+            padding: 10px;
+        }
+
+        .job-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #ccc;
+            margin-bottom: 5px;
+            padding-bottom: 3px;
+        }
+
+        .job-card-name { font-weight: bold; color: #000; font-size: 0.95rem; }
+        .job-card-content { font-size: 0.85rem; color: #555; margin-bottom: 3px; }
+
+        footer { margin-top: 30px; color: #aaa; font-size: 0.75rem; text-align: center; width: 100%; padding-bottom: 20px; }
+        
+        .btn-call { background: #28a745 !important; color: #fff !important; text-align: center !important; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div id="white-out"></div>
+
+<div id="game-box">
+    <div id="title-screen">
+        <div class="logo-title">かりんと渋谷店<br>理想の3P診断</div>
+        <img src="hachiko.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
+        <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
+        <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
+    </div>
+
+    <div id="name-input-screen" class="hidden">
+        <h3 style="color: var(--primary);">ご主人様のお名前を教えてほしいワン！</h3>
+        <input type="text" id="user-name" placeholder="お名前を入力..." maxlength="15">
+        <button onclick="transitionToHachiko()" style="text-align:center;">この名前で診断開始ワン！</button>
+    </div>
+
+    <div id="hachiko-wrap" class="hachiko-content">
+        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">
+            <img src="hachiko.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
+            <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
+        </div>
+
+        <div id="quiz" class="hidden" style="margin-top: 20px;">
+            <div id="q-num" style="color:var(--primary); font-size:0.8rem; margin-bottom:10px; font-weight:bold;"></div>
+            <div id="q-text" style="margin-bottom: 20px; font-weight: bold; font-size: 1rem; text-align:left; color: #000;"></div>
+            <div class="choices" id="choices"></div>
+        </div>
+    </div>
+
+    <div id="result" class="hidden">
+        <div style="font-weight:bold; font-size:0.9rem; color: #000;">診断結果：<span id="res-name-label"></span>ご主人様の理想の3Pは…</div>
+        <div class="job-res" id="job-name"></div>
+        <div class="stats" id="detail"></div>
+        
+        <button class="btn-call" onclick="location.href='tel:03-xxxx-xxxx'">📞 渋谷店へ電話して予約する</button>
+        <button id="btn-share" style="background:#000; color:#fff; margin-top:15px; text-align:center;">結果をXで報告ワン！</button>
+        <button onclick="location.reload()" style="margin-top:10px; background:#999; text-align:center;">タイトルへ</button>
+    </div>
+</div>
+
+<!-- 紹介文とメニュー -->
+<div class="intro-container">
+    <div class="intro-title">🐾 ハチコが贈る 渋谷の3Pメニュー 🐾</div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">1. W女王様のサンドイッチ型</span></div>
+        <div class="job-card-content">2人のS系キャストに挟まれ、逃げ場のない状態で徹底的にいじめ抜かれる絶対服従スタイル。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">2. ツンデレ＆小悪魔の挟み撃ち型</span></div>
+        <div class="job-card-content">毒舌な女の子と甘えてくる女の子のギャップに翻弄され、精神も身体もとろかされる甘辛ミックス。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">3. 主従逆転・Wペット従属型</span></div>
+        <div class="job-card-content">あなたが「ご主人様」として2人を従える……と思いきや、結局2人のペースに呑まれて玩具にされる型。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">4. 両手に華・W濃厚密着型</span></div>
+        <div class="job-card-content">左右から絶え間なく耳元で囁かれ、全身をくまなく愛撫され続ける感度限界突破スタイル。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">5. ハチコとお給仕・人間犬乱宴型</span></div>
+        <div class="job-card-content">ハチコと一緒に四つんばいで這いつくばり、2人のご主人様から同時に可愛がられる忠犬体験。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">6. 代わる代わる搾取・魔力二重奏型</span></div>
+        <div class="job-card-content">交互に攻め立てられ、息つく暇もなく体力を奪われ尽くす無慈悲な連続プレイ。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">7. Wお姉さんの包容＆甘やかし型</span></div>
+        <div class="job-card-content">包容力抜群の2人に包み込まれ、赤ちゃんのように甘やかされながら骨抜きにされる癒やしプレイ。</div>
+    </div>
+
+    <div class="job-card">
+        <div class="job-card-header"><span class="job-card-name">8. 終身拘束・ダブルロック型</span></div>
+        <div class="job-card-content">2人がかりで身体をがっちり固定され、自由を奪われた状態でなすすべなく攻め立てられるハードスタイル。</div>
+    </div>
+</div>
+
+<footer>
+    かりんと渋谷店presents<br>
+    理想の3P診断 project
+</footer>
+
+<script>
+    let userName = "";
+    let currentQ = 0;
+    let scores = {};
+    let canClickBubble = true;
+    
+    // 必要に応じてGASのURLを設定してください
+    const scriptURL = '';
+
+    const types = {
+        sandwich: { n: "W女王様のサンドイッチ型", c: "ご主人様、2人のドSなお姉様に挟まれて身動きが取れなくなるのがお望みなんだワン？徹底的にいじめ抜かれてひれ伏すといいワン！" },
+        tsundere: { n: "ツンデレ＆小悪魔の挟み撃ち型", c: "ツンツンされた後に小悪魔に甘えられたら、もう頭がパニックだワン！甘さと辛さの連続攻撃でとろけちゃえワン！" },
+        pet: { n: "主従逆転・Wペット従属型", c: "「2人を従えるご主人様」気取りだったのに、いつの間にか立場が逆転して玩具にされるのが一番興奮するんだワン！" },
+        flower: { n: "両手に華・W濃厚密着型", c: "左右からの吐息と愛撫で脳みそが溶けちゃうワン！贅沢すぎる密着で感度限界突破間違いなしだワン！" },
+        hachiko: { n: "ハチコとお給仕・人間犬乱宴型", c: "クゥ〜ン！ハチコと一緒に四つんばいになって可愛がられたい変態さん発見ワン！2人のご主人様に一生付き従うワン！" },
+        drain: { n: "代わる代わる搾取・魔力二重奏型", c: "息をつく暇もない連続アタックだワン！体力が空っぽになるまで絞り尽くされちゃうワン……！" },
+        heal: { n: "Wお姉さんの包容＆甘やかし型", c: "日頃の疲れを全て包み込んでもらうワン。赤ちゃんに戻ったみたいに甘やかされて骨抜きにされるワン～。" },
+        lock: { n: "終身拘束・ダブルロック型", c: "2人がかりでがっちり固定されて逃げ場ゼロワン！自由を奪われてなす術なく攻め立てられる最高の屈辱だワン！" }
+    };
+
+    // 10問の設問（8タイプが均等に5回ずつ出現するように配置）
+    const qs = [
+        { q: "2人の女の子に攻められるなら、どんな配置が理想？", a: [
+            {t: "左右から挟まれて身動きを奪われたい", j: "sandwich"},
+            {t: "片方に責められ、もう片方に甘えられたい", j: "tsundere"},
+            {t: "2人に膝枕されながら見下ろされたい", j: "heal"},
+            {t: "両手両足をがっちり押さえ込まれたい", j: "lock"}
+        ]},
+        { q: "お店で最初にかけてほしい言葉は？", a: [
+            {t: "「今日から私達の玩具ね」と冷たく笑われる", j: "sandwich"},
+            {t: "「ご主人様、ハチコと一緒に遊ぶワン！」", j: "hachiko"},
+            {t: "「よしよし、たくさん疲れたのね」と抱きしめられる", j: "heal"},
+            {t: "「逃げられると思わないでね」と鍵を掛けられる", j: "lock"}
+        ]},
+        { q: "プレイ中、最もゾクゾクする瞬間は？", a: [
+            {t: "威張ろうとしたのに一瞬で返り討ちにあう時", j: "pet"},
+            {t: "耳元で同時に「好き」と囁かれる時", j: "flower"},
+            {t: "休む間もなく次の手が伸びてくる時", j: "drain"},
+            {t: "四つんばいにされてお尻を撫でられる時", j: "hachiko"}
+        ]},
+        { q: "理想のキャスト2人の組み合わせは？", a: [
+            {t: "毒舌なツンデレ × 小悪魔な妹系", j: "tsundere"},
+            {t: "ご主人様気取りの2人（実は下僕扱い）", j: "pet"},
+            {t: "グラマラスなW濃厚系美女", j: "flower"},
+            {t: "体力無限大のWドS美女", j: "drain"}
+        ]},
+        { q: "2人から同時に何をおねだりされたい？", a: [
+            {t: "「もっと私達に跪きなさい」という命令", j: "sandwich"},
+            {t: "「どっちの言うことを聞くの？」という嫌がらせ", j: "tsundere"},
+            {t: "「ハチコと一緒に『ワン』って言って？」という言葉", j: "hachiko"},
+            {t: "「力を抜いて全部預けて？」という甘やかし", j: "heal"}
+        ]},
+        { q: "身体の自由を制限されるとしたら？", a: [
+            {t: "2人の重みで完全に押し潰される", j: "sandwich"},
+            {t: "首輪を繋がれて2人に引っぱられる", j: "hachiko"},
+            {t: "絶え間ない愛撫で動けなくされる", j: "flower"},
+            {t: "拘束具でがっちり固定される", j: "lock"}
+        ]},
+        { q: "プレイが終わった直後、どうされていたい？", a: [
+            {t: "「威張ってた割に可愛かったね」と笑われたい", j: "pet"},
+            {t: "抜け殻みたいに体力を絞り尽くされていたい", j: "drain"},
+            {t: "2人の胸に包まれてそのまま眠りたい", j: "heal"},
+            {t: "縛られたまま放置されて余韻に浸りたい", j: "lock"}
+        ]},
+        { q: "あなたが密かに憧れている「シチュエーション」は？", a: [
+            {t: "主導権を握ろうとして結局ダブルで搾取される", j: "pet"},
+            {t: "全身の肌という肌を同時に舐め回される", j: "flower"},
+            {t: "息つく暇もなく交互にイジられ続ける", j: "drain"},
+            {t: "ツンとデレの温度差で脳がバグる", j: "tsundere"}
+        ]},
+        { q: "ハチコに「ご主人様、どんなお仕置きが好きワン？」と聞かれたら？", a: [
+            {t: "「2人で順番に踏みつけてほしい」", j: "sandwich"},
+            {t: "「ハチコと一緒にご褒美をもらいたい」", j: "hachiko"},
+            {t: "「代わる代わる搾り取ってほしい」", j: "drain"},
+            {t: "「絶対に逃げられないようにしてほしい」", j: "lock"}
+        ]},
+        { q: "最後に……あなたが渋谷店で本当に体験したいのは？", a: [
+            {t: "ツンデレと小悪魔の翻弄", j: "tsundere"},
+            {t: "主従逆転の屈辱体験", j: "pet"},
+            {t: "左右からの濃厚ダブル愛撫", j: "flower"},
+            {t: "バブみ溢れるWお姉さんの癒やし", j: "heal"}
+        ]}
+    ];
+
+    function goToNameInput() {
+        document.getElementById('title-screen').classList.add('hidden');
+        document.getElementById('name-input-screen').classList.remove('hidden');
+    }
+
+    function transitionToHachiko() {
+        userName = document.getElementById('user-name').value || "ご主人様";
+        document.getElementById('name-input-screen').classList.add('hidden');
+        const hachikoWrap = document.getElementById('hachiko-wrap');
+        const commentBox = document.getElementById('hachiko-comment');
+
+        hachikoWrap.classList.add('hachiko-visible');
+        commentBox.innerText = `クゥ〜ン！${userName}ご主人様、いらっしゃいませだワン！ハチコが最高の3Pスタイルを診断してあげるから、正直に答えてほしいワン！`;
+        commentBox.classList.remove('hidden');
+    }
+
+    function handleHachikoClick() {
+        if (!canClickBubble) return; 
+        document.getElementById('hachiko-comment').classList.add('hidden');
+        startQuiz();
+    }
+
+    function startQuiz() {
+        document.getElementById('quiz').classList.remove('hidden');
+        Object.keys(types).forEach(key => scores[key] = 0);
+        showQ();
+    }
+
+    function showQ() {
+        if(currentQ < qs.length) {
+            document.getElementById('q-num').innerText = `STEP ${currentQ + 1} / 10`;
+            document.getElementById('q-text').innerText = qs[currentQ].q;
+            const div = document.getElementById('choices');
+            div.innerHTML = '';
+            qs[currentQ].a.forEach(ans => {
+                const btn = document.createElement('button');
+                btn.innerText = ans.t;
+                btn.onclick = () => { scores[ans.j]++; currentQ++; showQ(); };
+                div.appendChild(btn);
+            });
+        } else { showResult(); }
+    }
+
+    function sendToSheet(name, job) {
+        if(!scriptURL) return;
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, job: job })
+        }).catch(err => console.error("Sheet Sync Error:", err));
+    }
+
+    function showResult() {
+        canClickBubble = false; 
+        document.getElementById('hachiko-comment').classList.add('no-click');
+        document.getElementById('quiz').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+        
+        const commentBox = document.getElementById('hachiko-comment');
+        
+        // 得点集計＆同点時シャッフルによる確率ならし
+        let maxScore = -1;
+        let topTypes = [];
+        
+        for (let key in scores) {
+            if (scores[key] > maxScore) {
+                maxScore = scores[key];
+                topTypes = [key];
+            } else if (scores[key] === maxScore) {
+                topTypes.push(key);
+            }
+        }
+        
+        // 同点の場合はランダム選出
+        let selectedKey = topTypes[Math.floor(Math.random() * topTypes.length)];
+        const resultType = types[selectedKey];
+        
+        sendToSheet(userName, resultType.n);
+        
+        document.getElementById('res-name-label').innerText = userName;
+        document.getElementById('job-name').innerText = resultType.n;
+        
+        commentBox.innerText = `鑑定完了だワン！${userName}ご主人様にピッタリなのは「${resultType.n}」だワン！`;
+        commentBox.classList.remove('hidden');
+
+        document.getElementById('detail').innerHTML = `
+            <strong>ハチコの評価：</strong><br>${resultType.c}
+        `;
+        
+        document.getElementById('btn-share').onclick = () => {
+            const pureUrl = window.location.origin + window.location.pathname;
+            const text = encodeURIComponent(`【かりんと渋谷店 理想の3P診断】\n${userName}ご主人様の理想の3Pは「${resultType.n}」！\n#かりんと渋谷店 #理想の3P診断`);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(pureUrl)}`, '_blank');
+        };
+    }
+</script>
+</body>
+</html>
