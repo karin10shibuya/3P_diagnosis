@@ -74,7 +74,7 @@
             box-sizing: border-box;
             margin-bottom: 20px;
             
-            /* ハチ公前などの背景画像を薄く敷く設定（shibuya.jpgが無い場合は単色背景） */
+            /* ハチ公前などの背景画像（shibuya.jpgが無い場合は単色背景） */
             background-image: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url('shibuya.jpg');
             background-size: cover;
             background-position: center;
@@ -97,7 +97,7 @@
             margin-right: auto;
         }
         
-        /* ハチコ画像を拡大（max-widthを260pxに変更） */
+        /* ハチコ画像の拡大 */
         .hachiko-img { 
             width: 100%; 
             max-width: 260px; 
@@ -132,7 +132,7 @@
 
         .hidden { display: none !important; }
         
-        .job-res { font-size: 1.4rem; color: var(--primary); text-shadow: 1px 1px #ccc; margin: 10px 0; font-weight: bold; word-wrap: break-word; }
+        .job-res { font-size: 1.3rem; color: var(--primary); text-shadow: 1px 1px #ccc; margin: 10px 0; font-weight: bold; word-wrap: break-word; }
         
         .stats { text-align: left; background: #f9f9f9; padding: 15px; border: 1px dashed var(--primary); font-size: 0.85rem; color: #333; line-height: 1.6; box-sizing: border-box; }
         
@@ -200,10 +200,7 @@
 
 <div id="game-box">
     <div id="title-screen">
-        <!-- ロゴ画像 -->
         <img src="logo.jpg" class="logo-img" alt="かりんと渋谷店 理想の3P診断">
-        
-        <!-- タイトル画面用のハチコ画像（拡大版） -->
         <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
         <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
         <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
@@ -217,7 +214,6 @@
 
     <div id="hachiko-wrap" class="hachiko-content">
         <div style="background: rgba(249, 249, 249, 0.9); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-            <!-- 診断中のハチコ画像（拡大版） -->
             <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
             <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
         </div>
@@ -232,6 +228,13 @@
     <div id="result" class="hidden">
         <div style="font-weight:bold; font-size:0.9rem; color: #000;">診断結果：<span id="res-name-label"></span>ご主人様の理想の3Pは…</div>
         <div class="job-res" id="job-name"></div>
+        
+        <!-- オプション＆金額表示欄 -->
+        <div style="background: #fff0f5; border: 2px solid var(--primary); padding: 10px; border-radius: 6px; margin: 12px 0; text-align: left; font-size: 0.9rem;">
+            <div>✨ 帯同オプション：<strong id="res-opt" style="color: var(--primary);"></strong></div>
+            <div>💰 参考ご予算：<strong id="res-price" style="color: #d32f2f; font-size: 1.1rem;"></strong></div>
+        </div>
+
         <div class="stats" id="detail"></div>
         
         <button class="btn-call" onclick="location.href='tel:03-xxxx-xxxx'">📞 渋谷店へ電話して予約する</button>
@@ -242,46 +245,54 @@
 
 <!-- 紹介文とメニュー（リザルト時に表示） -->
 <div id="menu-container" class="intro-container hidden">
-    <div class="intro-title">🐾 他にもこんな3Pスタイルがあるワン！ 🐾</div>
+    <div class="intro-title">🐾 全8種類の3Pスタイル一覧 🐾</div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">1. W女王様のサンドイッチ型</span></div>
-        <div class="job-card-content">2人のS系キャストに挟まれ、逃げ場のない状態で徹底的にいじめ抜かれる絶対服従スタイル。</div>
+        <div class="job-card-header"><span class="job-card-name">1. W女王様の絶対服従・踏みつけ調教型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥35,000</span></div>
+        <div class="job-card-content"><strong>オプション：踏みつけ</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">2人の女王様に容赦なく踏みつけられながら下僕の快楽に溺れる。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">2. ツンデレ＆小悪魔の挟み撃ち型</span></div>
-        <div class="job-card-content">毒舌な女の子と甘えてくる女の子のギャップに翻弄され、精神も身体もとろかされる甘辛ミックス。</div>
+        <div class="job-card-header"><span class="job-card-name">2. ダブル拘束・無慈悲な亀甲監禁型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥38,000</span></div>
+        <div class="job-card-content"><strong>オプション：拘束</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">一歩も動けない亀甲縛りで逃げ場ゼロの極限焦らしプレイ。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">3. 主従逆転・Wペット従属型</span></div>
-        <div class="job-card-content">あなたが「ご主人様」として2人を従える……と思いきや、結局2人のペースに呑まれて玩具にされる型。</div>
+        <div class="job-card-header"><span class="job-card-name">3. W顔面騎乗・息継ぎ禁止の窒息悦楽型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥36,000</span></div>
+        <div class="job-card-content"><strong>オプション：顔面騎乗</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">両側から容赦なく顔面を塞がれ、圧倒的な密着と重みに溺れる。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">4. 両手に華・W濃厚密着型</span></div>
-        <div class="job-card-content">左右から絶え間なく耳元で囁かれ、全身をくまなく愛撫され続ける感度限界突破スタイル。</div>
+        <div class="job-card-header"><span class="job-card-name">4. ダブル責め立て・底なし指アナル搾取型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥40,000</span></div>
+        <div class="job-card-content"><strong>オプション：指アナル</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">体の芯から狂わされる背徳の指責めアタックで完全開発。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">5. ハチコとお給仕・人間犬乱宴型</span></div>
-        <div class="job-card-content">ハチコと一緒に四つんばいで這いつくばり、2人のご主人様から同時に可愛がられる忠犬体験。</div>
+        <div class="job-card-header"><span class="job-card-name">5. Wお姉さんの密着・オールランジェリー誘惑型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥30,000</span></div>
+        <div class="job-card-content"><strong>オプション：オールランジェリー</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">セクシーなランジェリーに身を包んだ2人に丸投げしてトロトロに。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">6. 代わる代わる搾取・魔力二重奏型</span></div>
-        <div class="job-card-content">交互に攻め立てられ、息つく暇もなく体力を奪われ尽くす無慈悲な連続プレイ。</div>
+        <div class="job-card-header"><span class="job-card-name">6. W美女の全身お触り・骨抜きマッサージ型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥32,000</span></div>
+        <div class="job-card-content"><strong>オプション：お触り</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">全身くまなく優しく、時には激しく愛撫される癒やしのお任せ型。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">7. Wお姉さんの包容＆甘やかし型</span></div>
-        <div class="job-card-content">包容力抜群の2人に包み込まれ、赤ちゃんのように甘やかされながら骨抜きにされる癒やしプレイ。</div>
+        <div class="job-card-header"><span class="job-card-name">7. ダブル乳舐め・ダブルバキューム吸着型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥34,000</span></div>
+        <div class="job-card-content"><strong>オプション：乳舐め</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">上半身の急所を同時に攻め立てられ、吸い尽くされる極上の受動プレイ。</div>
     </div>
 
     <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">8. 終身拘束・ダブルロック型</span></div>
-        <div class="job-card-content">2人がかりで身体をがっちり固定され、自由を奪われた状態でなすすべなく攻め立てられるハードスタイル。</div>
+        <div class="job-card-header"><span class="job-card-name">8. 両手に華・密着抱きつきトロトロ型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥28,000</span></div>
+        <div class="job-card-content"><strong>オプション：抱きつき</strong></div>
+        <div style="font-size: 0.8rem; color: #555;">2人の柔らかい体にすっぽり包み込まれ、ひたすら甘やかされる。</div>
     </div>
 </div>
 
@@ -299,7 +310,6 @@
     
     const scriptURL = '';
 
-    // ハチコ画像（1〜6.jpg）をランダム選出
     function setRandomHachiko(imgId) {
         currentHachikoIndex = Math.floor(Math.random() * 6) + 1;
         const img = document.getElementById(imgId);
@@ -338,77 +348,118 @@
         }
     }
 
+    // 全8パターンの定義（オプション名と金額を含めています）
     const types = {
-        sandwich: { n: "W女王様のサンドイッチ型", c: "ご主人様、2人のドSなお姉様に挟まれて身動きが取れなくなるのがお望みなんだワン？徹底的にいじめ抜かれてひれ伏すといいワン！" },
-        tsundere: { n: "ツンデレ＆小悪魔の挟み撃ち型", c: "ツンツンされた後に小悪魔に甘えられたら、もう頭がパニックだワン！甘さと辛さの連続攻撃でとろけちゃえワン！" },
-        pet: { n: "主従逆転・Wペット従属型", c: "「2人を従えるご主人様」気取りだったのに、いつの間にか立場が逆転して玩具にされるのが一番興奮するんだワン！" },
-        flower: { n: "両手に華・W濃厚密着型", c: "左右からの吐息と愛撫で脳みそが溶けちゃうワン！贅沢すぎる密着で感度限界突破間違いなしだワン！" },
-        hachiko: { n: "ハチコとお給仕・人間犬乱宴型", c: "クゥ〜ン！ハチコと一緒に四つんばいになって可愛がられたい変態さん発見ワン！2人のご主人様に一生付き従うワン！" },
-        drain: { n: "代わる代わる搾取・魔力二重奏型", c: "息をつく暇もない連続アタックだワン！体力が空っぽになるまで絞り尽くされちゃうワン……！" },
-        heal: { n: "Wお姉さんの包容＆甘やかし型", c: "日頃の疲れを全て包み込んでもらうワン。赤ちゃんに戻ったみたいに甘やかされて骨抜きにされるワン～。" },
-        lock: { n: "終身拘束・ダブルロック型", c: "2人がかりでがっちり固定されて逃げ場ゼロワン！自由を奪われてなす術なく攻め立てられる最高の屈辱だワン！" }
+        active_trample: { 
+            n: "W女王様の絶対服従・踏みつけ調教型", 
+            opt: "踏みつけ", 
+            price: "¥35,000",
+            c: "ご主人様、自分で『これをされたい』って分かってる変態さんだワンね！2人の女王様に容赦なく踏みつけられながら、下僕としての快楽に溺れる最高の一撃だワン！" 
+        },
+        active_lock: { 
+            n: "ダブル拘束・無慈悲な亀甲監禁型", 
+            opt: "拘束", 
+            price: "¥38,000",
+            c: "一歩も動けないようにガッチリ縛られて、2人に好き放題弄ばれたいんだワン？ 逃げ場ゼロの状態で極限まで焦らされる、背徳の拘束プレイだワン！" 
+        },
+        active_face: { 
+            n: "W顔面騎乗・息継ぎ禁止の窒息悦楽型", 
+            opt: "顔面騎乗", 
+            price: "¥36,000",
+            c: "両側から容赦なく顔面を塞がれ、圧倒的な密着と重みに溺れる型だワン！ 息も絶え絶えになりながら快感を貪る、ハードコアな大好物スタイルだワン！" 
+        },
+        active_finger: { 
+            n: "ダブル責め立て・底なし指アナル搾取型", 
+            opt: "指アナル", 
+            price: "¥40,000",
+            c: "体の芯から狂わされる、背徳の指責めアタックだワン！ 自分からこれを指名するなんて、相当お尻の感度が開発されちゃってるご主人様だワンね…！" 
+        },
+        passive_lingerie: { 
+            n: "Wお姉さんの密着・オールランジェリー誘惑型", 
+            opt: "オールランジェリー", 
+            price: "¥30,000",
+            c: "自分で決めるのは面倒だから、セクシーなランジェリーに身を包んだ2人に丸投げしたいおねだりさんだワン！ 視覚からトロトロに溶かされちゃうワン〜" 
+        },
+        passive_touch: { 
+            n: "W美女の全身お触り・骨抜きマッサージ型", 
+            opt: "お触り", 
+            price: "¥32,000",
+            c: "お任せで全身くまなく優しく、時には激しく愛撫されたい癒やし系だワン！ 2人の手のひらの上で、赤ちゃんのように転がされちゃうワン！" 
+        },
+        passive_nipple: { 
+            n: "ダブル乳舐め・ダブルバキューム吸着型", 
+            opt: "乳舐め", 
+            price: "¥34,000",
+            c: "上半身の急所を同時に攻め立てられ、思考力を完全に奪われるワン！ 女の子たちのリードに身を任せて、吸い尽くされるままになる極上の受動プレイだワン！" 
+        },
+        passive_hug: { 
+            n: "両手に華・密着抱きつきトロトロ型", 
+            opt: "抱きつき", 
+            price: "¥28,000",
+            c: "2人の柔らかい体にすっぽり包み込まれ、ひたすら甘やかされてしがみつかれたいんだワン。流されるままに極上の温もりに満たされるワン！" 
+        }
     };
 
     const qs = [
-        { q: "2人の女の子に攻められるなら、どんな配置が理想？", a: [
-            {t: "左右から挟まれて身動きを奪われたい", j: "sandwich"},
-            {t: "片方に責められ、もう片方に甘えられたい", j: "tsundere"},
-            {t: "2人に膝枕されながら見下ろされたい", j: "heal"},
-            {t: "両手両足をがっちり押さえ込まれたい", j: "lock"}
+        { q: "渋谷店に入店した瞬間、あなたの頭の中は？", a: [
+            {t: "「今日は絶対にこれをされたい」という欲望がある", j: "active_lock"},
+            {t: "「今日はどんな風に弄ばれるのかな」と女の子に任せたい", j: "passive_touch"},
+            {t: "「とにかく踏みつけられたい」という強い目的がある", j: "active_trample"},
+            {t: "「お任せでトロトロに溶かされたい」", j: "passive_lingerie"}
         ]},
-        { q: "お店で最初にかける言葉は？", a: [
-            {t: "「今日から私達の玩具ね」と冷たく笑われる", j: "sandwich"},
-            {t: "「ご主人様、ハチコと一緒に遊ぶワン！」", j: "hachiko"},
-            {t: "「よしよし、たくさん疲れたのね」と抱きしめられる", j: "heal"},
-            {t: "「逃げられると思わないでね」と鍵を掛けられる", j: "lock"}
+        { q: "2人の女の子が部屋に入ってきたときの理想の出迎えは？", a: [
+            {t: "最初からセクシーな下着姿で誘惑してほしい", j: "passive_lingerie"},
+            {t: "冷徹な目で「動かないで」と縛り準備をされる", j: "active_lock"},
+            {t: "有無を言わせずベッドに押し倒して馬乗りになられる", j: "active_face"},
+            {t: "ギュッと強く抱きつかれて甘い香りに包まれる", j: "passive_hug"}
         ]},
-        { q: "プレイ中、最もゾクゾクする瞬間は？", a: [
-            {t: "威張ろうとしたのに一瞬で返り討ちにあう時", j: "pet"},
-            {t: "耳元で同時に「好き」と囁かれる時", j: "flower"},
-            {t: "休む間もなく次の手が伸びてくる時", j: "drain"},
-            {t: "四つんばいにされてお尻を撫でられる時", j: "hachiko"}
+        { q: "プレイの主導権について、あなたの本音は？", a: [
+            {t: "自分がしてほしいプレイのメニューを完璧に指定したい", j: "active_finger"},
+            {t: "主導権は完全に相手に渡し、されるがままになりたい", j: "passive_nipple"},
+            {t: "最初はリードするふりをして、結局踏みにじられたい", j: "active_trample"},
+            {t: "心地よさに身を任せて、流れに身を委ねたい", j: "passive_touch"}
         ]},
-        { q: "理想のキャスト2人の組み合わせは？", a: [
-            {t: "毒舌なツンデレ × 小悪魔な妹系", j: "tsundere"},
-            {t: "ご主人様気取りの2人（実は下僕扱い）", j: "pet"},
-            {t: "グラマラスなW濃厚系美女", j: "flower"},
-            {t: "体力無限大のWドS美女", j: "drain"}
+        { q: "Active派：一番強烈に味わいたい「刺激」はどれ？", a: [
+            {t: "お尻の奥をグイグイ責められる指アナル", j: "active_finger"},
+            {t: "息ができないほどの顔面騎乗プレス", j: "active_face"},
+            {t: "身動きひとつできない完全拘束", j: "active_lock"},
+            {t: "高いヒールや足元で踏みつけられる屈辱", j: "active_trample"}
         ]},
-        { q: "2人から同時に何をおねだりされたい？", a: [
-            {t: "「もっと私達に跪きなさい」という命令", j: "sandwich"},
-            {t: "「どっちの言うことを聞くの？」という嫌がらせ", j: "tsundere"},
-            {t: "「ハチコと一緒に『ワン』って言って？」という言葉", j: "hachiko"},
-            {t: "「力を抜いて全部預けて？」という甘やかし", j: "heal"}
+        { q: "Passive派：一番身を委ねたい「シチュエーション」は？", a: [
+            {t: "全員ランジェリー姿で艶かしく囲まれる", j: "passive_lingerie"},
+            {t: "全身をくまなく這い回るようなお触り", j: "passive_touch"},
+            {t: "胸元を同時に舐め回されるダブル乳舐め", j: "passive_nipple"},
+            {t: "密着して離れない甘えん坊の抱きつき", j: "passive_hug"}
         ]},
-        { q: "身体の自由を制限されるとしたら？", a: [
-            {t: "2人の重みで完全に押し潰される", j: "sandwich"},
-            {t: "首輪を繋가れて2人に引っぱられる", j: "hachiko"},
-            {t: "絶え間ない愛撫で動けなくされる", j: "flower"},
-            {t: "拘束具でがっちり固定される", j: "lock"}
+        { q: "2人から「どこを一番いじめてほしい？」と聞かれたら？", a: [
+            {t: "「言葉よりも体の一部を激しく指で…」", j: "active_finger"},
+            {t: "「僕の顔面を使って好きにして」", j: "active_face"},
+            {t: "「下僕らしく足蹴にして踏んで」", j: "active_trample"},
+            {t: "「全部お任せするから好きにして」", j: "passive_touch"}
         ]},
-        { q: "プレイが終わった直後、どうされていたい？", a: [
-            {t: "「威張ってた割に可愛かったね」と笑われたい", j: "pet"},
-            {t: "抜け殻みたいに体力を絞り尽くされていたい", j: "drain"},
-            {t: "2人の胸に包まれてそのまま眠りたい", j: "heal"},
-            {t: "縛られたまま放置されて余韻に浸りたい", j: "lock"}
+        { q: "部屋の雰囲気が最高潮に達したとき、どうされたい？", a: [
+            {t: "逃げられないように手足を完全に固定されたい", j: "active_lock"},
+            {t: "ツヤツヤのランジェリー姿のまま上から覆いかぶさってほしい", j: "passive_lingerie"},
+            {t: "胸元や敏感な場所を同時に責め立てられたい", j: "passive_nipple"},
+            {t: "温かい体温を感じながら強く抱きしめられたい", j: "passive_hug"}
         ]},
-        { q: "あなたが密かに憧れている「シチュエーション」は？", a: [
-            {t: "主導権を握ろうとして結局ダブルで搾取される", j: "pet"},
-            {t: "全身の肌という肌を同時に舐め回される", j: "flower"},
-            {t: "息つく暇もなく交互にイジられ続ける", j: "drain"},
-            {t: "ツンとデレの温度差で脳がバグる", j: "tsundere"}
+        { q: "あなたが最も「興奮で理性が吹き飛ぶ」瞬間は？", a: [
+            {t: "自分の欲望（指アナル等）をピンポイントで叶えてもらう時", j: "active_finger"},
+            {t: "女の子たちのペースに完全に飲まれて、なすがままになる時", j: "passive_nipple"},
+            {t: "高慢な笑みで見下ろされながら踏みつけられる時", j: "active_trample"},
+            {t: "自分では思いつかないようなエロい誘惑をされる時", j: "passive_lingerie"}
         ]},
-        { q: "ハチコに「ご主人様、どんなお仕置きが好きワン？」と聞かれたら？", a: [
-            {t: "「2人で順番に踏みつけてほしい」", j: "sandwich"},
-            {t: "「ハチコと一緒にご褒美をもらいたい」", j: "hachiko"},
-            {t: "「代わる代わる搾取してほしい」", j: "drain"},
-            {t: "「絶対に逃げられないようにしてほしい」", j: "lock"}
+        { q: "ハチコが「ご主人様、今日の好みを教えてほしいワン！」と聞いたときの答えは？", a: [
+            {t: "「これとこれをしてください」と明確にオーダーする", j: "active_lock"},
+            {t: "「ハチコたちのお気に入りの格好とプレイで見せて」", j: "passive_lingerie"},
+            {t: "「お尻の奥まで狂わせてほしい」", j: "active_finger"},
+            {t: "「ただただ僕を可愛がって癒やしほしい」", j: "passive_hug"}
         ]},
-        { q: "最後に……あなたが渋谷店で本当に体験したいのは？", a: [
-            {t: "ツンデレと小悪魔の翻弄", j: "tsundere"},
-            {t: "主従逆転の屈辱体験", j: "pet"},
-            {t: "左右からの濃厚ダブル愛撫", j: "flower"},
-            {t: "バブみ溢れるWお姉さんの癒やし", j: "heal"}
+        { q: "最後に……渋谷店で体験したい究極の着地点は？", a: [
+            {t: "息もできないほどの顔面密着と圧倒的プレッシャー", j: "active_face"},
+            {t: "全身の感覚を支配されるような濃厚なお触り責め", j: "passive_touch"},
+            {t: "身動きを奪われ、逃げ場のない快楽に溺れること", j: "active_lock"},
+            {t: "甘い香りと温もりに全身を委ねること", j: "passive_hug"}
         ]}
     ];
 
@@ -497,6 +548,10 @@
         document.getElementById('res-name-label').innerText = userName;
         document.getElementById('job-name').innerText = resultType.n;
         
+        // オプションと金額をリザルト画面に反映
+        document.getElementById('res-opt').innerText = resultType.opt;
+        document.getElementById('res-price').innerText = resultType.price;
+        
         commentBox.innerText = `鑑定完了だワン！${userName}ご主人様にピッタリなのは「${resultType.n}」だワン！`;
         commentBox.classList.remove('hidden');
 
@@ -506,7 +561,7 @@
         
         document.getElementById('btn-share').onclick = () => {
             const pureUrl = window.location.origin + window.location.pathname;
-            const text = encodeURIComponent(`【かりんと渋谷店 理想の3P診断】\n${userName}ご主人様の理想の3Pは「${resultType.n}」！\n#かりんと渋谷店 #理想の3P診断`);
+            const text = encodeURIComponent(`【かりんと渋谷店 理想の3P診断】\n${userName}ご主人様の理想の3Pは「${resultType.n}」（${resultType.opt} / ${resultType.price}）！\n#かりんと渋谷店 #理想の3P診断`);
             window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(pureUrl)}`, '_blank');
         };
     }
