@@ -44,9 +44,10 @@
             margin-bottom: 20px;
         }
 
+        /* ★ハチコの顔をさらに大きくダイナミックにクローズアップ！ */
         .hachiko-big-avatar {
-            width: 95px;
-            height: 95px;
+            width: 110px;
+            height: 110px;
             object-fit: cover;
             object-position: center 20%; 
             border-radius: 50%;
@@ -55,13 +56,13 @@
             flex-shrink: 0;
             animation: float 3s ease-in-out infinite;
             background-color: #fff;
-            transform: scale(1.15);
+            transform: scale(1.3);
             transform-origin: center center;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1.15); }
-            50% { transform: translateY(-6px) scale(1.15); }
+            0%, 100% { transform: translateY(0) scale(1.3); }
+            50% { transform: translateY(-6px) scale(1.3); }
         }
 
         .hachiko-speech-bubble {
@@ -136,7 +137,6 @@
             font-size: 0.95rem;
         }
 
-        /* お名前入力欄のスタイル */
         .name-input {
             width: 100%;
             padding: 14px 20px;
@@ -334,7 +334,7 @@
     <!-- ハチコのお顔クローズアップエリア -->
     <div class="hachiko-chat-container">
         <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
-        <div id="hachiko-msg" class="hachiko-speech-bubble">お名前を教えてくれたら、ハチコが一緒に診断してあげるワン！✨</div>
+        <div id="hachiko-msg" class="hachiko-speech-bubble">お名前を教えてくれたら、ハチコが一緒に診断してあげるワン！✨（空欄でもOKだワン）</div>
     </div>
 
     <div class="container">
@@ -343,7 +343,7 @@
             <img src="logo.jpg" alt="Logo" class="app-logo" onerror="this.style.display='none'">
             <h1>ハチコの深層心理・本能アセスメント</h1>
             <p>あなたの本能と欲求を丸裸にする、全10問のポップな心理テスト！</p>
-            <input type="text" id="user-name-input" class="name-input" placeholder="お名前（またはニックネーム）を入力" maxlength="20">
+            <input type="text" id="user-name-input" class="name-input" placeholder="お名前（例：太郎）※空欄ならご主人様" maxlength="20">
             <button class="btn" onclick="startQuiz()">診断をスタート！</button>
         </div>
 
@@ -367,7 +367,7 @@
         <!-- 結果画面 -->
         <div id="result-screen" class="hidden">
             <div class="result-box">
-                <div class="result-title-badge"><span id="result-name-badge">--</span>様の診断結果発表</div>
+                <div class="result-title-badge"><span id="result-name-badge">--</span>の診断結果発表</div>
                 <div id="result-type" class="result-type">--</div>
                 
                 <div id="result-desc" class="result-desc">
@@ -394,11 +394,11 @@
         let allQuestions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let userName = "ご主人様"; // デフォルト名
+        let displayName = "ご主人様";
         let currentBestTypeName = "";
 
         const hachikoComments = [
-            "ふむふむ…[NAME]さんはそう選んだんだワン！",
+            "ふむふむ…[NAME]はそう選んだんだワン！",
             "おっ、今の選択、なかなか奥が深いワンね〜！",
             "ハチコ、次の質問も気になっちゃうワンっ✨",
             "どんどん本性に近づいてるワン……ふふっ♪",
@@ -407,19 +407,21 @@
 
         function setHachiko(imageName, message) {
             document.getElementById("hachiko-face").src = imageName;
-            // メッセージ内の [NAME] を入力された名前に置換
-            const personalizedMsg = message.replace(/[NAME]/g, userName);
+            const personalizedMsg = message.replace(/[NAME]/g, displayName);
             document.getElementById("hachiko-msg").innerText = personalizedMsg;
         }
 
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
+            
             if (inputVal !== "") {
-                userName = inputVal;
+                displayName = inputVal + "ご主人様";
+            } else {
+                displayName = "ご主人様";
             }
 
             switchScreen("loading-screen");
-            setHachiko("hachiko2.jpg", "[NAME]さんのデータを集めてるからちょっと待っててねワン！");
+            setHachiko("hachiko2.jpg", "[NAME]のデータを集めてるからちょっと待っててねワン！");
             try {
                 const [resFront, resBack] = await Promise.all([
                     fetch(`${GAS_API_URL}?sheet=front`),
@@ -494,7 +496,7 @@
                 }
             }
 
-            setHachiko("hachiko1.jpg", `${userName}さんの診断結果が出たワン！お疲れ様だワン♪`);
+            setHachiko("hachiko1.jpg", `${displayName}の診断結果が出たワン！お疲れ様だワン♪`);
 
             const typeNames = {
                 AH: "【AHタイプ】 主導調教型 (Active × Hard)",
@@ -519,12 +521,12 @@
 
             currentBestTypeName = typeNames[bestType];
 
-            document.getElementById("result-name-badge").innerText = userName;
+            document.getElementById("result-name-badge").innerText = displayName;
             document.getElementById("result-type").innerText = currentBestTypeName;
             document.getElementById("result-desc").innerText = typeDescriptions[bestType];
             document.getElementById("recommend-content").innerText = recommendPlans[bestType];
 
-            const tweetText = encodeURIComponent(`${userName}さんの診断結果は「${currentBestTypeName}」でした！✨\n\nハチコと一緒にあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
+            const tweetText = encodeURIComponent(`${displayName}の診断結果は「${currentBestTypeName}」でした！✨\n\nハチコと一緒にあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
             const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}`;
             document.getElementById("twitter-btn").href = tweetUrl;
         }
