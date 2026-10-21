@@ -81,7 +81,6 @@
             position: relative;
         }
 
-        /* ロゴを丸枠なしで大きく主張 */
         .app-logo {
             width: 100%;
             max-width: 280px;
@@ -170,13 +169,23 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            outline: none; /* フォーカス時のデフォルト枠線を消す */
         }
 
-        .choice-btn:hover {
+        /* PCでのホバー時のみ色を変える（スマホでの誤った常時ハイライトを防ぐ） */
+        @media (hover: hover) {
+            .choice-btn:hover {
+                background-color: #fff0f5;
+                border-color: var(--primary-color);
+                color: var(--primary-color);
+                transform: translateX(4px);
+            }
+        }
+
+        .choice-btn:active {
             background-color: #fff0f5;
             border-color: var(--primary-color);
             color: var(--primary-color);
-            transform: translateX(4px);
         }
 
         /* ローディング */
@@ -213,7 +222,7 @@
 </head>
 <body>
 
-    <!-- 常に登場するハチコ（語尾ワン！） -->
+    <!-- ハチコ常駐バー -->
     <div class="hachiko-bar">
         <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-avatar" onerror="this.src='logo.jpg'">
         <div id="hachiko-msg" class="hachiko-msg">ご主人様、一緒に深層心理を暴いちゃおうワン！✨</div>
@@ -265,9 +274,8 @@
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
 
-        // ハチコの「ワン」を交えたおしゃべりパターン
         const hachikoComments = [
-            "ふむふむ…ご主人様はそう選ぶんだワン！",
+            "ふむふむ…ご主人様はそう選んだんだワン！",
             "おっ、今の選択、なかなか奥が深いワンね〜！",
             "ハチコ、次の質問も気になっちゃうワンっ✨",
             "どんどん本性に近づいてるワン……ふふっ♪",
