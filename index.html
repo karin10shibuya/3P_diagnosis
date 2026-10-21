@@ -44,7 +44,6 @@
             margin-bottom: 20px;
         }
 
-        /* ★ハチコの顔をさらに大きくダイナミックにクローズアップ！ */
         .hachiko-big-avatar {
             width: 110px;
             height: 110px;
@@ -414,8 +413,11 @@
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
             
+            // ★【修正】毎回新しく「〇〇ご主人様」を生成するため、重複する心配がなくなります
             if (inputVal !== "") {
-                displayName = inputVal + "ご主人様";
+                // すでに「ご主人様」という文字が入っていたら取り除いてから綺麗に結合する安全対策
+                const cleanName = inputVal.replace(/ご主人様/g, "");
+                displayName = cleanName + "ご主人様";
             } else {
                 displayName = "ご主人様";
             }
@@ -460,9 +462,14 @@
             
             document.getElementById("question-container").innerText = q.question;
 
-            const rawComment = hachikoComments[Math.floor(Math.random() * hachikoComments.length)];
-            const randomHachikoImg = `hachiko${(currentIndex % 5) + 1}.jpg`;
-            setHachiko(randomHachikoImg, rawComment);
+            // 1問目は固定のセリフ、2問目以降はランダムセリフ
+            if (currentIndex === 0) {
+                setHachiko("hachiko1.jpg", `いよいよ診断スタートだワン！[NAME]と一緒に深層心理を暴いていくワンよ〜！✨`);
+            } else {
+                const rawComment = hachikoComments[Math.floor(Math.random() * hachikoComments.length)];
+                const randomHachikoImg = `hachiko${(currentIndex % 5) + 1}.jpg`;
+                setHachiko(randomHachikoImg, rawComment);
+            }
 
             const choicesContainer = document.getElementById("choices-container");
             choicesContainer.innerHTML = "";
