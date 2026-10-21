@@ -129,6 +129,7 @@
             text-align: center;
             box-shadow: 0 6px 20px rgba(255, 107, 155, 0.4);
             letter-spacing: 0.05em;
+            margin-top: 20px;
         }
 
         .btn:hover {
@@ -169,10 +170,9 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            outline: none; /* フォーカス時のデフォルト枠線を消す */
+            outline: none;
         }
 
-        /* PCでのホバー時のみ色を変える（スマホでの誤った常時ハイライトを防ぐ） */
         @media (hover: hover) {
             .choice-btn:hover {
                 background-color: #fff0f5;
@@ -198,10 +198,11 @@
 
         /* 結果画面 */
         .result-type {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--primary-color);
-            margin: 15px 0 20px 0;
+            margin: 10px 0 20px 0;
             font-weight: bold;
+            line-height: 1.3;
         }
 
         .result-desc {
@@ -210,9 +211,47 @@
             padding: 20px;
             border-radius: 14px;
             border-left: 5px solid var(--primary-color);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.7;
+            font-size: 0.92rem;
+        }
+
+        /* おすすめ3Pプランカード */
+        .recommend-box {
+            text-align: left;
+            background: linear-gradient(135deg, #fff9fb 0%, #fff0f5 100%);
+            border: 2px dashed var(--primary-color);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+        }
+
+        .recommend-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recommend-content {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .recommend-price {
             font-size: 0.95rem;
+            font-weight: bold;
+            color: #2b2d42;
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .hidden {
@@ -260,8 +299,16 @@
                 <p style="margin-bottom: 5px; font-weight: bold;">🎉 あなたの診断結果は……！ 🎉</p>
                 <div id="result-type" class="result-type">--</div>
                 <div id="result-desc" class="result-desc">
-                    ここに解説文が入ります。
+                    ここに詳細な解説文が入ります。
                 </div>
+                
+                <!-- おすすめ3Pプラン欄 -->
+                <div class="recommend-box">
+                    <div class="recommend-title">💖 ハチコ的・こんな3Pがオススメ！</div>
+                    <div id="recommend-content" class="recommend-content">ここにオススメの内容が入ります。</div>
+                    <div id="recommend-price" class="recommend-price">💰 料金目安：--</div>
+                </div>
+
                 <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
             </div>
         </div>
@@ -374,14 +421,36 @@
             };
 
             const typeDescriptions = {
-                AH: "あなたは「自分で主導権を握り、強烈な負荷やスリル、拘束を味わいたい」という強い欲求を持つタイプです。自らの意志で圧倒的な世界観を構築し、エキサイティングな状況をリードすることに最高の悦びを感じます。",
-                AS: "あなたは「自分の美意識やこだわりを大切にし、甘さや密着を自らデザインしてリードしたい」というタイプです。スタイリッシュで洗練された空気感を好み、スマートに心地よさを追求します。",
-                PH: "あなたは「自分では決めないけれど、容赦ない視覚的・肉体的な刺激や連続アタックで思考を完全にとかされたい」というタイプです。すべてを委ねた先にある、強烈な快楽の渦に溺れることに本能が惹かれます。",
-                PS: "あなたは「すべてを相手に委ねて、ひたすら甘やかされたり優しく愛撫されたりして骨抜きにされたい」というタイプです。温もりに包まれ、外界の緊張から解放される至福の癒やしを最も深く求めています。"
+                AH: "あなたは「自分で主導権を握り、強烈な負荷やスリル、拘束を味わいたい」という強い欲求を持つタイプです。自らの意志で圧倒的な世界観やルールを構築し、エキサイティングな状況を自らリードすることに最高の悦びを感じます。妥協を許さない完璧主義な一面があり、ドラマチックで刺激的な展開に身を委ねることで、心の底から満たされる本能を秘めています。",
+                AS: "あなたは「自分の美意識やこだわりを大切にし、甘さや密着を自らデザインしてリードしたい」というタイプです。スタイリッシュで洗練された空気感を好み、スマートに心地よさを追求します。独自の美的センスと細やかな気配りを合わせ持ち、相手との絶妙な距離感をコントロールしながら、優雅でロマンチックな世界観を創り上げることに悦びを見出します。",
+                PH: "あなたは「自分では決めないけれど、容赦ない視覚的・肉体的な刺激や連続アタックで思考を完全にとかされたい」というタイプです。すべてを委ねた先にある、強烈な快楽の渦に溺れることに本能が強く惹かれます。普段の理性から解放され、圧倒的な存在感や容赦ないアプローチによって、思考が真っ白になるような非日常のスリルとトランス状態を求めています。",
+                PS: "あなたは「すべてを相手に委ねて、ひたすら甘やかされたり優しく愛撫されたりして骨抜きにされたい」というタイプです。温もりに包まれ、外界の緊張から解放される至福の癒やしを最も深く求めています。包み込むような優しさと絶対的な安心感の中で、全身の力を抜き去り、心身ともにトロトロにとろけてしまうような極上のリラクゼーション体験がベストマッチです。"
+            };
+
+            // タイプ別のおすすめプランと料金
+            const recommendPlans = {
+                AH: {
+                    content: "主導権を完全に対等（または支配的）に握り、スリルと緊張感を楽しめる『ハードシチュエーション・カスタム3Pプラン』。演出やルールにこだわり抜いた濃厚な時間をデザインします。",
+                    price: "35,000円〜 / 120分"
+                },
+                AS: {
+                    content: "洗練された空間と甘い密着感を贅沢に味わう『スタイリッシュ・アロマフェチ3Pプラン』。美しい照明と心地よい距離感の中で、五感を満たすスマートな時間を演出します。",
+                    price: "30,000円〜 / 120分"
+                },
+                PH: {
+                    content: "考える余地を与えない連続的な刺激と圧倒的密着で思考をとかす『ハード・ラッシュ快楽3Pプラン』。すべてをお任せにして、極限のトランス状態へと誘います。",
+                    price: "32,000円〜 / 120分"
+                },
+                PS: {
+                    content: "全身を優しく包み込まれ、ひたすら甘やかされて骨抜きになる『極上癒やし・トリートメント3Pプラン』。日常の疲れを完全に忘れさせる、至福のデトックス空間を提供します。",
+                    price: "28,000円〜 / 120分"
+                }
             };
 
             document.getElementById("result-type").innerText = typeNames[bestType];
             document.getElementById("result-desc").innerText = typeDescriptions[bestType];
+            document.getElementById("recommend-content").innerText = recommendPlans[bestType].content;
+            document.getElementById("recommend-price").innerText = `💰 料金目安：${recommendPlans[bestType].price}`;
         }
 
         function switchScreen(screenId) {
