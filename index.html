@@ -40,6 +40,28 @@
             border-radius: 16px;
             padding: 40px 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        /* ロゴ画像スタイル */
+        .app-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            margin: 0 auto 20px auto;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+        }
+
+        /* ハチコ画像スタイル */
+        .hachiko-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--accent-color);
+            margin: 15px auto;
         }
 
         h1, h2 {
@@ -133,7 +155,7 @@
             text-align: center;
             font-size: 1.1rem;
             color: var(--text-sub);
-            padding: 40px 0;
+            padding: 20px 0;
         }
 
         /* 結果画面 */
@@ -169,6 +191,8 @@
     <div class="container">
         <!-- スタート画面 -->
         <div id="start-screen">
+            <!-- ロゴ画像を表示 -->
+            <img src="logo.jpg" alt="Logo" class="app-logo" onerror="this.style.display='none'">
             <h1>Deep Psychological Assessment</h1>
             <p>深層心理の奥底にある本能と欲求を紐解く、全10問の選択式診断テスト。直感に従って選択してください。</p>
             <button class="btn" onclick="startQuiz()">診断を始める</button>
@@ -176,7 +200,8 @@
 
         <!-- ローディング画面 -->
         <div id="loading-screen" class="hidden">
-            <div class="loading">データを構築中...</div>
+            <img src="hachiko1.jpg" alt="Hachiko" class="hachiko-img" onerror="this.style.display='none'">
+            <div class="loading">深層データを構築中...</div>
         </div>
 
         <!-- クイズ画面 -->
@@ -194,6 +219,8 @@
         <!-- 結果画面 -->
         <div id="result-screen" class="hidden">
             <div class="result-box">
+                <!-- 結果画面にもハチコ画像を添えて -->
+                <img id="result-hachiko" src="hachiko2.jpg" alt="Hachiko Result" class="hachiko-img" onerror="this.style.display='none'">
                 <p style="margin-bottom: 5px;">あなたの診断結果は</p>
                 <div id="result-type" class="result-type">--</div>
                 <div id="result-desc" class="result-desc">
@@ -205,18 +232,16 @@
     </div>
 
     <script>
-        // 確認済みのGASウェブアプリURLを設定
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxKd0sRsasVHnLmyzYakYGemsXGAyajnCdHXoJfmID3SKvDs5jjVCkqKpAqpfd5fe8O/exec";
 
         let questions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let currentPhase = "front"; // "front" or "back"
+        let currentPhase = "front";
 
         async function startQuiz() {
             switchScreen("loading-screen");
             try {
-                // 前半5問を取得
                 const res = await fetch(`${GAS_API_URL}?sheet=front`);
                 questions = await res.json();
                 currentIndex = 0;
@@ -237,7 +262,6 @@
                 return;
             }
 
-            // 後半に切り替わるタイミング (5問目終了後)
             if (currentIndex === 5 && currentPhase === "front") {
                 loadBackQuestions();
                 return;
@@ -263,11 +287,9 @@
         async function loadBackQuestions() {
             switchScreen("loading-screen");
             try {
-                // 後半5問を取得
                 const res = await fetch(`${GAS_API_URL}?sheet=back`);
                 const backQuestions = await res.json();
                 
-                // 前半の配列の続きに後半の5問を結合
                 questions = questions.concat(backQuestions);
                 currentPhase = "back";
 
@@ -290,7 +312,6 @@
         function showResult() {
             switchScreen("result-screen");
 
-            // 最もスコアが高いタイプを決定
             let bestType = "AH";
             let maxScore = -1;
             for (let type in scores) {
@@ -298,6 +319,17 @@
                     maxScore = scores[type];
                     bestType = type;
                 }
+            }
+
+            // 結果のタイプに応じてハチコ画像を動的に切り替える小ネタも入れました！
+            const hachikoMap = {
+                AH: "hachiko1.jpg",
+                AS: "hachiko2.jpg",
+                PH: "hachiko3.jpg",
+                PS: "hachiko4.jpg"
+            };
+            if (hachikoMap[bestType]) {
+                document.getElementById("result-hachiko").src = hachikoMap[bestType];
             }
 
             const typeNames = {
