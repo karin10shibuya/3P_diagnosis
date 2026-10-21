@@ -142,11 +142,11 @@
         }
 
         .result-type {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--accent-color);
             margin: 15px 0 25px 0;
             font-weight: bold;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
         }
 
         .result-desc {
@@ -205,7 +205,7 @@
     </div>
 
     <script>
-        // ★ここにデプロイしたGoogle Apps ScriptのウェブアプリURLを貼り付けてください
+        // 確認済みのGASウェブアプリURLを設定
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxKd0sRsasVHnLmyzYakYGemsXGAyajnCdHXoJfmID3SKvDs5jjVCkqKpAqpfd5fe8O/exec";
 
         let questions = [];
@@ -244,7 +244,7 @@
             }
 
             const q = questions[currentIndex];
-            document.getElementById("progress-indicatorinnerText" || "progress-indicator").innerText = `${currentIndex + 1} / 10`;
+            document.getElementById("progress-indicator").innerText = `${currentIndex + 1} / 10`;
             document.getElementById("stage-indicator").innerText = currentPhase === "front" ? `Phase 1 : 傾向判定 (${currentIndex + 1}/5)` : `Phase 2 : 詳細分析 (${currentIndex - 4}/5)`;
             document.getElementById("question-container").innerText = q.question;
 
@@ -290,7 +290,7 @@
         function showResult() {
             switchScreen("result-screen");
 
-            // 最もスコアが高いタイプを決定 (同点の場合は AH > AS > PH > PS の優先順位など)
+            // 最もスコアが高いタイプを決定
             let bestType = "AH";
             let maxScore = -1;
             for (let type in scores) {
