@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ハチコのドキドキ深層心理診断</title>
+    <title>ハチコの深層心理・本能アセスメント</title>
     <style>
         :root {
-            --bg-color: #fff0f5; /* 柔らかいパステルピンク */
+            --bg-color: #fff0f5;
             --card-bg: #ffffff;
-            --primary-color: #ff6b9b; /* ポップなピンク */
-            --secondary-color: #ffca3a; /* 明るいイエロー */
-            --accent-blue: #4ea8de; /* ポップなブルー */
+            --primary-color: #ff6b9b;
+            --secondary-color: #ffca3a;
             --text-main: #2b2d42;
             --text-sub: #8d99ae;
-            --border-color: #f1f2f6;
         }
 
         * {
@@ -34,11 +32,11 @@
             padding: 20px;
         }
 
-        /* 常に表示するハチコエリア */
+        /* ハチコ常駐バー */
         .hachiko-bar {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border: 3px solid var(--primary-color);
             border-radius: 50px;
             padding: 8px 20px 8px 8px;
@@ -83,14 +81,16 @@
             position: relative;
         }
 
+        /* ロゴを丸枠なしで大きく主張 */
         .app-logo {
-            width: 110px;
-            height: 110px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid var(--secondary-color);
-            margin: 0 auto 15px auto;
-            box-shadow: 0 6px 20px rgba(255, 202, 58, 0.4);
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 12px;
+            margin: 0 auto 20px auto;
+            display: block;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
@@ -213,24 +213,24 @@
 </head>
 <body>
 
-    <!-- 常に上部にいる自我を持ったハチコ -->
+    <!-- 常に登場するハチコ（語尾ワン！） -->
     <div class="hachiko-bar">
         <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-avatar" onerror="this.src='logo.jpg'">
-        <div id="hachiko-msg" class="hachiko-msg">ご主人様、一緒に深層心理を暴いちゃいましょう！✨</div>
+        <div id="hachiko-msg" class="hachiko-msg">ご主人様、一緒に深層心理を暴いちゃおうワン！✨</div>
     </div>
 
     <div class="container">
         <!-- スタート画面 -->
         <div id="start-screen">
             <img src="logo.jpg" alt="Logo" class="app-logo" onerror="this.style.display='none'">
-            <h1>Deep Psychological Assessment</h1>
+            <h1>ハチコの深層心理・本能アセスメント</h1>
             <p>ハチコと一緒にあなたの本能と欲求を丸裸にする、全10問のポップな心理テスト！直感で選んでね♪</p>
             <button class="btn" onclick="startQuiz()">診断をスタート！</button>
         </div>
 
         <!-- ローディング画面 -->
         <div id="loading-screen" class="hidden">
-            <div class="loading">ハチコが秘密のデータを召喚中...✨</div>
+            <div class="loading">ハチコが秘密のデータを召喚中だワン…！✨</div>
         </div>
 
         <!-- クイズ画面 -->
@@ -253,7 +253,7 @@
                 <div id="result-desc" class="result-desc">
                     ここに解説文が入ります。
                 </div>
-                <button class="btn" onclick="location.reload()">もう一度遊ぶ！</button>
+                <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
             </div>
         </div>
     </div>
@@ -265,13 +265,13 @@
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
 
-        // ハチコのおしゃべりパターンの引き出し
+        // ハチコの「ワン」を交えたおしゃべりパターン
         const hachikoComments = [
-            "ふむふむ…ご主人様はそう選ぶんですね！",
-            "おっ、今の選択、なかなか奥が深いですね〜！",
-            "ハチコ、次の質問も気になっちゃいますっ✨",
-            "どんどん本性に近づいてますよ……ふふっ♪",
-            "直感こそ最大の真実です！その調子ですっ！"
+            "ふむふむ…ご主人様はそう選ぶんだワン！",
+            "おっ、今の選択、なかなか奥が深いワンね〜！",
+            "ハチコ、次の質問も気になっちゃうワンっ✨",
+            "どんどん本性に近づいてるワン……ふふっ♪",
+            "直感こそ最大の真実だワン！その調子だワンっ！"
         ];
 
         function setHachiko(imageName, message) {
@@ -281,7 +281,7 @@
 
         async function startQuiz() {
             switchScreen("loading-screen");
-            setHachiko("hachiko2.jpg", "データを集めてるからちょっと待っててね！");
+            setHachiko("hachiko2.jpg", "データを集めてるからちょっと待っててねワン！");
             try {
                 const [resFront, resBack] = await Promise.all([
                     fetch(`${GAS_API_URL}?sheet=front`),
@@ -300,7 +300,7 @@
             } catch (err) {
                 alert("データの取得に失敗しちゃいました。URLを確認してね！");
                 switchScreen("start-screen");
-                setHachiko("hachiko1.jpg", "あれれ？通信エラーみたいです…泣");
+                setHachiko("hachiko1.jpg", "あれれ？通信エラーみたいだワン…泣");
             }
         }
 
@@ -320,7 +320,6 @@
             
             document.getElementById("question-container").innerText = q.question;
 
-            // ランダムにハチコのセリフを変化させる
             const randomComment = hachikoComments[Math.floor(Math.random() * hachikoComments.length)];
             const randomHachikoImg = `hachiko${(currentIndex % 5) + 1}.jpg`;
             setHachiko(randomHachikoImg, randomComment);
@@ -357,14 +356,7 @@
                 }
             }
 
-            const hachikoMap = {
-                AH: "hachiko1.jpg",
-                AS: "hachiko2.jpg",
-                PH: "hachiko3.jpg",
-                PS: "hachiko4.jpg"
-            };
-            
-            setHachiko(hachikoMap[bestType] || "hachiko1.jpg", "ご主人様の診断結果が出ましたよっ！");
+            setHachiko("hachiko1.jpg", "ご主人様の診断結果が出たワン！お疲れ様だワン♪");
 
             const typeNames = {
                 AH: "【AHタイプ】 主導調教型 (Active × Hard)",
@@ -376,7 +368,7 @@
             const typeDescriptions = {
                 AH: "あなたは「自分で主導権を握り、強烈な負荷やスリル、拘束を味わいたい」という強い欲求を持つタイプです。自らの意志で圧倒的な世界観を構築し、エキサイティングな状況をリードすることに最高の悦びを感じます。",
                 AS: "あなたは「自分の美意識やこだわりを大切にし、甘さや密着を自らデザインしてリードしたい」というタイプです。スタイリッシュで洗練された空気感を好み、スマートに心地よさを追求します。",
-                PH: "あなたは「自分では決めないけれど、容赦ない視覚的・肉体的な刺激や連続アタックで思考を完全にとかされたい」というタイプです。すべてを委ねた先にある、強烈な快楽の渦に溺れることに本本能が惹かれます。",
+                PH: "あなたは「自分では決めないけれど、容赦ない視覚的・肉体的な刺激や連続アタックで思考を完全にとかされたい」というタイプです。すべてを委ねた先にある、強烈な快楽の渦に溺れることに本能が惹かれます。",
                 PS: "あなたは「すべてを相手に委ねて、ひたすら甘やかされたり優しく愛撫されたりして骨抜きにされたい」というタイプです。温もりに包まれ、外界の緊張から解放される至福の癒やしを最も深く求めています。"
             };
 
