@@ -11,7 +11,6 @@
             --primary-color: #ff6b9b;
             --primary-light: #ffe6ef;
             --secondary-color: #ffca3a;
-            --accent-blue: #4ea8de;
             --text-main: #2b2d42;
             --text-sub: #6c757d;
         }
@@ -21,7 +20,6 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            /* ★ここで連続タップによる画面拡大を完全に防止します！ */
             touch-action: manipulation; 
         }
 
@@ -36,40 +34,58 @@
             padding: 20px;
         }
 
-        /* ハチコ常駐バー */
-        .hachiko-bar {
+        /* ★ハチコを大きく可愛く見せる吹き出しエリア */
+        .hachiko-chat-container {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.95);
-            border: 3px solid var(--primary-color);
-            border-radius: 50px;
-            padding: 8px 20px 8px 8px;
-            margin-bottom: 20px;
-            max-width: 500px;
+            gap: 15px;
+            max-width: 550px;
             width: 100%;
-            box-shadow: 0 8px 20px rgba(255, 107, 155, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .hachiko-big-avatar {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 8px 25px rgba(255, 107, 155, 0.4);
+            flex-shrink: 0;
             animation: float 3s ease-in-out infinite;
+            background-color: #fff;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            50% { transform: translateY(-6px); }
         }
 
-        .hachiko-avatar {
-            width: 55px;
-            height: 55px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--secondary-color);
-            margin-right: 15px;
-        }
-
-        .hachiko-speech {
+        .hachiko-speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border: 3px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 14px 18px;
             font-size: 0.95rem;
             font-weight: bold;
             color: var(--text-main);
             line-height: 1.4;
+            box-shadow: 0 6px 20px rgba(255, 107, 155, 0.2);
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        /* 吹き出しのしっぽ */
+        .hachiko-speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px 12px 8px 0;
+            border-style: solid;
+            border-color: transparent var(--primary-color) transparent transparent;
         }
 
         /* メインカード */
@@ -118,7 +134,7 @@
             font-size: 0.95rem;
         }
 
-        /* 通常のボタン */
+        /* ボタン共通 */
         .btn {
             display: block;
             width: 100%;
@@ -260,7 +276,7 @@
             color: #495057;
         }
 
-        /* おすすめ3Pプラン欄 */
+        /* おすすめ3Pプラン欄（料金なしバージョン） */
         .recommend-box {
             background: linear-gradient(135deg, #fffdf4 0%, #fff6d6 100%);
             border: 2px solid var(--secondary-color);
@@ -284,19 +300,6 @@
             font-size: 0.9rem;
             color: var(--text-main);
             line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .recommend-price-tag {
-            background: #ffffff;
-            color: #e76f51;
-            font-weight: bold;
-            font-size: 1rem;
-            padding: 6px 14px;
-            border-radius: 20px;
-            display: inline-block;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #f4a261;
         }
 
         .hidden {
@@ -306,10 +309,10 @@
 </head>
 <body>
 
-    <!-- ハチコ常駐バー -->
-    <div class="hachiko-bar">
-        <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-avatar" onerror="this.src='logo.jpg'">
-        <div id="hachiko-msg" class="hachiko-msg">ご主人様、一緒に深層心理を暴いちゃおうワン！✨</div>
+    <!-- ハチコを大きく可愛く見せるチャット風エリア -->
+    <div class="hachiko-chat-container">
+        <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
+        <div id="hachiko-msg" class="hachiko-speech-bubble">ご主人様、一緒に深層心理を暴いちゃおうワン！✨</div>
     </div>
 
     <div class="container">
@@ -348,18 +351,15 @@
                     ここに詳細な解説文が入ります。
                 </div>
                 
-                <!-- おすすめ3Pプラン欄 -->
+                <!-- おすすめ3Pプラン欄（料金なし） -->
                 <div class="recommend-box">
                     <div class="recommend-title">💖 ハチコ的・こんな3Pがオススメ！</div>
                     <div id="recommend-content" class="recommend-content">ここにオススメの内容が入ります。</div>
-                    <div style="text-align: right;">
-                        <span id="recommend-price" class="recommend-price-tag">💰 料金目安：--</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- アクションボタン群 -->
-            <a id="phone-btn" href="tel:0354591332" class="btn btn-phone">📞 お店に電話する (03-5459-1332)</a>
+            <!-- アクションボタン群（電話番号なし） -->
+            <a id="phone-btn" href="tel:0354591332" class="btn btn-phone">📞 お店に電話する</a>
             <a id="twitter-btn" href="#" target="_blank" class="btn btn-twitter">𝕏 Xに投稿する</a>
             <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
         </div>
@@ -480,30 +480,17 @@
             };
 
             const recommendPlans = {
-                AH: {
-                    content: "主導権を完全に対等（または支配的）に握り、スリルと緊張感を楽しめる『ハードシチュエーション・カスタム3Pプラン』。演出やルールにこだわり抜いた濃厚な時間をデザインします。",
-                    price: "35,000円〜 / 120分"
-                },
-                AS: {
-                    content: "洗練された空間と甘い密着感を贅沢に味わう『スタイリッシュ・アロマフェチ3Pプラン』。美しい照明と心地よい距離感の中で、五感を満たすスマートな時間を演出します。",
-                    price: "30,000円〜 / 120分"
-                },
-                PH: {
-                    content: "考える余地を与えない連続的な刺激と圧倒的密着で思考をとかす『ハード・ラッシュ快楽3Pプラン』。すべてをお任せにして、極限のトランス状態へと誘います。",
-                    price: "32,000円〜 / 120分"
-                },
-                PS: {
-                    content: "全身を優しく包み込まれ、ひたすら甘やかされて骨抜きになる『極上癒やし・トリートメント3Pプラン』。日常の疲れを完全に忘れさせる、至福のデトックス空間を提供します。",
-                    price: "28,000円〜 / 120分"
-                }
+                AH: "主導権を完全に対等（または支配的）に握り、スリルと緊張感を楽しめる『ハードシチュエーション・カスタム3Pプラン』。演出やルールにこだわり抜いた濃厚な時間をデザインします。",
+                AS: "洗練された空間と甘い密着感を贅沢に味わう『スタイリッシュ・アロマフェチ3Pプラン』。美しい照明と心地よい距離感の中で、五感を満たすスマートな時間を演出します。",
+                PH: "考える余地を与えない連続的な刺激と圧倒的密着で思考をとかす『ハード・ラッシュ快楽3Pプラン』。すべてをお任せにして、極限のトランス状態へと誘います。",
+                PS: "全身を優しく包み込まれ、ひたすら甘やかされて骨抜きになる『極上癒やし・トリートメント3Pプラン』。日常の疲れを完全に忘れさせる、至福のデトックス空間を提供します。"
             };
 
             currentBestTypeName = typeNames[bestType];
 
             document.getElementById("result-type").innerText = currentBestTypeName;
             document.getElementById("result-desc").innerText = typeDescriptions[bestType];
-            document.getElementById("recommend-content").innerText = recommendPlans[bestType].content;
-            document.getElementById("recommend-price").innerText = `💰 料金目安：${recommendPlans[bestType].price}`;
+            document.getElementById("recommend-content").innerText = recommendPlans[bestType];
 
             const tweetText = encodeURIComponent(`ハチコの深層心理・本能アセスメントで私の診断結果は「${currentBestTypeName}」でした！✨\n\nあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
             const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}`;
