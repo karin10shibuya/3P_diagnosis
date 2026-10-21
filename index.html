@@ -9,9 +9,11 @@
             --bg-color: #fff0f5;
             --card-bg: #ffffff;
             --primary-color: #ff6b9b;
+            --primary-light: #ffe6ef;
             --secondary-color: #ffca3a;
+            --accent-blue: #4ea8de;
             --text-main: #2b2d42;
-            --text-sub: #8d99ae;
+            --text-sub: #6c757d;
         }
 
         * {
@@ -114,6 +116,7 @@
             font-size: 0.95rem;
         }
 
+        /* 通常のボタン */
         .btn {
             display: block;
             width: 100%;
@@ -129,7 +132,8 @@
             text-align: center;
             box-shadow: 0 6px 20px rgba(255, 107, 155, 0.4);
             letter-spacing: 0.05em;
-            margin-top: 20px;
+            margin-top: 15px;
+            text-decoration: none;
         }
 
         .btn:hover {
@@ -139,6 +143,24 @@
 
         .btn:active {
             transform: scale(0.98);
+        }
+
+        /* 電話ボタン（安心感のあるグリーン系） */
+        .btn-phone {
+            background: linear-gradient(135deg, #2ec4b6 0%, #20bf6b 100%);
+            box-shadow: 0 6px 20px rgba(46, 196, 182, 0.4);
+        }
+        .btn-phone:hover {
+            box-shadow: 0 8px 25px rgba(46, 196, 182, 0.6);
+        }
+
+        /* X（Twitter）投稿ボタン（黒・スタイリッシュ） */
+        .btn-twitter {
+            background: #000000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .btn-twitter:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
 
         /* クイズ画面 */
@@ -196,40 +218,60 @@
             padding: 20px 0;
         }
 
-        /* 結果画面 */
-        .result-type {
-            font-size: 1.6rem;
-            color: var(--primary-color);
-            margin: 10px 0 20px 0;
+        /* 結果画面のデザイン */
+        .result-box {
+            text-align: left;
+        }
+
+        .result-title-badge {
+            text-align: center;
+            font-size: 0.9rem;
             font-weight: bold;
-            line-height: 1.3;
+            color: var(--primary-color);
+            background: var(--primary-light);
+            padding: 6px 15px;
+            border-radius: 20px;
+            display: table;
+            margin: 0 auto 10px auto;
+        }
+
+        .result-type {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin: 5px 0 20px 0;
+            font-weight: bold;
+            line-height: 1.4;
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b9b, #ffa502);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .result-desc {
-            text-align: left;
             background-color: #f8f9fa;
-            padding: 20px;
+            padding: 18px;
             border-radius: 14px;
             border-left: 5px solid var(--primary-color);
             margin-bottom: 20px;
-            line-height: 1.7;
+            line-height: 1.8;
             font-size: 0.92rem;
+            color: #495057;
         }
 
         /* おすすめ3Pプランカード */
         .recommend-box {
-            text-align: left;
-            background: linear-gradient(135deg, #fff9fb 0%, #fff0f5 100%);
-            border: 2px dashed var(--primary-color);
-            padding: 20px;
+            background: linear-gradient(135deg, #fffdf4 0%, #fff6d6 100%);
+            border: 2px solid var(--secondary-color);
+            padding: 18px;
             border-radius: 14px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.15);
         }
 
         .recommend-title {
             font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.05rem;
+            color: #d4a373;
+            font-size: 0.95rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -243,15 +285,16 @@
             margin-bottom: 12px;
         }
 
-        .recommend-price {
-            font-size: 0.95rem;
+        .recommend-price-tag {
+            background: #ffffff;
+            color: #e76f51;
             font-weight: bold;
-            color: #2b2d42;
-            background: #fff;
-            padding: 8px 12px;
-            border-radius: 8px;
+            font-size: 1rem;
+            padding: 6px 14px;
+            border-radius: 20px;
             display: inline-block;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #f4a261;
         }
 
         .hidden {
@@ -296,8 +339,9 @@
         <!-- 結果画面 -->
         <div id="result-screen" class="hidden">
             <div class="result-box">
-                <p style="margin-bottom: 5px; font-weight: bold;">🎉 あなたの診断結果は……！ 🎉</p>
+                <div class="result-title-badge">🎉 診断結果発表 🎉</div>
                 <div id="result-type" class="result-type">--</div>
+                
                 <div id="result-desc" class="result-desc">
                     ここに詳細な解説文が入ります。
                 </div>
@@ -306,11 +350,16 @@
                 <div class="recommend-box">
                     <div class="recommend-title">💖 ハチコ的・こんな3Pがオススメ！</div>
                     <div id="recommend-content" class="recommend-content">ここにオススメの内容が入ります。</div>
-                    <div id="recommend-price" class="recommend-price">💰 料金目安：--</div>
+                    <div style="text-align: right;">
+                        <span id="recommend-price" class="recommend-price-tag">💰 料金目安：--</span>
+                    </div>
                 </div>
-
-                <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
             </div>
+
+            <!-- アクションボタン群 -->
+            <a id="phone-btn" href="tel:0354591332" class="btn btn-phone">📞 お店に電話する (03-5459-1332)</a>
+            <a id="twitter-btn" href="#" target="_blank" class="btn btn-twitter">𝕏 Xに投稿する</a>
+            <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
         </div>
     </div>
 
@@ -320,6 +369,7 @@
         let allQuestions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
+        let currentBestTypeName = ""; // 投稿用に保持
 
         const hachikoComments = [
             "ふむふむ…ご主人様はそう選んだんだワン！",
@@ -427,7 +477,6 @@
                 PS: "あなたは「すべてを相手に委ねて、ひたすら甘やかされたり優しく愛撫されたりして骨抜きにされたい」というタイプです。温もりに包まれ、外界の緊張から解放される至福の癒やしを最も深く求めています。包み込むような優しさと絶対的な安心感の中で、全身の力を抜き去り、心身ともにトロトロにとろけてしまうような極上のリラクゼーション体験がベストマッチです。"
             };
 
-            // タイプ別のおすすめプランと料金
             const recommendPlans = {
                 AH: {
                     content: "主導権を完全に対等（または支配的）に握り、スリルと緊張感を楽しめる『ハードシチュエーション・カスタム3Pプラン』。演出やルールにこだわり抜いた濃厚な時間をデザインします。",
@@ -447,10 +496,17 @@
                 }
             };
 
-            document.getElementById("result-type").innerText = typeNames[bestType];
+            currentBestTypeName = typeNames[bestType];
+
+            document.getElementById("result-type").innerText = currentBestTypeName;
             document.getElementById("result-desc").innerText = typeDescriptions[bestType];
             document.getElementById("recommend-content").innerText = recommendPlans[bestType].content;
             document.getElementById("recommend-price").innerText = `💰 料金目安：${recommendPlans[bestType].price}`;
+
+            // X投稿ボタンのリンク（テキストを自動生成）
+            const tweetText = encodeURIComponent(`ハチコの深層心理・本能アセスメントで私の診断結果は「${currentBestTypeName}」でした！✨\n\nあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}` ;
+            document.getElementById("twitter-btn").href = tweetUrl;
         }
 
         function switchScreen(screenId) {
