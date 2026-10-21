@@ -191,7 +191,6 @@
     <div class="container">
         <!-- スタート画面 -->
         <div id="start-screen">
-            <!-- ロゴ画像を表示 -->
             <img src="logo.jpg" alt="Logo" class="app-logo" onerror="this.style.display='none'">
             <h1>Deep Psychological Assessment</h1>
             <p>深層心理の奥底にある本能と欲求を紐解く、全10問の選択式診断テスト。直感に従って選択してください。</p>
@@ -219,7 +218,6 @@
         <!-- 結果画面 -->
         <div id="result-screen" class="hidden">
             <div class="result-box">
-                <!-- 結果画面にもハチコ画像を添えて -->
                 <img id="result-hachiko" src="hachiko2.jpg" alt="Hachiko Result" class="hachiko-img" onerror="this.style.display='none'">
                 <p style="margin-bottom: 5px;">あなたの診断結果は</p>
                 <div id="result-type" class="result-type">--</div>
@@ -234,19 +232,26 @@
     <script>
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxKd0sRsasVHnLmyzYakYGemsXGAyajnCdHXoJfmID3SKvDs5jjVCkqKpAqpfd5fe8O/exec";
 
-        let questions = [];
+        let allQuestions = []; // 前半・後半をまとめて保持
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let currentPhase = "front";
 
         async function startQuiz() {
             switchScreen("loading-screen");
             try {
-                const res = await fetch(`${GAS_API_URL}?sheet=front`);
-                questions = await res.json();
+                // 【超高速化】最初にFrontとBackのデータを同時に一括取得してしまう！
+                const [resFront, resBack] = await Promise.all([
+                    fetch(`${GAS_API_URL}?sheet=front`),
+                    fetch(`${GAS_API_URL}?sheet=back`)
+                ]);
+
+                const frontData = await resFront.json();
+                const backData = await resBack.json();
+
+                // 前半5問 ＋ 後半5問をあらかじめ結合して保持
+                allQuestions = frontData.concat(backData);
                 currentIndex = 0;
                 scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-                currentPhase = "front";
                 
                 switchScreen("quiz-screen");
                 showQuestion();
@@ -262,14 +267,14 @@
                 return;
             }
 
-            if (currentIndex === 5 && currentPhase === "front") {
-                loadBackQuestions();
-                return;
-            }
+            const q = allQuestions[currentIndex];
+            const isFront = currentIndex < 5;
 
-            const q = questions[currentIndex];
             document.getElementById("progress-indicator").innerText = `${currentIndex + 1} / 10`;
-            document.getElementById("stage-indicator").innerText = currentPhase === "front" ? `Phase 1 : 傾向判定 (${currentIndex + 1}/5)` : `Phase 2 : 詳細分析 (${currentIndex - 4}/5)`;
+            document.getElementById("stage-indicator").innerText = isFront 
+                ? `Phase 1 : 傾向判定 (${currentIndex + 1}/5)` 
+                : `Phase 2 : 詳細分析 (${currentIndex - 4}/5)`;
+            
             document.getElementById("question-container").innerText = q.question;
 
             const choicesContainer = document.getElementById("choices-container");
@@ -284,29 +289,12 @@
             });
         }
 
-        async function loadBackQuestions() {
-            switchScreen("loading-screen");
-            try {
-                const res = await fetch(`${GAS_API_URL}?sheet=back`);
-                const backQuestions = await res.json();
-                
-                questions = questions.concat(backQuestions);
-                currentPhase = "back";
-
-                switchScreen("quiz-screen");
-                showQuestion();
-            } catch (err) {
-                alert("後半データの取得に失敗しました。");
-                switchScreen("start-screen");
-            }
-        }
-
         function selectChoice(type) {
             if (scores[type] !== undefined) {
                 scores[type]++;
             }
             currentIndex++;
-            showQuestion();
+            showQuestion(); // 2問目以降や後半への切り替えも一瞬でサクサク動作！
         }
 
         function showResult() {
@@ -321,7 +309,6 @@
                 }
             }
 
-            // 結果のタイプに応じてハチコ画像を動的に切り替える小ネタも入れました！
             const hachikoMap = {
                 AH: "hachiko1.jpg",
                 AS: "hachiko2.jpg",
