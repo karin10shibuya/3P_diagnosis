@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ハチコの深層心理・本能アセスメント</title>
     <style>
         :root {
@@ -21,6 +21,8 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            /* ★ここで連続タップによる画面拡大を完全に防止します！ */
+            touch-action: manipulation; 
         }
 
         body {
@@ -145,7 +147,7 @@
             transform: scale(0.98);
         }
 
-        /* 電話ボタン（安心感のあるグリーン系） */
+        /* 電話ボタン */
         .btn-phone {
             background: linear-gradient(135deg, #2ec4b6 0%, #20bf6b 100%);
             box-shadow: 0 6px 20px rgba(46, 196, 182, 0.4);
@@ -154,7 +156,7 @@
             box-shadow: 0 8px 25px rgba(46, 196, 182, 0.6);
         }
 
-        /* X（Twitter）投稿ボタン（黒・スタイリッシュ） */
+        /* X投稿ボタン */
         .btn-twitter {
             background: #000000;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -258,7 +260,7 @@
             color: #495057;
         }
 
-        /* おすすめ3Pプランカード */
+        /* おすすめ3Pプラン欄 */
         .recommend-box {
             background: linear-gradient(135deg, #fffdf4 0%, #fff6d6 100%);
             border: 2px solid var(--secondary-color);
@@ -369,7 +371,7 @@
         let allQuestions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let currentBestTypeName = ""; // 投稿用に保持
+        let currentBestTypeName = "";
 
         const hachikoComments = [
             "ふむふむ…ご主人様はそう選んだんだワン！",
@@ -503,9 +505,8 @@
             document.getElementById("recommend-content").innerText = recommendPlans[bestType].content;
             document.getElementById("recommend-price").innerText = `💰 料金目安：${recommendPlans[bestType].price}`;
 
-            // X投稿ボタンのリンク（テキストを自動生成）
             const tweetText = encodeURIComponent(`ハチコの深層心理・本能アセスメントで私の診断結果は「${currentBestTypeName}」でした！✨\n\nあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
-            const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}` ;
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}`;
             document.getElementById("twitter-btn").href = tweetUrl;
         }
 
