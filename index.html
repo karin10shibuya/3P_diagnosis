@@ -2,569 +2,328 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>かりんと渋谷店 理想の3P診断</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Psychological Assessment</title>
     <style>
-        :root { --primary: #e91e63; --bg: #12001a; --text: #ffffff; --gold: #ffeb3b; }
-        
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
+        :root {
+            --bg-color: #0d0d0f;
+            --card-bg: #16161a;
+            --accent-color: #c5a059;
+            --accent-hover: #dfbc71;
+            --text-main: #e1e1e6;
+            --text-sub: #94949b;
+            --border-color: #2a2a32;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            touch-action: pan-y; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
-        body { 
-            background: var(--bg); color: var(--text); font-family: sans-serif; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
-            padding: 20px 0;
-        }
-
-        /* 全画面動画オーバーレイ用CSS */
-        #video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000;
-            z-index: 10000;
             display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 1;
-            transition: opacity 0.8s ease;
-        }
-
-        #op-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .btn-skip {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            border: 1px solid #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            z-index: 10001;
-            width: auto !important;
-            box-shadow: none !important;
-        }
-
-        #game-box { 
-            width: 90%; 
-            max-width: 480px; 
-            background: #ffffff; 
-            color: #000000;      
-            padding: 25px; 
-            border: 4px solid var(--primary); 
-            text-align: center; 
-            box-shadow: 10px 10px 0px #000; 
-            position: relative;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-            
-            /* ハチ公前などの背景画像（shibuya.jpgが無い場合は単色背景） */
-            background-image: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url('shibuya.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        
-        #white-out { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: none; opacity: 0; transition: opacity 0.8s; pointer-events: none; }
-        
-        .hachiko-content { opacity: 0; display: none; }
-        .hachiko-visible { opacity: 1 !important; display: block !important; animation: fadeIn 1.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* ロゴ画像用スタイル */
-        .logo-img { 
-            width: 100%; 
-            max-width: 320px; 
-            height: auto; 
-            margin-bottom: 20px; 
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* ハチコ画像の拡大 */
-        .hachiko-img { 
-            width: 100%; 
-            max-width: 260px; 
-            height: auto; 
-            border: 2px solid var(--primary); 
-            background: #eee; 
-            display: block; 
-            margin: 0 auto; 
-            border-radius: 8px; 
-        }
-        
-        .msg-bubble { background: #f0f0f0; color: #000; padding: 20px; border-radius: 12px; margin-top: 15px; margin-bottom: 20px; font-weight: bold; font-size: 0.9rem; line-height: 1.6; position: relative; cursor: pointer; border: 3px solid var(--primary); text-align: left; box-sizing: border-box; }
-        .msg-bubble::after { content: "▼ CLICK"; position: absolute; bottom: 5px; right: 15px; font-size: 0.6rem; color: var(--primary); animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        
-        .msg-bubble.no-click { cursor: default; }
-        .msg-bubble.no-click::after { display: none; }
-
-        #user-name { padding: 12px; width: 100%; max-width: 300px; margin-bottom: 20px; border-radius: 5px; border: 2px solid var(--primary); text-align: center; font-size: 1rem; background: #fff; color: #000; box-sizing: border-box; }
-        .choices { display: grid; gap: 10px; width: 100%; }
-
-        button { 
-            background: #eee; border: 2px solid #ccc; padding: 15px; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 0px #666; font-size: 0.95rem; color: #000; transition: 0.1s; width: 100%; text-align: left; -webkit-tap-highlight-color: transparent; box-sizing: border-box;
-            touch-action: manipulation;
-        }
-
-        @media (hover: hover) {
-            button:hover { background: var(--gold); transform: translate(2px, 2px); box-shadow: 2px 2px 0px #666; }
-        }
-
-        button:active { background: var(--gold) !important; transform: translate(2px, 2px); box-shadow: 2px 2px 0px #666; }
-
-        .hidden { display: none !important; }
-        
-        .job-res { font-size: 1.3rem; color: var(--primary); text-shadow: 1px 1px #ccc; margin: 10px 0; font-weight: bold; word-wrap: break-word; }
-        
-        .stats { text-align: left; background: #f9f9f9; padding: 15px; border: 1px dashed var(--primary); font-size: 0.85rem; color: #333; line-height: 1.6; box-sizing: border-box; }
-        
-        .intro-container {
-            width: 90%;
-            max-width: 480px;
-            background: #fff;
-            color: #333;
-            text-align: left;
             padding: 20px;
-            border: 4px solid var(--primary);
-            box-shadow: 10px 10px 0px #000;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            box-sizing: border-box;
         }
 
-        .intro-title {
-            color: var(--primary);
-            font-weight: bold;
-            border-bottom: 2px solid var(--primary);
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1, h2 {
             text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        p {
+            text-align: center;
+            color: var(--text-sub);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
             font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+            letter-spacing: 0.05em;
         }
 
-        .job-card {
-            background: #fdfbff;
-            border: 1px solid #ddd;
-            border-left: 5px solid var(--primary);
-            margin-bottom: 12px;
-            padding: 10px;
+        .btn:hover {
+            background-color: var(--accent-hover);
         }
 
-        .job-card-header {
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* クイズ画面 */
+        .quiz-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px dashed #ccc;
-            margin-bottom: 5px;
-            padding-bottom: 3px;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        .job-card-name { font-weight: bold; color: #000; font-size: 0.95rem; }
-        .job-card-content { font-size: 0.85rem; color: #555; margin-bottom: 3px; }
+        .question-text {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            color: var(--text-main);
+            text-align: left;
+        }
 
-        footer { margin-top: 30px; color: #aaa; font-size: 0.75rem; text-align: center; width: 100%; padding-bottom: 20px; }
-        
-        .btn-call { background: #28a745 !important; color: #fff !important; text-align: center !important; margin-top: 15px; }
+        .choices-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-btn {
+            width: 100%;
+            padding: 16px 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .choice-btn:hover {
+            background-color: rgba(197, 160, 89, 0.1);
+            border-color: var(--accent-color);
+            color: var(--accent-hover);
+        }
+
+        /* ローディング・エラー */
+        .loading {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            padding: 40px 0;
+        }
+
+        /* 結果画面 */
+        .result-box {
+            text-align: center;
+        }
+
+        .result-type {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin: 15px 0 25px 0;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+        }
+
+        .result-desc {
+            text-align: left;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
-<!-- 全画面動画再生エリア -->
-<div id="video-overlay" class="hidden">
-    <button class="btn-skip" onclick="closeVideo()">SKIP ✕</button>
-    <video id="op-video" playsinline muted autoplay onended="closeVideo()" onerror="closeVideo()">
-        <source src="opening.mp4" type="video/mp4">
-    </video>
-</div>
-
-<div id="white-out"></div>
-
-<div id="game-box">
-    <div id="title-screen">
-        <img src="logo.jpg" class="logo-img" alt="かりんと渋谷店 理想の3P診断">
-        <img id="title-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
-        <p style="font-size:0.85rem; margin:15px 0;">渋谷の欲望を知り尽くした「ハチコ」が、あなたにピッタリな3Pスタイルを判定するワン！</p>
-        <button onclick="goToNameInput()" style="text-align:center;">診断をスタートするワン！</button>
-    </div>
-
-    <div id="name-input-screen" class="hidden">
-        <h3 style="color: var(--primary);">ご主人様のお名前を教えてほしいワン！</h3>
-        <input type="text" id="user-name" placeholder="お名前を入力..." maxlength="15">
-        <button onclick="transitionToHachiko()" style="text-align:center;">この名前で診断開始ワン！</button>
-    </div>
-
-    <div id="hachiko-wrap" class="hachiko-content">
-        <div style="background: rgba(249, 249, 249, 0.9); padding: 15px; border-radius: 8px; border: 1px solid #eee;">
-            <img id="quiz-hachiko-img" src="hachiko1.jpg" class="hachiko-img" alt="ハチコ" onerror="this.style.display='none'">
-            <div id="hachiko-comment" class="msg-bubble" onclick="handleHachikoClick()"></div>
+    <div class="container">
+        <!-- スタート画面 -->
+        <div id="start-screen">
+            <h1>Deep Psychological Assessment</h1>
+            <p>深層心理の奥底にある本能と欲求を紐解く、全10問の選択式診断テスト。直感に従って選択してください。</p>
+            <button class="btn" onclick="startQuiz()">診断を始める</button>
         </div>
 
-        <div id="quiz" class="hidden" style="margin-top: 20px;">
-            <div id="q-num" style="color:var(--primary); font-size:0.8rem; margin-bottom:10px; font-weight:bold;"></div>
-            <div id="q-text" style="margin-bottom: 20px; font-weight: bold; font-size: 1rem; text-align:left; color: #000;"></div>
-            <div class="choices" id="choices"></div>
+        <!-- ローディング画面 -->
+        <div id="loading-screen" class="hidden">
+            <div class="loading">データを構築中...</div>
+        </div>
+
+        <!-- クイズ画面 -->
+        <div id="quiz-screen" class="hidden">
+            <div class="quiz-header">
+                <span id="stage-indicator">Front Phase (1/5)</span>
+                <span id="progress-indicator">1 / 10</span>
+            </div>
+            <h2 id="question-container" class="question-text">ここに問題文が入ります</h2>
+            <div id="choices-container" class="choices-list">
+                <!-- 選択肢ボタンが動的に入ります -->
+            </div>
+        </div>
+
+        <!-- 結果画面 -->
+        <div id="result-screen" class="hidden">
+            <div class="result-box">
+                <p style="margin-bottom: 5px;">あなたの診断結果は</p>
+                <div id="result-type" class="result-type">--</div>
+                <div id="result-desc" class="result-desc">
+                    ここに解説文が入ります。
+                </div>
+                <button class="btn" onclick="location.reload()">もう一度診断する</button>
+            </div>
         </div>
     </div>
 
-    <div id="result" class="hidden">
-        <div style="font-weight:bold; font-size:0.9rem; color: #000;">診断結果：<span id="res-name-label"></span>ご主人様の理想の3Pは…</div>
-        <div class="job-res" id="job-name"></div>
-        
-        <!-- オプション＆金額表示欄 -->
-        <div style="background: #fff0f5; border: 2px solid var(--primary); padding: 10px; border-radius: 6px; margin: 12px 0; text-align: left; font-size: 0.9rem;">
-            <div>✨ 帯同オプション：<strong id="res-opt" style="color: var(--primary);"></strong></div>
-            <div>💰 参考ご予算：<strong id="res-price" style="color: #d32f2f; font-size: 1.1rem;"></strong></div>
-        </div>
+    <script>
+        // ★ここにデプロイしたGoogle Apps ScriptのウェブアプリURLを貼り付けてください
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxKd0sRsasVHnLmyzYakYGemsXGAyajnCdHXoJfmID3SKvDs5jjVCkqKpAqpfd5fe8O/exec";
 
-        <div class="stats" id="detail"></div>
-        
-        <button class="btn-call" onclick="location.href='tel:03-xxxx-xxxx'">📞 渋谷店へ電話して予約する</button>
-        <button id="btn-share" style="background:#000; color:#fff; margin-top:15px; text-align:center;">結果をXで報告ワン！</button>
-        <button onclick="location.reload()" style="margin-top:10px; background:#999; text-align:center;">タイトルへ</button>
-    </div>
-</div>
+        let questions = [];
+        let currentIndex = 0;
+        let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
+        let currentPhase = "front"; // "front" or "back"
 
-<!-- 紹介文とメニュー（リザルト時に表示） -->
-<div id="menu-container" class="intro-container hidden">
-    <div class="intro-title">🐾 全8種類の3Pスタイル一覧 🐾</div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">1. W女王様の絶対服従・踏みつけ調教型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥35,000</span></div>
-        <div class="job-card-content"><strong>オプション：踏みつけ</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">2人の女王様に容赦なく踏みつけられながら下僕の快楽に溺れる。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">2. ダブル拘束・無慈悲な亀甲監禁型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥38,000</span></div>
-        <div class="job-card-content"><strong>オプション：拘束</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">一歩も動けない亀甲縛りで逃げ場ゼロの極限焦らしプレイ。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">3. W顔面騎乗・息継ぎ禁止の窒息悦楽型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥36,000</span></div>
-        <div class="job-card-content"><strong>オプション：顔面騎乗</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">両側から容赦なく顔面を塞がれ、圧倒的な密着と重みに溺れる。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">4. ダブル責め立て・底なし指アナル搾取型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥40,000</span></div>
-        <div class="job-card-content"><strong>オプション：指アナル</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">体の芯から狂わされる背徳の指責めアタックで完全開発。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">5. Wお姉さんの密着・オールランジェリー誘惑型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥30,000</span></div>
-        <div class="job-card-content"><strong>オプション：オールランジェリー</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">セクシーなランジェリーに身を包んだ2人に丸投げしてトロトロに。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">6. W美女の全身お触り・骨抜きマッサージ型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥32,000</span></div>
-        <div class="job-card-content"><strong>オプション：お触り</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">全身くまなく優しく、時には激しく愛撫される癒やしのお任せ型。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">7. ダブル乳舐め・ダブルバキューム吸着型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥34,000</span></div>
-        <div class="job-card-content"><strong>オプション：乳舐め</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">上半身の急所を同時に攻め立てられ、吸い尽くされる極上の受動プレイ。</div>
-    </div>
-
-    <div class="job-card">
-        <div class="job-card-header"><span class="job-card-name">8. 両手に華・密着抱きつきトロトロ型</span><span style="color:#d32f2f; font-weight:bold; font-size:0.85rem;">¥28,000</span></div>
-        <div class="job-card-content"><strong>オプション：抱きつき</strong></div>
-        <div style="font-size: 0.8rem; color: #555;">2人の柔らかい体にすっぽり包み込まれ、ひたすら甘やかされる。</div>
-    </div>
-</div>
-
-<footer>
-    かりんと渋谷店presents<br>
-    理想の3P診断 project
-</footer>
-
-<script>
-    let userName = "";
-    let currentQ = 0;
-    let scores = {};
-    let canClickBubble = true;
-    let currentHachikoIndex = 1;
-    
-    const scriptURL = '';
-
-    function setRandomHachiko(imgId) {
-        currentHachikoIndex = Math.floor(Math.random() * 6) + 1;
-        const img = document.getElementById(imgId);
-        if (img) {
-            img.style.display = 'block';
-            img.src = `hachiko${currentHachikoIndex}.jpg`;
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        setRandomHachiko('title-hachiko-img');
-
-        const overlay = document.getElementById('video-overlay');
-        const video = document.getElementById('op-video');
-        const hasSeenVideo = sessionStorage.getItem('hasSeen3pVideo');
-
-        if (!hasSeenVideo) {
-            overlay.classList.remove('hidden');
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => closeVideo());
+        async function startQuiz() {
+            switchScreen("loading-screen");
+            try {
+                // 前半5問を取得
+                const res = await fetch(`${GAS_API_URL}?sheet=front`);
+                questions = await res.json();
+                currentIndex = 0;
+                scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
+                currentPhase = "front";
+                
+                switchScreen("quiz-screen");
+                showQuestion();
+            } catch (err) {
+                alert("データの取得に失敗しました。URLを確認してください。");
+                switchScreen("start-screen");
             }
         }
-    });
 
-    function closeVideo() {
-        const overlay = document.getElementById('video-overlay');
-        const video = document.getElementById('op-video');
-        if (video) video.pause();
-        if (overlay) {
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-                sessionStorage.setItem('hasSeen3pVideo', 'true');
-            }, 800);
-        }
-    }
+        function showQuestion() {
+            if (currentIndex >= 10) {
+                showResult();
+                return;
+            }
 
-    // 全8パターンの定義（オプション名と金額を含めています）
-    const types = {
-        active_trample: { 
-            n: "W女王様の絶対服従・踏みつけ調教型", 
-            opt: "踏みつけ", 
-            price: "¥35,000",
-            c: "ご主人様、自分で『これをされたい』って分かってる変態さんだワンね！2人の女王様に容赦なく踏みつけられながら、下僕としての快楽に溺れる最高の一撃だワン！" 
-        },
-        active_lock: { 
-            n: "ダブル拘束・無慈悲な亀甲監禁型", 
-            opt: "拘束", 
-            price: "¥38,000",
-            c: "一歩も動けないようにガッチリ縛られて、2人に好き放題弄ばれたいんだワン？ 逃げ場ゼロの状態で極限まで焦らされる、背徳の拘束プレイだワン！" 
-        },
-        active_face: { 
-            n: "W顔面騎乗・息継ぎ禁止の窒息悦楽型", 
-            opt: "顔面騎乗", 
-            price: "¥36,000",
-            c: "両側から容赦なく顔面を塞がれ、圧倒的な密着と重みに溺れる型だワン！ 息も絶え絶えになりながら快感を貪る、ハードコアな大好物スタイルだワン！" 
-        },
-        active_finger: { 
-            n: "ダブル責め立て・底なし指アナル搾取型", 
-            opt: "指アナル", 
-            price: "¥40,000",
-            c: "体の芯から狂わされる、背徳の指責めアタックだワン！ 自分からこれを指名するなんて、相当お尻の感度が開発されちゃってるご主人様だワンね…！" 
-        },
-        passive_lingerie: { 
-            n: "Wお姉さんの密着・オールランジェリー誘惑型", 
-            opt: "オールランジェリー", 
-            price: "¥30,000",
-            c: "自分で決めるのは面倒だから、セクシーなランジェリーに身を包んだ2人に丸投げしたいおねだりさんだワン！ 視覚からトロトロに溶かされちゃうワン〜" 
-        },
-        passive_touch: { 
-            n: "W美女の全身お触り・骨抜きマッサージ型", 
-            opt: "お触り", 
-            price: "¥32,000",
-            c: "お任せで全身くまなく優しく、時には激しく愛撫されたい癒やし系だワン！ 2人の手のひらの上で、赤ちゃんのように転がされちゃうワン！" 
-        },
-        passive_nipple: { 
-            n: "ダブル乳舐め・ダブルバキューム吸着型", 
-            opt: "乳舐め", 
-            price: "¥34,000",
-            c: "上半身の急所を同時に攻め立てられ、思考力を完全に奪われるワン！ 女の子たちのリードに身を任せて、吸い尽くされるままになる極上の受動プレイだワン！" 
-        },
-        passive_hug: { 
-            n: "両手に華・密着抱きつきトロトロ型", 
-            opt: "抱きつき", 
-            price: "¥28,000",
-            c: "2人の柔らかい体にすっぽり包み込まれ、ひたすら甘やかされてしがみつかれたいんだワン。流されるままに極上の温もりに満たされるワン！" 
-        }
-    };
+            // 後半に切り替わるタイミング (5問目終了後)
+            if (currentIndex === 5 && currentPhase === "front") {
+                loadBackQuestions();
+                return;
+            }
 
-    const qs = [
-        { q: "渋谷店に入店した瞬間、あなたの頭の中は？", a: [
-            {t: "「今日は絶対にこれをされたい」という欲望がある", j: "active_lock"},
-            {t: "「今日はどんな風に弄ばれるのかな」と女の子に任せたい", j: "passive_touch"},
-            {t: "「とにかく踏みつけられたい」という強い目的がある", j: "active_trample"},
-            {t: "「お任せでトロトロに溶かされたい」", j: "passive_lingerie"}
-        ]},
-        { q: "2人の女の子が部屋に入ってきたときの理想の出迎えは？", a: [
-            {t: "最初からセクシーな下着姿で誘惑してほしい", j: "passive_lingerie"},
-            {t: "冷徹な目で「動かないで」と縛り準備をされる", j: "active_lock"},
-            {t: "有無を言わせずベッドに押し倒して馬乗りになられる", j: "active_face"},
-            {t: "ギュッと強く抱きつかれて甘い香りに包まれる", j: "passive_hug"}
-        ]},
-        { q: "プレイの主導権について、あなたの本音は？", a: [
-            {t: "自分がしてほしいプレイのメニューを完璧に指定したい", j: "active_finger"},
-            {t: "主導権は完全に相手に渡し、されるがままになりたい", j: "passive_nipple"},
-            {t: "最初はリードするふりをして、結局踏みにじられたい", j: "active_trample"},
-            {t: "心地よさに身を任せて、流れに身を委ねたい", j: "passive_touch"}
-        ]},
-        { q: "Active派：一番強烈に味わいたい「刺激」はどれ？", a: [
-            {t: "お尻の奥をグイグイ責められる指アナル", j: "active_finger"},
-            {t: "息ができないほどの顔面騎乗プレス", j: "active_face"},
-            {t: "身動きひとつできない完全拘束", j: "active_lock"},
-            {t: "高いヒールや足元で踏みつけられる屈辱", j: "active_trample"}
-        ]},
-        { q: "Passive派：一番身を委ねたい「シチュエーション」は？", a: [
-            {t: "全員ランジェリー姿で艶かしく囲まれる", j: "passive_lingerie"},
-            {t: "全身をくまなく這い回るようなお触り", j: "passive_touch"},
-            {t: "胸元を同時に舐め回されるダブル乳舐め", j: "passive_nipple"},
-            {t: "密着して離れない甘えん坊の抱きつき", j: "passive_hug"}
-        ]},
-        { q: "2人から「どこを一番いじめてほしい？」と聞かれたら？", a: [
-            {t: "「言葉よりも体の一部を激しく指で…」", j: "active_finger"},
-            {t: "「僕の顔面を使って好きにして」", j: "active_face"},
-            {t: "「下僕らしく足蹴にして踏んで」", j: "active_trample"},
-            {t: "「全部お任せするから好きにして」", j: "passive_touch"}
-        ]},
-        { q: "部屋の雰囲気が最高潮に達したとき、どうされたい？", a: [
-            {t: "逃げられないように手足を完全に固定されたい", j: "active_lock"},
-            {t: "ツヤツヤのランジェリー姿のまま上から覆いかぶさってほしい", j: "passive_lingerie"},
-            {t: "胸元や敏感な場所を同時に責め立てられたい", j: "passive_nipple"},
-            {t: "温かい体温を感じながら強く抱きしめられたい", j: "passive_hug"}
-        ]},
-        { q: "あなたが最も「興奮で理性が吹き飛ぶ」瞬間は？", a: [
-            {t: "自分の欲望（指アナル等）をピンポイントで叶えてもらう時", j: "active_finger"},
-            {t: "女の子たちのペースに完全に飲まれて、なすがままになる時", j: "passive_nipple"},
-            {t: "高慢な笑みで見下ろされながら踏みつけられる時", j: "active_trample"},
-            {t: "自分では思いつかないようなエロい誘惑をされる時", j: "passive_lingerie"}
-        ]},
-        { q: "ハチコが「ご主人様、今日の好みを教えてほしいワン！」と聞いたときの答えは？", a: [
-            {t: "「これとこれをしてください」と明確にオーダーする", j: "active_lock"},
-            {t: "「ハチコたちのお気に入りの格好とプレイで見せて」", j: "passive_lingerie"},
-            {t: "「お尻の奥まで狂わせてほしい」", j: "active_finger"},
-            {t: "「ただただ僕を可愛がって癒やしほしい」", j: "passive_hug"}
-        ]},
-        { q: "最後に……渋谷店で体験したい究極の着地点は？", a: [
-            {t: "息もできないほどの顔面密着と圧倒的プレッシャー", j: "active_face"},
-            {t: "全身の感覚を支配されるような濃厚なお触り責め", j: "passive_touch"},
-            {t: "身動きを奪われ、逃げ場のない快楽に溺れること", j: "active_lock"},
-            {t: "甘い香りと温もりに全身を委ねること", j: "passive_hug"}
-        ]}
-    ];
+            const q = questions[currentIndex];
+            document.getElementById("progress-indicatorinnerText" || "progress-indicator").innerText = `${currentIndex + 1} / 10`;
+            document.getElementById("stage-indicator").innerText = currentPhase === "front" ? `Phase 1 : 傾向判定 (${currentIndex + 1}/5)` : `Phase 2 : 詳細分析 (${currentIndex - 4}/5)`;
+            document.getElementById("question-container").innerText = q.question;
 
-    function goToNameInput() {
-        document.getElementById('title-screen').classList.add('hidden');
-        document.getElementById('name-input-screen').classList.remove('hidden');
-    }
+            const choicesContainer = document.getElementById("choices-container");
+            choicesContainer.innerHTML = "";
 
-    function transitionToHachiko() {
-        userName = document.getElementById('user-name').value || "ご主人様";
-        document.getElementById('name-input-screen').classList.add('hidden');
-        const hachikoWrap = document.getElementById('hachiko-wrap');
-        const commentBox = document.getElementById('hachiko-comment');
-        
-        setRandomHachiko('quiz-hachiko-img');
-
-        hachikoWrap.classList.add('hachiko-visible');
-        commentBox.innerText = `クゥ〜ン！${userName}ご主人様、いらっしゃいませだワン！ハチコが最高の3Pスタイルを診断してあげるから、正直に答えてほしいワン！`;
-        commentBox.classList.remove('hidden');
-    }
-
-    function handleHachikoClick() {
-        if (!canClickBubble) return; 
-        document.getElementById('hachiko-comment').classList.add('hidden');
-        startQuiz();
-    }
-
-    function startQuiz() {
-        document.getElementById('quiz').classList.remove('hidden');
-        Object.keys(types).forEach(key => scores[key] = 0);
-        showQ();
-    }
-
-    function showQ() {
-        if(currentQ < qs.length) {
-            document.getElementById('q-num').innerText = `STEP ${currentQ + 1} / 10`;
-            document.getElementById('q-text').innerText = qs[currentQ].q;
-            const div = document.getElementById('choices');
-            div.innerHTML = '';
-            qs[currentQ].a.forEach(ans => {
-                const btn = document.createElement('button');
-                btn.innerText = ans.t;
-                btn.onclick = () => { scores[ans.j]++; currentQ++; showQ(); };
-                div.appendChild(btn);
+            q.choices.forEach(choice => {
+                const btn = document.createElement("button");
+                btn.className = "choice-btn";
+                btn.innerText = choice.text;
+                btn.onclick = () => selectChoice(choice.type);
+                choicesContainer.appendChild(btn);
             });
-        } else { showResult(); }
-    }
+        }
 
-    function sendToSheet(name, job) {
-        if(!scriptURL) return;
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, job: job })
-        }).catch(err => console.error("Sheet Sync Error:", err));
-    }
+        async function loadBackQuestions() {
+            switchScreen("loading-screen");
+            try {
+                // 後半5問を取得
+                const res = await fetch(`${GAS_API_URL}?sheet=back`);
+                const backQuestions = await res.json();
+                
+                // 前半の配列の続きに後半の5問を結合
+                questions = questions.concat(backQuestions);
+                currentPhase = "back";
 
-    function showResult() {
-        canClickBubble = false; 
-        document.getElementById('hachiko-comment').classList.add('no-click');
-        document.getElementById('quiz').classList.add('hidden');
-        document.getElementById('result').classList.remove('hidden');
-        
-        document.getElementById('menu-container').classList.remove('hidden');
-        
-        const commentBox = document.getElementById('hachiko-comment');
-        
-        let maxScore = -1;
-        let topTypes = [];
-        
-        for (let key in scores) {
-            if (scores[key] > maxScore) {
-                maxScore = scores[key];
-                topTypes = [key];
-            } else if (scores[key] === maxScore) {
-                topTypes.push(key);
+                switchScreen("quiz-screen");
+                showQuestion();
+            } catch (err) {
+                alert("後半データの取得に失敗しました。");
+                switchScreen("start-screen");
             }
         }
-        
-        let selectedKey = topTypes[Math.floor(Math.random() * topTypes.length)];
-        const resultType = types[selectedKey];
-        
-        sendToSheet(userName, resultType.n);
-        
-        document.getElementById('res-name-label').innerText = userName;
-        document.getElementById('job-name').innerText = resultType.n;
-        
-        // オプションと金額をリザルト画面に反映
-        document.getElementById('res-opt').innerText = resultType.opt;
-        document.getElementById('res-price').innerText = resultType.price;
-        
-        commentBox.innerText = `鑑定完了だワン！${userName}ご主人様にピッタリなのは「${resultType.n}」だワン！`;
-        commentBox.classList.remove('hidden');
 
-        document.getElementById('detail').innerHTML = `
-            <strong>ハチコの評価：</strong><br>${resultType.c}
-        `;
-        
-        document.getElementById('btn-share').onclick = () => {
-            const pureUrl = window.location.origin + window.location.pathname;
-            const text = encodeURIComponent(`【かりんと渋谷店 理想の3P診断】\n${userName}ご主人様の理想の3Pは「${resultType.n}」（${resultType.opt} / ${resultType.price}）！\n#かりんと渋谷店 #理想の3P診断`);
-            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(pureUrl)}`, '_blank');
-        };
-    }
-</script>
+        function selectChoice(type) {
+            if (scores[type] !== undefined) {
+                scores[type]++;
+            }
+            currentIndex++;
+            showQuestion();
+        }
+
+        function showResult() {
+            switchScreen("result-screen");
+
+            // 最もスコアが高いタイプを決定 (同点の場合は AH > AS > PH > PS の優先順位など)
+            let bestType = "AH";
+            let maxScore = -1;
+            for (let type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    bestType = type;
+                }
+            }
+
+            const typeNames = {
+                AH: "【AHタイプ】 主導調教型 (Active × Hard)",
+                AS: "【ASタイプ】 主導フェチ型 (Active × Soft)",
+                PH: "【PHタイプ】 お任せ刺激型 (Passive × Hard)",
+                PS: "【PSタイプ】 お任せ癒やし型 (Passive × Soft)"
+            };
+
+            const typeDescriptions = {
+                AH: "あなたは「自分で主導権を握り、強烈な負荷やスリル、拘束を味わいたい」という強い欲求を持つタイプです。自らの意志で圧倒的な世界観を構築し、エキサイティングな状況をリードすることに最高の悦びを感じます。",
+                AS: "あなたは「自分の美意識やこだわりを大切にし、甘さや密着を自らデザインしてリードしたい」というタイプです。スタイリッシュで洗練された空気感を好み、スマートに心地よさを追求します。",
+                PH: "あなたは「自分では決めないけれど、容赦ない視覚的・肉体的な刺激や連続アタックで思考を完全にとかされたい」というタイプです。すべてを委ねた先にある、強烈な快楽の渦に溺れることに本能が惹かれます。",
+                PS: "あなたは「すべてを相手に委ねて、ひたすら甘やかされたり優しく愛撫されたりして骨抜きにされたい」というタイプです。温もりに包まれ、外界の緊張から解放される至福の癒やしを最も深く求めています。"
+            };
+
+            document.getElementById("result-type").innerText = typeNames[bestType];
+            document.getElementById("result-desc").innerText = typeDescriptions[bestType];
+        }
+
+        function switchScreen(screenId) {
+            ["start-screen", "loading-screen", "quiz-screen", "result-screen"].forEach(id => {
+                document.getElementById(id).classList.add("hidden");
+            });
+            document.getElementById(screenId).classList.remove("hidden");
+        }
+    </script>
 </body>
 </html>
