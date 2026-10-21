@@ -34,7 +34,7 @@
             padding: 20px;
         }
 
-        /* ★ハチコを大きく可愛く見せる吹き出しエリア */
+        /* ハチコのおしゃべりエリア */
         .hachiko-chat-container {
             display: flex;
             align-items: center;
@@ -44,21 +44,26 @@
             margin-bottom: 20px;
         }
 
+        /* ★ハチコの顔を大きくクローズアップする調整 */
         .hachiko-big-avatar {
-            width: 90px;
-            height: 90px;
+            width: 95px;
+            height: 95px;
             object-fit: cover;
+            /* 画像の上のほう（顔の位置）を中心にする */
+            object-position: center 20%; 
             border-radius: 50%;
             border: 4px solid #ffffff;
             box-shadow: 0 8px 25px rgba(255, 107, 155, 0.4);
             flex-shrink: 0;
             animation: float 3s ease-in-out infinite;
             background-color: #fff;
+            transform: scale(1.15); /* 少し拡大して顔を強調 */
+            transform-origin: center center;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+            0%, 100% { transform: translateY(0) scale(1.15); }
+            50% { transform: translateY(-6px) scale(1.15); }
         }
 
         .hachiko-speech-bubble {
@@ -76,7 +81,6 @@
             text-align: left;
         }
 
-        /* 吹き出しのしっぽ */
         .hachiko-speech-bubble::before {
             content: '';
             position: absolute;
@@ -276,7 +280,7 @@
             color: #495057;
         }
 
-        /* おすすめ3Pプラン欄（料金なしバージョン） */
+        /* おすすめ3Pプラン欄 */
         .recommend-box {
             background: linear-gradient(135deg, #fffdf4 0%, #fff6d6 100%);
             border: 2px solid var(--secondary-color);
@@ -309,7 +313,7 @@
 </head>
 <body>
 
-    <!-- ハチコを大きく可愛く見せるチャット風エリア -->
+    <!-- ハチコのお顔をクローズアップしたチャットエリア -->
     <div class="hachiko-chat-container">
         <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
         <div id="hachiko-msg" class="hachiko-speech-bubble">ご主人様、一緒に深層心理を暴いちゃおうワン！✨</div>
@@ -351,14 +355,14 @@
                     ここに詳細な解説文が入ります。
                 </div>
                 
-                <!-- おすすめ3Pプラン欄（料金なし） -->
+                <!-- おすすめ3Pプラン欄 -->
                 <div class="recommend-box">
                     <div class="recommend-title">💖 ハチコ的・こんな3Pがオススメ！</div>
                     <div id="recommend-content" class="recommend-content">ここにオススメの内容が入ります。</div>
                 </div>
             </div>
 
-            <!-- アクションボタン群（電話番号なし） -->
+            <!-- アクションボタン群 -->
             <a id="phone-btn" href="tel:0354591332" class="btn btn-phone">📞 お店に電話する</a>
             <a id="twitter-btn" href="#" target="_blank" class="btn btn-twitter">𝕏 Xに投稿する</a>
             <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
