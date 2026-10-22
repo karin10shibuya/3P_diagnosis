@@ -348,7 +348,7 @@
 
         <!-- ローディング画面 -->
         <div id="loading-screen" class="hidden">
-            <div class="loading">ハチコが秘密のデータを召喚中だワン…！✨</div>
+            <div class="loading" id="loading-text">ハチコが秘密のデータを召喚中だワン…！✨</div>
         </div>
 
         <!-- クイズ画面 -->
@@ -393,7 +393,7 @@
         let allQuestions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let displayName = "ご主人様";
+        let displayName = "ご主人様"; // 常にリセットされる基本値
         let currentBestTypeName = "";
 
         const hachikoComments = [
@@ -406,6 +406,7 @@
 
         function setHachiko(imageName, message) {
             document.getElementById("hachiko-face").src = imageName;
+            // テンプレート内の [NAME] を一度だけ確実に置き換える
             const personalizedMsg = message.replace(/[NAME]/g, displayName);
             document.getElementById("hachiko-msg").innerText = personalizedMsg;
         }
@@ -413,17 +414,16 @@
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
             
-            // ★【修正】毎回新しく「〇〇ご主人様」を生成するため、重複する心配がなくなります
+            // ★名前の重複を防ぐため、毎回必ずクリーンな状態から組み立てる
             if (inputVal !== "") {
-                // すでに「ご主人様」という文字が入っていたら取り除いてから綺麗に結合する安全対策
-                const cleanName = inputVal.replace(/ご主人様/g, "");
-                displayName = cleanName + "ご主人様";
+                displayName = inputVal + "ご主人様";
             } else {
                 displayName = "ご主人様";
             }
 
             switchScreen("loading-screen");
             setHachiko("hachiko2.jpg", "[NAME]のデータを集めてるからちょっと待っててねワン！");
+            
             try {
                 const [resFront, resBack] = await Promise.all([
                     fetch(`${GAS_API_URL}?sheet=front`),
@@ -462,7 +462,7 @@
             
             document.getElementById("question-container").innerText = q.question;
 
-            // 1問目は固定のセリフ、2問目以降はランダムセリフ
+            // 1問目は固定の挨拶、2問目以降はランダムセリフ
             if (currentIndex === 0) {
                 setHachiko("hachiko1.jpg", `いよいよ診断スタートだワン！[NAME]と一緒に深層心理を暴いていくワンよ〜！✨`);
             } else {
