@@ -348,7 +348,7 @@
 
         <!-- ローディング画面 -->
         <div id="loading-screen" class="hidden">
-            <div class="loading" id="loading-text">ハチコが秘密のデータを召喚中だワン…！✨</div>
+            <div class="loading">ハチコが秘密のデータを召喚中だワン…！✨</div>
         </div>
 
         <!-- クイズ画面 -->
@@ -393,11 +393,11 @@
         let allQuestions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let displayName = "ご主人様"; // 常にリセットされる基本値
+        let currentDisplayName = "ご主人様"; // 独立した変数名に変更
         let currentBestTypeName = "";
 
         const hachikoComments = [
-            "ふむふむ…[NAME]はそう選んだんだワン！",
+            "ふむふむ…${name}はそう選んだんだワン！",
             "おっ、今の選択、なかなか奥が深いワンね〜！",
             "ハチコ、次の質問も気になっちゃうワンっ✨",
             "どんどん本性に近づいてるワン……ふふっ♪",
@@ -406,23 +406,25 @@
 
         function setHachiko(imageName, message) {
             document.getElementById("hachiko-face").src = imageName;
-            // テンプレート内の [NAME] を一度だけ確実に置き換える
-            const personalizedMsg = message.replace(/[NAME]/g, displayName);
+            // メッセージ内の ${name} を現在の名前に確実に置き換える
+            const personalizedMsg = message.replace(/\$\{name\}/g, currentDisplayName);
             document.getElementById("hachiko-msg").innerText = personalizedMsg;
         }
 
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
             
-            // ★名前の重複を防ぐため、毎回必ずクリーンな状態から組み立てる
+            // ★完全なリセット＆再代入（累算を防ぐ）
             if (inputVal !== "") {
-                displayName = inputVal + "ご主人様";
+                // 入力値から余計な「ご主人様」が含まれていたら一度カットして綺麗にする
+                const pureName = inputVal.replace(/ご主人様/g, "").trim();
+                currentDisplayName = pureName + "ご主人様";
             } else {
-                displayName = "ご主人様";
+                currentDisplayName = "ご主人様";
             }
 
             switchScreen("loading-screen");
-            setHachiko("hachiko2.jpg", "[NAME]のデータを集めてるからちょっと待っててねワン！");
+            setHachiko("hachiko2.jpg", "${name}のデータを集めてるからちょっと待っててねワン！");
             
             try {
                 const [resFront, resBack] = await Promise.all([
@@ -462,9 +464,9 @@
             
             document.getElementById("question-container").innerText = q.question;
 
-            // 1問目は固定の挨拶、2問目以降はランダムセリフ
+            // 1問目は固定セリフ、2問目以降はランダムセリフ
             if (currentIndex === 0) {
-                setHachiko("hachiko1.jpg", `いよいよ診断スタートだワン！[NAME]と一緒に深層心理を暴いていくワンよ〜！✨`);
+                setHachiko("hachiko1.jpg", `いよいよ診断スタートだワン！${currentDisplayName}と一緒に深層心理を暴いていくワンよ〜！✨`);
             } else {
                 const rawComment = hachikoComments[Math.floor(Math.random() * hachikoComments.length)];
                 const randomHachikoImg = `hachiko${(currentIndex % 5) + 1}.jpg`;
@@ -503,7 +505,7 @@
                 }
             }
 
-            setHachiko("hachiko1.jpg", `${displayName}の診断結果が出たワン！お疲れ様だワン♪`);
+            setHachiko("hachiko1.jpg", `${currentDisplayName}の診断結果が出たワン！お疲れ様だワン♪`);
 
             const typeNames = {
                 AH: "【AHタイプ】 主導調教型 (Active × Hard)",
@@ -528,12 +530,12 @@
 
             currentBestTypeName = typeNames[bestType];
 
-            document.getElementById("result-name-badge").innerText = displayName;
+            document.getElementById("result-name-badge").innerText = currentDisplayName;
             document.getElementById("result-type").innerText = currentBestTypeName;
             document.getElementById("result-desc").innerText = typeDescriptions[bestType];
             document.getElementById("recommend-content").innerText = recommendPlans[bestType];
 
-            const tweetText = encodeURIComponent(`${displayName}の診断結果は「${currentBestTypeName}」でした！✨\n\nハチコと一緒にあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
+            const tweetText = encodeURIComponent(`${currentDisplayName}の診断結果は「${currentBestTypeName}」でした！✨\n\nハチコと一緒にあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
             const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}`;
             document.getElementById("twitter-btn").href = tweetUrl;
         }
