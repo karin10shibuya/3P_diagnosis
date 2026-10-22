@@ -44,26 +44,25 @@
             margin-bottom: 20px;
         }
 
-        /* ★ハチコの画像をさらに大きく大胆にクローズアップ！ */
+        /* ★新しいバストアップ画像（hachiko_face.png）が綺麗に収まるように調整 */
         .hachiko-big-avatar {
-            width: 115px;
-            height: 115px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            object-position: center 18%; /* 顔のポジションを微調整 */
+            object-position: center 15%; /* お顔が真ん中に来るように調整 */
             border-radius: 50%;
             border: 4px solid #ffffff;
             box-shadow: 0 8px 25px rgba(255, 107, 155, 0.4);
             flex-shrink: 0;
             animation: float 3s ease-in-out infinite;
             background-color: #fff;
-            transform: scale(1.6); /* 拡大率を思い切りアップ！ */
+            transform: scale(1.1); /* ちょうどいいサイズ感に微調整 */
             transform-origin: center center;
-            overflow: hidden;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1.6); }
-            50% { transform: translateY(-6px) scale(1.6); }
+            0%, 100% { transform: translateY(0) scale(1.1); }
+            50% { transform: translateY(-6px) scale(1.1); }
         }
 
         .hachiko-speech-bubble {
@@ -332,9 +331,9 @@
 </head>
 <body>
 
-    <!-- ハチコのお顔クローズアップエリア -->
+    <!-- ハチコのお顔クローズアップエリア（新しい hachiko_face.png を使用） -->
     <div class="hachiko-chat-container">
-        <img id="hachiko-face" src="hachiko1.jpg" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
+        <img id="hachiko-face" src="hachiko_face.png" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
         <div id="hachiko-msg" class="hachiko-speech-bubble">お名前を教えてくれたら、ハチコが一緒に診断してあげるワン！✨（空欄でもOKだワン）</div>
     </div>
 
@@ -406,8 +405,9 @@
             "直感こそ最大の真実だワン！その調子だワンっ！"
         ];
 
-        function setHachiko(imageName, message) {
-            document.getElementById("hachiko-face").src = imageName;
+        function setHachiko(message) {
+            // 画像は常に新しいバストアップ画像（hachiko_face.png）を使用
+            document.getElementById("hachiko-face").src = "hachiko_face.png";
             const personalizedMsg = message.replace(/\$\{name\}/g, currentDisplayName);
             document.getElementById("hachiko-msg").innerText = personalizedMsg;
         }
@@ -415,6 +415,7 @@
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
             
+            // ★完全なリセット＆再代入（名前の重複を完全に防止）
             if (inputVal !== "") {
                 const pureName = inputVal.replace(/ご主人様/g, "").trim();
                 currentDisplayName = pureName + "ご主人様";
@@ -423,7 +424,7 @@
             }
 
             switchScreen("loading-screen");
-            setHachiko("hachiko2.jpg", "${name}のデータを集めてるからちょっと待っててねワン！");
+            setHachiko("${name}のデータを集めてるからちょっと待っててねワン！");
             
             try {
                 const [resFront, resBack] = await Promise.all([
@@ -443,7 +444,7 @@
             } catch (err) {
                 alert("データの取得に失敗しちゃいました。URLを確認してね！");
                 switchScreen("start-screen");
-                setHachiko("hachiko1.jpg", "あれれ？通信エラーみたいだワン…泣");
+                setHachiko("あれれ？通信エラーみたいだワン…泣");
             }
         }
 
@@ -464,11 +465,10 @@
             document.getElementById("question-container").innerText = q.question;
 
             if (currentIndex === 0) {
-                setHachiko("hachiko1.jpg", `いよいよ診断スタートだワン！${currentDisplayName}と一緒に深層心理を暴いていくワンよ〜！✨`);
+                setHachiko(`いよいよ診断スタートだワン！${currentDisplayName}と一緒に深層心理を暴いていくワンよ〜！✨`);
             } else {
                 const rawComment = hachikoComments[Math.floor(Math.random() * hachikoComments.length)];
-                const randomHachikoImg = `hachiko${(currentIndex % 5) + 1}.jpg`;
-                setHachiko(randomHachikoImg, rawComment);
+                setHachiko(rawComment);
             }
 
             const choicesContainer = document.getElementById("choices-container");
@@ -503,7 +503,7 @@
                 }
             }
 
-            setHachiko("hachiko1.jpg", `${currentDisplayName}の診断結果が出たワン！お疲れ様だワン♪`);
+            setHachiko(`${currentDisplayName}の診断結果が出たワン！お疲れ様だワン♪`);
 
             const typeNames = {
                 AH: "【AHタイプ】 主導調教型 (Active × Hard)",
