@@ -44,24 +44,26 @@
             margin-bottom: 20px;
         }
 
+        /* ★ハチコの画像をさらに大きく大胆にクローズアップ！ */
         .hachiko-big-avatar {
-            width: 110px;
-            height: 110px;
+            width: 115px;
+            height: 115px;
             object-fit: cover;
-            object-position: center 20%; 
+            object-position: center 18%; /* 顔のポジションを微調整 */
             border-radius: 50%;
             border: 4px solid #ffffff;
             box-shadow: 0 8px 25px rgba(255, 107, 155, 0.4);
             flex-shrink: 0;
             animation: float 3s ease-in-out infinite;
             background-color: #fff;
-            transform: scale(1.3);
+            transform: scale(1.6); /* 拡大率を思い切りアップ！ */
             transform-origin: center center;
+            overflow: hidden;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1.3); }
-            50% { transform: translateY(-6px) scale(1.3); }
+            0%, 100% { transform: translateY(0) scale(1.6); }
+            50% { transform: translateY(-6px) scale(1.6); }
         }
 
         .hachiko-speech-bubble {
@@ -393,7 +395,7 @@
         let allQuestions = [];
         let currentIndex = 0;
         let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let currentDisplayName = "ご主人様"; // 独立した変数名に変更
+        let currentDisplayName = "ご主人様";
         let currentBestTypeName = "";
 
         const hachikoComments = [
@@ -406,7 +408,6 @@
 
         function setHachiko(imageName, message) {
             document.getElementById("hachiko-face").src = imageName;
-            // メッセージ内の ${name} を現在の名前に確実に置き換える
             const personalizedMsg = message.replace(/\$\{name\}/g, currentDisplayName);
             document.getElementById("hachiko-msg").innerText = personalizedMsg;
         }
@@ -414,9 +415,7 @@
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
             
-            // ★完全なリセット＆再代入（累算を防ぐ）
             if (inputVal !== "") {
-                // 入力値から余計な「ご主人様」が含まれていたら一度カットして綺麗にする
                 const pureName = inputVal.replace(/ご主人様/g, "").trim();
                 currentDisplayName = pureName + "ご主人様";
             } else {
@@ -464,7 +463,6 @@
             
             document.getElementById("question-container").innerText = q.question;
 
-            // 1問目は固定セリフ、2問目以降はランダムセリフ
             if (currentIndex === 0) {
                 setHachiko("hachiko1.jpg", `いよいよ診断スタートだワン！${currentDisplayName}と一緒に深層心理を暴いていくワンよ〜！✨`);
             } else {
