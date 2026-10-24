@@ -44,19 +44,18 @@
             margin-bottom: 20px;
         }
 
-        /* ★新しいバストアップ画像（hachiko_face.png）が綺麗に収まるように調整 */
         .hachiko-big-avatar {
             width: 100px;
             height: 100px;
             object-fit: cover;
-            object-position: center 15%; /* お顔が真ん中に来るように調整 */
+            object-position: center 15%; 
             border-radius: 50%;
             border: 4px solid #ffffff;
             box-shadow: 0 8px 25px rgba(255, 107, 155, 0.4);
             flex-shrink: 0;
             animation: float 3s ease-in-out infinite;
             background-color: #fff;
-            transform: scale(1.1); /* ちょうどいいサイズ感に微調整 */
+            transform: scale(1.1);
             transform-origin: center center;
         }
 
@@ -194,6 +193,17 @@
             box-shadow: 0 8px 25px rgba(46, 196, 182, 0.6);
         }
 
+        /* HPリンクボタン（タイプ別おすすめ詳細用） */
+        .btn-plan-link {
+            background: linear-gradient(135deg, #f3722c 0%, #f9844a 100%);
+            box-shadow: 0 6px 20px rgba(243, 114, 44, 0.4);
+            font-size: 1rem;
+            padding: 14px;
+        }
+        .btn-plan-link:hover {
+            box-shadow: 0 8px 25px rgba(243, 114, 44, 0.6);
+        }
+
         /* X投稿ボタン */
         .btn-twitter {
             background: #000000;
@@ -322,6 +332,7 @@
             font-size: 0.9rem;
             color: var(--text-main);
             line-height: 1.6;
+            margin-bottom: 12px;
         }
 
         .hidden {
@@ -331,9 +342,9 @@
 </head>
 <body>
 
-    <!-- ハチコのお顔クローズアップエリア（新しい hachiko_face.png を使用） -->
+    <!-- ハチコのお顔クローズアップエリア -->
     <div class="hachiko-chat-container">
-        <img id="hachiko-face" src="hachiko_face.png" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpeg'">
+        <img id="hachiko-face" src="hachiko_face.png" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
         <div id="hachiko-msg" class="hachiko-speech-bubble">お名前を教えてくれたら、ハチコが一緒に診断してあげるワン！✨（空欄でもOKだワン）</div>
     </div>
 
@@ -374,10 +385,11 @@
                     ここに詳細な解説文が入ります。
                 </div>
                 
-                <!-- おすすめ3Pプラン欄 -->
+                <!-- おすすめ3Pプラン欄 ＋ タイプ別個別HPリンクボタン -->
                 <div class="recommend-box">
                     <div class="recommend-title">💖 ハチコ的・こんな3Pがオススメ！</div>
                     <div id="recommend-content" class="recommend-content">ここにオススメの内容が入ります。</div>
+                    <a id="plan-link-btn" href="#" target="_blank" class="btn btn-plan-link">🌐 このおすすめプランの詳細を見る</a>
                 </div>
             </div>
 
@@ -406,7 +418,6 @@
         ];
 
         function setHachiko(message) {
-            // 画像は常に新しいバストアップ画像（hachiko_face.png）を使用
             document.getElementById("hachiko-face").src = "hachiko_face.png";
             const personalizedMsg = message.replace(/\$\{name\}/g, currentDisplayName);
             document.getElementById("hachiko-msg").innerText = personalizedMsg;
@@ -415,7 +426,6 @@
         async function startQuiz() {
             const inputVal = document.getElementById("user-name-input").value.trim();
             
-            // ★完全なリセット＆再代入（名前の重複を完全に防止）
             if (inputVal !== "") {
                 const pureName = inputVal.replace(/ご主人様/g, "").trim();
                 currentDisplayName = pureName + "ご主人様";
@@ -526,12 +536,23 @@
                 PS: "全身を優しく包み込まれ、ひたすら甘やかされて骨抜きになる『極上癒やし・トリートメント3Pプラン』。日常の疲れを完全に忘れさせる、至福のデトックス空間を提供します。"
             };
 
+            // AS, AH, PS, PH それぞれの個別HPリンクを設定済み
+            const planLinks = {
+                AS: "http://shibuyakarinto.com/profile.php?staff_id=18602",
+                AH: "http://shibuyakarinto.com/profile.php?staff_id=18603",
+                PS: "http://shibuyakarinto.com/profile.php?staff_id=18604",
+                PH: "http://shibuyakarinto.com/profile.php?staff_id=18605"
+            };
+
             currentBestTypeName = typeNames[bestType];
 
             document.getElementById("result-name-badge").innerText = currentDisplayName;
             document.getElementById("result-type").innerText = currentBestTypeName;
             document.getElementById("result-desc").innerText = typeDescriptions[bestType];
             document.getElementById("recommend-content").innerText = recommendPlans[bestType];
+            
+            // 診断されたタイプに応じた個別リンクをセット
+            document.getElementById("plan-link-btn").href = planLinks[bestType];
 
             const tweetText = encodeURIComponent(`${currentDisplayName}の診断結果は「${currentBestTypeName}」でした！✨\n\nハチコと一緒にあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
             const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}`;
