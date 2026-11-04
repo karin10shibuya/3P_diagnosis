@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <!-- スマホでの拡大縮小・ピンチインアウトを完全に禁止する設定 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>4タイプ診断 深層心理から読み解くM度合いチェッカー</title>
     <style>
@@ -19,7 +18,6 @@
             --text-color: #2d3436;
         }
 
-        /* 拡大縮小を禁止するためのタッチアクション設定 */
         html {
             touch-action: manipulation;
         }
@@ -181,7 +179,6 @@
             color: #ffffff;
             border-color: #000;
         }
-        /* お店に電話するボタン：明るいオレンジ色に確実に設定 */
         .btn-phone {
             background-color: var(--pop-orange) !important;
             color: var(--text-color) !important;
@@ -285,7 +282,15 @@
             line-height: 1.6;
         }
 
-        /* ポップな座標マップ（文字が絶対にはみ出さないよう調整） */
+        /* マップ手前の見出し文言の改行崩れを防ぐ設定 */
+        .map-title {
+            font-size: 0.95rem;
+            font-weight: 900;
+            margin: 15px 0 5px 0;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
         .coordinate-plane {
             position: relative;
             width: 260px;
@@ -306,7 +311,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.6rem; /* はみ出し防止にしっかりサイズダウン */
+            font-size: 0.6rem;
             font-weight: 900;
             text-align: center;
             padding: 2px;
@@ -396,6 +401,7 @@
             .subtitle { font-size: 1rem; }
             .speech-bubble { font-size: 1rem; }
             .result-type-title { font-size: 1.8rem; }
+            .map-title { font-size: 1rem; }
             .quadrant { font-size: 0.75rem; }
             .quadrant span { font-size: 0.55rem; }
         }
@@ -419,7 +425,6 @@
     <!-- ② スタート画面 -->
     <div id="start-screen" class="screen start-screen">
         <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
-        <!-- ロゴ画像 (logo.pngを用意してください) -->
         <img src="logo.png" alt="ロゴ" class="site-logo" onerror="this.style.display='none'">
         
         <h1>4タイプ診断</h1>
@@ -451,9 +456,9 @@
         
         <div class="killer-word-box" id="killer-word"></div>
 
-        <h3 style="font-size:1rem; font-weight:900; margin: 15px 0 5px 0;">🗺️ あなたのMタイプ・ポジショニングマップ</h3>
+        <!-- マップ手前の文言（改行崩れ防止クラス付与） -->
+        <h3 class="map-title">🗺️ あなたのMタイプ・ポジショニングマップ</h3>
         <div class="coordinate-plane">
-            <!-- 文字サイズと改行を調整からはみ出しを防止 -->
             <div class="quadrant q-as">AS型<br>(あくそふ)<br><span>(こだわり×ソフト)</span></div>
             <div class="quadrant q-ah">AH型<br>(あくはー)<br><span>(こだわり×ハード)</span></div>
             <div class="quadrant q-ps">PS型<br>(ぱっそふ)<br><span>(丸投げ×ソフト)</span></div>
@@ -461,7 +466,6 @@
             <div class="axis-x"></div>
             <div class="axis-y"></div>
             
-            <!-- 文字なしのただの丸い点ポインター -->
             <div id="user-pointer" class="user-pointer" style="left: 50%; top: 50%;">
                 <div class="pointer-dot"></div>
             </div>
@@ -475,13 +479,11 @@
 
         <button class="btn" onclick="resetQuiz()" style="margin-top: 25px; max-width: 100%;">もう一度測定する 🔄</button>
         
-        <!-- Xに投稿ボタン ＆ 明るいオレンジ色の電話ボタン -->
         <button class="btn btn-x" onclick="shareOnX()" style="margin-top: 10px; max-width: 100%;">𝕏 (Twitter) に投稿する 📣</button>
         <a href="tel:03-0000-0000" class="staff-link btn-phone" style="margin-top: 10px; width: 100%; box-sizing: border-box;">📞 お店に電話する</a>
     </div>
 </div>
 
-<!-- 常に下部に表示するクレジット -->
 <div class="site-footer">かりんと渋谷 presents</div>
 
 <script>
@@ -517,7 +519,7 @@
             text: "人から何かを教えてもらうとき、心の中でどう思いがち？",
             options: [
                 { text: "「自分のやり方や美学とはちょっと違うけど…まぁ、言われた通りにしておくか」", x: 1.0, y: 0 },
-                { text: "「お、それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
+                { text: "「お, それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
                 { text: "「はい、分かりました！」と特に深く考えず、言われたとおりにテキパキこなす", x: -0.5, y: 0 },
                 { text: "「めんどくさいな…できれば全部代わりにやってくれないかな」と内心思っている", x: -1.0, y: 0 }
             ]
@@ -682,7 +684,7 @@
         } else if (totalScoreX >= 0 && totalScoreY < 0) {
             currentResultTitle = "【AH型】あくはータイプ";
             subtitle = "プライド全開のガチドM・調教おねだりM";
-            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かげてブルブル震え出す変態エリート」";
+            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かべてブルブル震え出す変態エリート」";
             recTitle = "おすすめ：プライドへし折りスパルタ調教コース";
             recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
