@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ハチコの深層心理・受動タイプ診断</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap');
+
         :root {
-            --primary-color: #ff6b81;
-            --secondary-color: #ff4757;
-            --bg-color: #fff5f6;
+            --pop-pink: #ff3366;
+            --pop-yellow: #ffcc00;
+            --pop-blue: #00ccff;
+            --pop-purple: #9933ff;
+            --bg-color: #fff0f5;
             --card-bg: #ffffff;
-            --text-color: #2f3542;
-            --border-radius: 16px;
+            --text-color: #2d3436;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
             background-color: var(--bg-color);
+            /* ポップなドット背景パターン */
+            background-image: radial-gradient(#ffccd5 15%, transparent 16%), radial-gradient(#ffccd5 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
             color: var(--text-color);
             margin: 0;
             padding: 20px;
@@ -30,34 +37,39 @@
             width: 100%;
             max-width: 600px;
             background: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-radius: 24px;
+            border: 4px solid var(--text-color);
+            box-shadow: 6px 6px 0px var(--text-color);
             padding: 30px;
             box-sizing: border-box;
         }
 
-        /* ヘッダー・アバター周り */
+        /* アバター周り */
         .header {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .hachiko-avatar {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            border: 3px solid var(--primary-color);
+            border: 4px solid var(--text-color);
             object-fit: cover;
             margin-bottom: 10px;
-            box-shadow: 0 4px 10px rgba(255, 107, 129, 0.3);
+            box-shadow: 3px 3px 0px var(--text-color);
+            background: var(--pop-yellow);
         }
         h1 {
-            font-size: 20px;
-            color: var(--secondary-color);
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--pop-pink);
             margin: 0 0 5px 0;
+            text-shadow: 2px 2px 0px var(--text-color);
         }
         .subtitle {
-            font-size: 13px;
-            color: #747d8c;
+            font-size: 14px;
+            font-weight: 700;
+            color: #636e72;
             margin: 0;
         }
 
@@ -74,68 +86,73 @@
             text-align: center;
         }
         .name-input-box {
-            margin: 20px 0;
+            margin: 25px 0;
         }
         .name-input-box input {
-            width: 80%;
-            padding: 12px;
+            width: 85%;
+            padding: 14px;
             font-size: 16px;
-            border: 2px solid #dfe4ea;
-            border-radius: 8px;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 700;
+            border: 3px solid var(--text-color);
+            border-radius: 12px;
             text-align: center;
             outline: none;
-            transition: border-color 0.3s;
-        }
-        .name-input-box input:focus {
-            border-color: var(--primary-color);
+            background: #fff;
+            box-shadow: 3px 3px 0px var(--text-color);
         }
 
-        /* ボタン共通 */
+        /* ポップなボタン */
         .btn {
-            background: linear-gradient(135deg, #ff6b81, #ff4757);
-            color: white;
-            border: none;
+            background-color: var(--pop-yellow);
+            color: var(--text-color);
+            border: 3px solid var(--text-color);
             padding: 14px 28px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 18px;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 900;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 4px 4px 0px var(--text-color);
+            transition: transform 0.1s, box-shadow 0.1s;
             width: 100%;
             max-width: 300px;
             margin-top: 15px;
         }
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--text-color);
+        }
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--text-color);
         }
 
         /* クイズ画面 */
         .progress-bar-container {
-            background: #f1f2f6;
-            height: 8px;
-            border-radius: 4px;
+            background: #dfe6e9;
+            height: 14px;
+            border-radius: 10px;
+            border: 3px solid var(--text-color);
             margin-bottom: 20px;
             overflow: hidden;
         }
         .progress-bar {
-            background: var(--primary-color);
+            background: var(--pop-blue);
             height: 100%;
             width: 0%;
             transition: width 0.3s ease;
         }
         .question-number {
-            font-size: 12px;
-            color: #a4b0be;
-            font-weight: bold;
-            text-transform: uppercase;
+            font-size: 13px;
+            color: var(--pop-pink);
+            font-weight: 900;
             letter-spacing: 1px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         .question-text {
-            font-size: 17px;
-            font-weight: bold;
+            font-size: 18px;
+            font-weight: 900;
             margin-bottom: 20px;
             line-height: 1.5;
         }
@@ -145,20 +162,27 @@
             gap: 12px;
         }
         .option-btn {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
+            background: #ffffff;
+            border: 3px solid var(--text-color);
             padding: 14px 18px;
             text-align: left;
             border-radius: 12px;
             font-size: 15px;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 700;
             color: var(--text-color);
             cursor: pointer;
-            transition: all 0.2s;
+            box-shadow: 3px 3px 0px var(--text-color);
+            transition: all 0.1s;
         }
         .option-btn:hover {
-            background: #fff0f3;
-            border-color: var(--primary-color);
-            transform: translateX(4px);
+            background: #ffeaa7;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--text-color);
+        }
+        .option-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--text-color);
         }
 
         /* 結果画面 */
@@ -166,38 +190,42 @@
             text-align: center;
         }
         .result-type-title {
-            font-size: 24px;
-            color: var(--secondary-color);
-            font-weight: bold;
+            font-size: 26px;
+            color: var(--pop-pink);
+            font-weight: 900;
             margin-bottom: 5px;
+            text-shadow: 2px 2px 0px var(--text-color);
         }
         .result-type-sub {
-            font-size: 14px;
-            color: #747d8c;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--pop-purple);
             margin-bottom: 15px;
         }
         .killer-word-box {
-            background: #fff0f3;
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            border-radius: 0 12px 12px 0;
+            background: #fff9e6;
+            border: 3px solid var(--text-color);
+            box-shadow: 4px 4px 0px var(--text-color);
+            padding: 16px;
+            border-radius: 16px;
             text-align: left;
             margin-bottom: 20px;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 900;
             color: #d63031;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
-        /* 座標マップデザイン（左上:あくそふ, 右上:あくはー, 左下:ぱっそふ, 右下:ぱっはー） */
+        /* ポップな座標マップ */
         .coordinate-plane {
             position: relative;
             width: 260px;
             height: 260px;
             margin: 20px auto;
-            background: #fafafa;
-            border: 2px solid #2f3542;
-            border-radius: 12px;
+            background: #ffffff;
+            border: 3px solid var(--text-color);
+            box-shadow: 4px 4px 0px var(--text-color);
+            border-radius: 16px;
             overflow: hidden;
         }
         .quadrant {
@@ -208,21 +236,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            color: #a4b0be;
+            font-size: 12px;
+            font-weight: 900;
             text-align: center;
             padding: 5px;
             box-sizing: border-box;
         }
-        .quadrant span { font-size: 8px; font-weight: normal; }
-        .q-as { top: 0; left: 0; background: rgba(255, 182, 193, 0.15); } /* 左上：あくそふ */
-        .q-ah { top: 0; right: 0; background: rgba(255, 105, 180, 0.15); } /* 右上：あくはー */
-        .q-ps { bottom: 0; left: 0; background: rgba(135, 206, 235, 0.15); } /* 左下：ぱっそふ */
-        .q-ph { bottom: 0; right: 0; background: rgba(147, 112, 219, 0.15); } /* 右下：ぱっはー */
+        .quadrant span { font-size: 9px; font-weight: 700; }
+        .q-as { top: 0; left: 0; background: rgba(255, 102, 153, 0.15); color: #ff3366; }
+        .q-ah { top: 0; right: 0; background: rgba(255, 204, 0, 0.2); color: #d35400; }
+        .q-ps { bottom: 0; left: 0; background: rgba(0, 204, 255, 0.15); color: #0984e3; }
+        .q-ph { bottom: 0; right: 0; background: rgba(153, 51, 255, 0.15); color: #6c5ce7; }
         
-        .axis-x { position: absolute; top: 50%; width: 100%; height: 1px; background: #dfe4ea; }
-        .axis-y { position: absolute; left: 50%; height: 100%; width: 1px; background: #dfe4ea; }
+        .axis-x { position: absolute; top: 50%; width: 100%; height: 2px; background: var(--text-color); }
+        .axis-y { position: absolute; left: 50%; height: 100%; width: 2px; background: var(--text-color); }
         
         .user-pointer {
             position: absolute;
@@ -232,54 +259,63 @@
             text-align: center;
         }
         .pointer-icon {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            border: 2px solid var(--secondary-color);
-            background: #fff;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            border: 3px solid var(--text-color);
+            background: var(--pop-yellow);
+            box-shadow: 2px 2px 0px var(--text-color);
             object-fit: cover;
         }
         .pointer-label {
             display: block;
-            font-size: 9px;
-            font-weight: bold;
-            background: var(--secondary-color);
+            font-size: 10px;
+            font-weight: 900;
+            background: var(--pop-pink);
             color: #fff;
-            padding: 1px 4px;
-            border-radius: 4px;
-            margin-top: 1px;
+            border: 2px solid var(--text-color);
+            padding: 1px 6px;
+            border-radius: 6px;
+            margin-top: 2px;
         }
 
         .recommendation-box {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 15px;
+            background: #f1f2f6;
+            border: 3px solid var(--text-color);
+            box-shadow: 4px 4px 0px var(--text-color);
+            border-radius: 16px;
+            padding: 16px;
             margin-top: 20px;
             text-align: left;
         }
         .recommendation-box h4 {
             margin: 0 0 8px 0;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 900;
             color: var(--text-color);
         }
         .staff-link {
             display: inline-block;
-            background: #2ed573;
-            color: white;
+            background: var(--pop-blue);
+            color: var(--text-color);
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            margin-top: 10px;
-            transition: background 0.2s;
+            padding: 12px 20px;
+            border: 3px solid var(--text-color);
+            box-shadow: 3px 3px 0px var(--text-color);
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 15px;
+            margin-top: 12px;
+            transition: all 0.1s;
             text-align: center;
             width: 100%;
             box-sizing: border-box;
         }
         .staff-link:hover {
-            background: #26af5f;
+            background: #00b894;
+            color: #fff;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--text-color);
         }
     </style>
 </head>
@@ -288,15 +324,15 @@
 <div class="container">
     <!-- スタート画面 -->
     <div id="start-screen" class="screen active start-screen">
-        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/80?text=Hachiko'">
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
         <h1>ハチコの深層心理診断</h1>
-        <p class="subtitle">〜 あなたの「愛され方・受動の好み」を丸裸にします 〜</p>
+        <p class="subtitle">🐾 あなたの「愛され方・受動の好み」を丸裸にします 🐾</p>
         
         <div class="name-input-box">
             <input type="text" id="user-name" placeholder="お名前を入力（空欄ならご主人様）">
         </div>
         
-        <button class="btn" onclick="startQuiz()">診断を始める 🐾</button>
+        <button class="btn" onclick="startQuiz()">診断を始める 🚀</button>
     </div>
 
     <!-- クイズ画面 -->
@@ -311,15 +347,15 @@
 
     <!-- 結果画面 -->
     <div id="result-screen" class="screen result-screen">
-        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/80?text=Hachiko'">
-        <div id="greeting-text" class="subtitle"></div>
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
+        <div id="greeting-text" class="subtitle" style="font-weight:900; color:var(--pop-pink);"></div>
         <h2 class="result-type-title" id="result-title"></h2>
         <div class="result-type-sub" id="result-subtitle"></div>
         
         <div class="killer-word-box" id="killer-word"></div>
 
         <!-- 変態ポジショニングマップ -->
-        <h3 style="font-size:14px; margin: 15px 0 5px 0;">🗺️ あなたの変態ポジショニングマップ</h3>
+        <h3 style="font-size:15px; font-weight:900; margin: 15px 0 5px 0;">🗺️ あなたの変態ポジショニングマップ</h3>
         <div class="coordinate-plane">
             <div class="quadrant q-as">あくそふ<br><span>(こだわり×ソフト)</span></div>
             <div class="quadrant q-ah">あくはー<br><span>(こだわり×ハード)</span></div>
@@ -329,23 +365,22 @@
             <div class="axis-y"></div>
             
             <div id="user-pointer" class="user-pointer" style="left: 50%; top: 50%;">
-                <img src="hachiko_face.png" alt="YOU" class="pointer-icon" onerror="this.src='https://via.placeholder.com/36?text=YOU'">
+                <img src="hachiko_face.png" alt="YOU" class="pointer-icon" onerror="this.src='https://via.placeholder.com/42?text=YOU'">
                 <span class="pointer-label">YOU!</span>
             </div>
         </div>
 
         <div class="recommendation-box">
             <h4 id="rec-title">おすすめの担当キャスト</h4>
-            <p id="rec-desc" style="font-size:13px; color:#666; margin:0;"></p>
+            <p id="rec-desc" style="font-size:13px; font-weight:700; color:#57606f; margin:0;"></p>
             <a id="rec-link" href="#" target="_blank" class="staff-link">このタイプのプロフィールを見る ↗</a>
         </div>
 
-        <button class="btn" onclick="resetQuiz()" style="margin-top: 25px;">もう一度診断する</button>
+        <button class="btn" onclick="resetQuiz()" style="margin-top: 25px; max-width: 100%;">もう一度診断する 🔄</button>
     </div>
 </div>
 
 <script>
-    // データベース：前半プール（性格編）と後半プール（エロ受動編）
     const poolPart1 = [
         {
             text: "休日に、自分の知らない新しいお店へ行くときの行動は？",
@@ -398,10 +433,10 @@
         {
             text: "2人きりの静かな空間で、相手と向かい合って座ったときの理想の距離感は？",
             options: [
-                { text: "自分の好みのペースに合わせて、じれったいほど丁寧に距離を縮めてきてほしい", x: -0.8, y: -0.8 }, // AS (左上)
-                { text: "「まだ動いちゃダメ」と視線で逃げ場を塞がれ、じわじわと追い詰められたい", x: 0.8, y: -0.8 },  // AH (右上)
-                { text: "細かいことは気にせず、ただただ深い温もりと心地よさにすっぽり包み込まれたい", x: -0.8, y: 0.8 }, // PS (左下)
-                { text: "自分の意志とは関係なく、容赦ない圧倒的なアタックで一気に世界を奪われたい", x: 0.8, y: 0.8 }   // PH (右下)
+                { text: "自分の好みのペースに合わせて、じれったいほど丁寧に距離を縮めてきてほしい", x: -0.8, y: -0.8 },
+                { text: "「まだ動いちゃダメ」と視線で逃げ場を塞がれ、じわじわと追い詰められたい", x: 0.8, y: -0.8 },
+                { text: "細かいことは気にせず、ただただ深い温もりと心地よさにすっぽり包み込まれたい", x: -0.8, y: 0.8 },
+                { text: "自分の意志とは関係なく、容赦ない圧倒的なアタックで一気に世界を奪われたい", x: 0.8, y: 0.8 }
             ]
         },
         {
@@ -511,7 +546,7 @@
         document.getElementById('result-screen').classList.add('active');
         document.getElementById('progress-bar').style.width = '100%';
 
-        document.getElementById('greeting-text').innerText = `${userName}の診断結果はこちらです！`;
+        document.getElementById('greeting-text').innerText = `${userName}の診断結果はこちら！`;
 
         let title = "";
         let subtitle = "";
@@ -520,7 +555,6 @@
         let recDesc = "";
         let recUrl = "";
 
-        // 【座標計算】X軸:横(プラス右/マイナス左), Y軸:縦(プラス下/マイナス上)
         let posX = 50 + (totalScoreX * 8);
         let posY = 50 + (totalScoreY * 8);
         posX = Math.max(15, Math.min(85, posX));
@@ -529,14 +563,7 @@
         document.getElementById('user-pointer').style.left = posX + '%';
         document.getElementById('user-pointer').style.top = posY + '%';
 
-        // 【4象限マップと判定の完全一致】
-        // 左上(AS): X < 0 且つ Y < 0 (こだわり × ソフト)
-        // 右上(AH): X >= 0 且つ Y < 0 (こだわり × ハード)
-        // 左下(PS): X < 0 且つ Y >= 0 (丸投げ × ソフト)
-        // 右下(PH): X >= 0 且つ Y >= 0 (丸投げ × ハード)
-
         if (totalScoreX < 0 && totalScoreY < 0) {
-            // 【左上】あくそふ (こだわり×ソフト)
             title = "【あくそふ】タイプ";
             subtitle = "こだわり強めの上品なお洒落・甘えん坊タイプ";
             killerWord = "「普段はめちゃくちゃ仕事できて余裕ぶってるくせに、お気に入りのアロマとムードを作られた途端、子犬みたいにトロトロになって『もっと褒めて…♡』ってすり寄ってくるめんどくさい可愛い人」";
@@ -544,15 +571,13 @@
             recDesc = "あなたの上質なこだわりとプライドを優しく全肯定しつつ、完璧な空間で極上の甘やかしを提供します。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
         } else if (totalScoreX >= 0 && totalScoreY < 0) {
-            // 【右上】あくはー (こだわり×ハード)
             title = "【あくはー】タイプ";
             subtitle = "プライド全開のガチドM・調教おねだりタイプ";
-            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かべてブルブル震え出す変態エリート」";
+            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かげてブルブル震え出す変態エリート」";
             recTitle = "あくはー担当：厳しくプライドをへし折るスパルタ枠";
             recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
         } else if (totalScoreX < 0 && totalScoreY >= 0) {
-            // 【左下】ぱっそふ (丸投げ×ソフト)
             title = "【ぱっそふ】タイプ";
             subtitle = "すべてをお任せしたい究極の骨抜き・お布団大好きマン";
             killerWord = "「めんどくさいことは一切人生から排除したい癖に、優しく包み込まれて頭をなでられた瞬間、社会人の尊厳をすべて忘れ去って赤ちゃんのようにトロケ落ちる最強の怠け者」";
@@ -560,7 +585,6 @@
             recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
         } else {
-            // 【右下】ぱっはー (丸投げ×ハード)
             title = "【ぱっはー】タイプ";
             subtitle = "脳の配線を焼き切られたい快楽ジャンキータイプ";
             killerWord = "「普段どんなに理知的な顔をして生きている男でも、圧倒的な物量と強烈なアタックの前に叩き伏せられた瞬間、『あばばば…もう何も考えられない…♡』と白目をむいて快楽のモブと化す人」";
