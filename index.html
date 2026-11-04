@@ -2,569 +2,577 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ハチコの深層心理・本能アセスメント</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ハチコの深層心理・受動タイプ診断</title>
     <style>
         :root {
-            --bg-color: #fff0f5;
+            --primary-color: #ff6b81;
+            --secondary-color: #ff4757;
+            --bg-color: #fff5f6;
             --card-bg: #ffffff;
-            --primary-color: #ff6b9b;
-            --primary-light: #ffe6ef;
-            --secondary-color: #ffca3a;
-            --text-main: #2b2d42;
-            --text-sub: #6c757d;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            touch-action: manipulation; 
+            --text-color: #2f3542;
+            --border-radius: 16px;
         }
 
         body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-            color: var(--text-main);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            min-height: 100vh;
         }
 
-        /* ハチコのおしゃべりエリア */
-        .hachiko-chat-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            max-width: 550px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .hachiko-big-avatar {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            object-position: center 15%; 
-            border-radius: 50%;
-            border: 4px solid #ffffff;
-            box-shadow: 0 8px 25px rgba(255, 107, 155, 0.4);
-            flex-shrink: 0;
-            animation: float 3s ease-in-out infinite;
-            background-color: #fff;
-            transform: scale(1.1);
-            transform-origin: center center;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1.1); }
-            50% { transform: translateY(-6px) scale(1.1); }
-        }
-
-        .hachiko-speech-bubble {
-            position: relative;
-            background: #ffffff;
-            border: 3px solid var(--primary-color);
-            border-radius: 20px;
-            padding: 14px 18px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: var(--text-main);
-            line-height: 1.4;
-            box-shadow: 0 6px 20px rgba(255, 107, 155, 0.2);
-            flex-grow: 1;
-            text-align: left;
-        }
-
-        .hachiko-speech-bubble::before {
-            content: '';
-            position: absolute;
-            left: -12px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-width: 8px 12px 8px 0;
-            border-style: solid;
-            border-color: transparent var(--primary-color) transparent transparent;
-        }
-
-        /* メインカード */
         .container {
             width: 100%;
-            max-width: 550px;
-            background-color: var(--card-bg);
-            border: 4px solid #fff;
-            border-radius: 24px;
-            padding: 35px 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* ヘッダー・アバター周り */
+        .header {
             text-align: center;
-            position: relative;
+            margin-bottom: 25px;
         }
-
-        .app-logo {
-            width: 100%;
-            max-width: 280px;
-            height: auto;
-            object-fit: contain;
-            border-radius: 12px;
-            margin: 0 auto 20px auto;
-            display: block;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        .hachiko-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(255, 107, 129, 0.3);
         }
-
         h1 {
-            font-size: 1.6rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            letter-spacing: 0.05em;
+            font-size: 20px;
+            color: var(--secondary-color);
+            margin: 0 0 5px 0;
+        }
+        .subtitle {
+            font-size: 13px;
+            color: #747d8c;
+            margin: 0;
         }
 
-        h2 {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            text-align: left;
-            line-height: 1.5;
+        /* 画面共通切り替え */
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
         }
 
-        p {
-            color: var(--text-sub);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 0.95rem;
+        /* スタート画面 */
+        .start-screen {
+            text-align: center;
         }
-
-        .name-input {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 1.05rem;
-            border: 2px solid #e9ecef;
-            border-radius: 50px;
+        .name-input-box {
+            margin: 20px 0;
+        }
+        .name-input-box input {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #dfe4ea;
+            border-radius: 8px;
             text-align: center;
             outline: none;
-            margin-bottom: 20px;
-            color: var(--text-main);
-            background: #f8f9fa;
-            transition: all 0.2s;
+            transition: border-color 0.3s;
         }
-
-        .name-input:focus {
+        .name-input-box input:focus {
             border-color: var(--primary-color);
-            background: #fff0f5;
         }
 
         /* ボタン共通 */
         .btn {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #ff6b9b 0%, #ff8e53 100%);
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.1rem;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
             border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            text-align: center;
-            box-shadow: 0 6px 20px rgba(255, 107, 155, 0.4);
-            letter-spacing: 0.05em;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 300px;
             margin-top: 15px;
-            text-decoration: none;
         }
-
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 155, 0.6);
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        /* 電話ボタン */
-        .btn-phone {
-            background: linear-gradient(135deg, #2ec4b6 0%, #20bf6b 100%);
-            box-shadow: 0 6px 20px rgba(46, 196, 182, 0.4);
-        }
-        .btn-phone:hover {
-            box-shadow: 0 8px 25px rgba(46, 196, 182, 0.6);
-        }
-
-        /* HPリンクボタン（タイプ別おすすめ詳細用） */
-        .btn-plan-link {
-            background: linear-gradient(135deg, #f3722c 0%, #f9844a 100%);
-            box-shadow: 0 6px 20px rgba(243, 114, 44, 0.4);
-            font-size: 1rem;
-            padding: 14px;
-        }
-        .btn-plan-link:hover {
-            box-shadow: 0 8px 25px rgba(243, 114, 44, 0.6);
-        }
-
-        /* X投稿ボタン */
-        .btn-twitter {
-            background: #000000;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-        .btn-twitter:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6);
         }
 
         /* クイズ画面 */
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-sub);
-            font-size: 0.85rem;
-            margin-bottom: 15px;
+        .progress-bar-container {
+            background: #f1f2f6;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: var(--primary-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-number {
+            font-size: 12px;
+            color: #a4b0be;
             font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
-
-        .choices-list {
+        .question-text {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .options-container {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
-        .choice-btn {
-            width: 100%;
-            padding: 16px 20px;
-            background-color: #f8f9fa;
+        .option-btn {
+            background: #f8f9fa;
             border: 2px solid #e9ecef;
-            border-radius: 14px;
-            color: var(--text-main);
+            padding: 14px 18px;
             text-align: left;
-            font-size: 0.95rem;
-            font-weight: 500;
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--text-color);
             cursor: pointer;
             transition: all 0.2s;
-            outline: none;
         }
-
-        @media (hover: hover) {
-            .choice-btn:hover {
-                background-color: #fff0f5;
-                border-color: var(--primary-color);
-                color: var(--primary-color);
-                transform: translateX(4px);
-            }
-        }
-
-        .choice-btn:active {
-            background-color: #fff0f5;
+        .option-btn:hover {
+            background: #fff0f3;
             border-color: var(--primary-color);
-            color: var(--primary-color);
+            transform: translateX(4px);
         }
 
-        /* ローディング */
-        .loading {
-            font-size: 1.1rem;
-            color: var(--primary-color);
+        /* 結果画面 */
+        .result-screen {
+            text-align: center;
+        }
+        .result-type-title {
+            font-size: 24px;
+            color: var(--secondary-color);
             font-weight: bold;
-            padding: 20px 0;
+            margin-bottom: 5px;
+        }
+        .result-type-sub {
+            font-size: 14px;
+            color: #747d8c;
+            margin-bottom: 15px;
+        }
+        .killer-word-box {
+            background: #fff0f3;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            border-radius: 0 12px 12px 0;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #d63031;
+            line-height: 1.4;
         }
 
-        /* 結果画面のデザイン */
-        .result-box {
+        /* 座標マップデザイン */
+        .coordinate-plane {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+            background: #fafafa;
+            border: 2px solid #2f3542;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .quadrant {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #a4b0be;
+            text-align: center;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .quadrant span { font-size: 8px; font-weight: normal; }
+        .q-as { top: 0; left: 0; background: rgba(255, 182, 193, 0.1); }
+        .q-ah { top: 0; right: 0; background: rgba(255, 105, 180, 0.1); }
+        .q-ps { bottom: 0; left: 0; background: rgba(135, 206, 235, 0.1); }
+        .q-ph { bottom: 0; right: 0; background: rgba(147, 112, 219, 0.1); }
+        .axis-x { position: absolute; top: 50%; width: 100%; height: 1px; background: #dfe4ea; }
+        .axis-y { position: absolute; left: 50%; height: 100%; width: 1px; background: #dfe4ea; }
+        
+        .user-pointer {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            text-align: center;
+        }
+        .pointer-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-color);
+            background: #fff;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            object-fit: cover;
+        }
+        .pointer-label {
+            display: block;
+            font-size: 9px;
+            font-weight: bold;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 1px 4px;
+            border-radius: 4px;
+            margin-top: 1px;
+        }
+
+        .recommendation-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
             text-align: left;
         }
-
-        .result-title-badge {
+        .recommendation-box h4 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        .staff-link {
+            display: inline-block;
+            background: #2ed573;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.2s;
             text-align: center;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            background: var(--primary-light);
-            padding: 6px 15px;
-            border-radius: 20px;
-            display: table;
-            margin: 0 auto 10px auto;
+            width: 100%;
+            box-sizing: border-box;
         }
-
-        .result-type {
-            font-size: 1.4rem;
-            color: var(--text-main);
-            margin: 5px 0 20px 0;
-            font-weight: bold;
-            line-height: 1.4;
-            text-align: center;
-            background: linear-gradient(135deg, #ff6b9b, #ffa502);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .result-desc {
-            background-color: #f8f9fa;
-            padding: 18px;
-            border-radius: 14px;
-            border-left: 5px solid var(--primary-color);
-            margin-bottom: 20px;
-            line-height: 1.8;
-            font-size: 0.92rem;
-            color: #495057;
-        }
-
-        /* おすすめ3Pプラン欄 */
-        .recommend-box {
-            background: linear-gradient(135deg, #fffdf4 0%, #fff6d6 100%);
-            border: 2px solid var(--secondary-color);
-            padding: 18px;
-            border-radius: 14px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.15);
-        }
-
-        .recommend-title {
-            font-weight: bold;
-            color: #d4a373;
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .recommend-content {
-            font-size: 0.9rem;
-            color: var(--text-main);
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .hidden {
-            display: none !important;
+        .staff-link:hover {
+            background: #26af5f;
         }
     </style>
 </head>
 <body>
 
-    <!-- ハチコのお顔クローズアップエリア -->
-    <div class="hachiko-chat-container">
-        <img id="hachiko-face" src="hachiko_face.png" alt="ハチコ" class="hachiko-big-avatar" onerror="this.src='logo.jpg'">
-        <div id="hachiko-msg" class="hachiko-speech-bubble">お名前を教えてくれたら、ハチコが一緒に診断してあげるワン！✨（空欄でもOKだワン）</div>
+<div class="container">
+    <!-- スタート画面 -->
+    <div id="start-screen" class="screen active start-screen">
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/80?text=Hachiko'">
+        <h1>ハチコの深層心理診断</h1>
+        <p class="subtitle">〜 あなたの「愛され方・受動の好み」を丸裸にします 〜</p>
+        
+        <div class="name-input-box">
+            <input type="text" id="user-name" placeholder="お名前を入力（空欄ならご主人様）">
+        </div>
+        
+        <button class="btn" onclick="startQuiz()">診断を始める 🐾</button>
     </div>
 
-    <div class="container">
-        <!-- スタート画面 -->
-        <div id="start-screen">
-            <img src="logo.jpg" alt="Logo" class="app-logo" onerror="this.style.display='none'">
-            <h1>ハチコの深層心理・本能アセスメント</h1>
-            <p>あなたの本能と欲求を丸裸にする、全10問のポップな心理テスト！</p>
-            <input type="text" id="user-name-input" class="name-input" placeholder="お名前（例：太郎）※空欄ならご主人様" maxlength="20">
-            <button class="btn" onclick="startQuiz()">診断をスタート！</button>
+    <!-- クイズ画面 -->
+    <div id="quiz-screen" class="screen">
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
         </div>
-
-        <!-- ローディング画面 -->
-        <div id="loading-screen" class="hidden">
-            <div class="loading">ハチコが秘密のデータを召喚中だワン…！✨</div>
-        </div>
-
-        <!-- クイズ画面 -->
-        <div id="quiz-screen" class="hidden">
-            <div class="quiz-header">
-                <span id="stage-indicator">Phase 1 (1/5)</span>
-                <span id="progress-indicator">1 / 10</span>
-            </div>
-            <h2 id="question-container" class="question-text">ここに問題文が入ります</h2>
-            <div id="choices-container" class="choices-list">
-                <!-- 選択肢ボタン -->
-            </div>
-        </div>
-
-        <!-- 結果画面 -->
-        <div id="result-screen" class="hidden">
-            <div class="result-box">
-                <div class="result-title-badge"><span id="result-name-badge">--</span>の診断結果発表</div>
-                <div id="result-type" class="result-type">--</div>
-                
-                <div id="result-desc" class="result-desc">
-                    ここに詳細な解説文が入ります。
-                </div>
-                
-                <!-- おすすめ3Pプラン欄 ＋ タイプ別個別HPリンクボタン -->
-                <div class="recommend-box">
-                    <div class="recommend-title">💖 ハチコ的・こんな3Pがオススメ！</div>
-                    <div id="recommend-content" class="recommend-content">ここにオススメの内容が入ります。</div>
-                    <a id="plan-link-btn" href="#" target="_blank" class="btn btn-plan-link">🌐 このおすすめプランの詳細を見る</a>
-                </div>
-            </div>
-
-            <!-- アクションボタン群 -->
-            <a id="phone-btn" href="tel:0354591332" class="btn btn-phone">📞 お店に電話する</a>
-            <a id="twitter-btn" href="#" target="_blank" class="btn btn-twitter">𝕏 Xに投稿する</a>
-            <button class="btn" onclick="location.reload()">もう一度遊ぶワン！</button>
-        </div>
+        <div id="question-number" class="question-number">QUESTION 1 / 10</div>
+        <div id="question-text" class="question-text">読み込み中...</div>
+        <div id="options-container" class="options-container"></div>
     </div>
 
-    <script>
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxKd0sRsasVHnLmyzYakYGemsXGAyajnCdHXoJfmID3SKvDs5jjVCkqKpAqpfd5fe8O/exec";
+    <!-- 結果画面 -->
+    <div id="result-screen" class="screen result-screen">
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/80?text=Hachiko'">
+        <div id="greeting-text" class="subtitle"></div>
+        <h2 class="result-type-title" id="result-title"></h2>
+        <div class="result-type-sub" id="result-subtitle"></div>
+        
+        <div class="killer-word-box" id="killer-word"></div>
 
-        let allQuestions = [];
-        let currentIndex = 0;
-        let scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-        let currentDisplayName = "ご主人様";
-        let currentBestTypeName = "";
-
-        const hachikoComments = [
-            "ふむふむ…${name}はそう選んだんだワン！",
-            "おっ、今の選択、なかなか奥が深いワンね〜！",
-            "ハチコ、次の質問も気になっちゃうワンっ✨",
-            "どんどん本性に近づいてるワン……ふふっ♪",
-            "直感こそ最大の真実だワン！その調子だワンっ！"
-        ];
-
-        function setHachiko(message) {
-            document.getElementById("hachiko-face").src = "hachiko_face.png";
-            const personalizedMsg = message.replace(/\$\{name\}/g, currentDisplayName);
-            document.getElementById("hachiko-msg").innerText = personalizedMsg;
-        }
-
-        async function startQuiz() {
-            const inputVal = document.getElementById("user-name-input").value.trim();
+        <!-- 変態ポジショニングマップ -->
+        <h3 style="font-size:14px; margin: 15px 0 5px 0;">🗺️ あなたの変態ポジショニングマップ</h3>
+        <div class="coordinate-plane">
+            <div class="quadrant q-as">あくそふ<br><span>(こだわり×ソフト)</span></div>
+            <div class="quadrant q-ah">あくはー<br><span>(こだわり×ハード)</span></div>
+            <div class="quadrant q-ps">ぱっそふ<br><span>(丸投げ×ソフト)</span></div>
+            <div class="quadrant q-ph">ぱっはー<br><span>(丸投げ×ハード)</span></div>
+            <div class="axis-x"></div>
+            <div class="axis-y"></div>
             
-            if (inputVal !== "") {
-                const pureName = inputVal.replace(/ご主人様/g, "").trim();
-                currentDisplayName = pureName + "ご主人様";
-            } else {
-                currentDisplayName = "ご主人様";
-            }
+            <div id="user-pointer" class="user-pointer" style="left: 50%; top: 50%;">
+                <img src="hachiko_face.png" alt="YOU" class="pointer-icon" onerror="this.src='https://via.placeholder.com/36?text=YOU'">
+                <span class="pointer-label">YOU!</span>
+            </div>
+        </div>
 
-            switchScreen("loading-screen");
-            setHachiko("${name}のデータを集めてるからちょっと待っててねワン！");
-            
-            try {
-                const [resFront, resBack] = await Promise.all([
-                    fetch(`${GAS_API_URL}?sheet=front`),
-                    fetch(`${GAS_API_URL}?sheet=back`)
-                ]);
+        <div class="recommendation-box">
+            <h4 id="rec-title">おすすめの担当キャスト</h4>
+            <p id="rec-desc" style="font-size:13px; color:#666; margin:0;"></p>
+            <a id="rec-link" href="#" target="_blank" class="staff-link">このタイプのプロフィールを見る ↗</a>
+        </div>
 
-                const frontData = await resFront.json();
-                const backData = await resBack.json();
+        <button class="btn" onclick="resetQuiz()" style="margin-top: 25px;">もう一度診断する</button>
+    </div>
+</div>
 
-                allQuestions = frontData.concat(backData);
-                currentIndex = 0;
-                scores = { PS: 0, PH: 0, AS: 0, AH: 0 };
-                
-                switchScreen("quiz-screen");
-                showQuestion();
-            } catch (err) {
-                alert("データの取得に失敗しちゃいました。URLを確認してね！");
-                switchScreen("start-screen");
-                setHachiko("あれれ？通信エラーみたいだワン…泣");
-            }
+<script>
+    // データベース：前半（性格）と後半（エロ）をそれぞれプールとして持たせる
+    const poolPart1 = [
+        {
+            text: "休日に、自分の知らない新しいお店へ行くときの行動は？",
+            options: [
+                { text: "事前にネットやSNSで口コミを徹底的に調べ、一番良さそうな席やメニューを予習してから向かう", x: 1.0, y: 0 },
+                { text: "気になった看板や雰囲気に惹かれて、自分の直感だけでふらっと足を踏み入れる", x: 0.5, y: 0 },
+                { text: "「どこでもいいよ」と言われたら、相手の行きたい提案にニコニコしてそのまま乗っかる", x: -0.5, y: 0 },
+                { text: "正直めんどくさいので、お気に入りの定番の場所以外はあまり行きたくない", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "カフェや飲食店で、注文を決めるときのあなたのスタイルは？",
+            options: [
+                { text: "自分の中で「今日の気分はこれ」と決まっているものがハッキリあり、それをブレずに頼む", x: 1.0, y: 0 },
+                { text: "メニューの見た目やネーミングの面白さに惹かれて、その場のノリで直感的に決める", x: 0.5, y: 0 },
+                { text: "迷ったら周囲の人や連れの「おすすめは何？」と聞いて、そのまま同じものを頼みがち", x: -0.5, y: 0 },
+                { text: "失敗するのが一番嫌なので、一番無難でハズレのない定番メニューを確実に選ぶ", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "グループや仕事で、思い通りにならないトラブルが起きたときは？",
+            options: [
+                { text: "いったん深呼吸して、自分が主導権を握ってスマートに軌道修正しようと動く", x: 1.0, y: 0 },
+                { text: "「なんとかなる精神」でその場のノリと勢いに身を任せ、流れの変化を楽しむ", x: 0.5, y: 0 },
+                { text: "「まぁ、なるようにしかならないか」と、あまり深く考えず周りの動きに合わせる", x: -0.5, y: 0 },
+                { text: "余計な波風を立てたくないので、できるだけ当たり障りないポジションでやり過ごす", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "人から何かを教えてもらうとき、心の中でどう思いがち？",
+            options: [
+                { text: "「自分のやり方や美学とはちょっと違うけど…まぁ、言われた通りにしておくか」", x: 1.0, y: 0 },
+                { text: "「お,それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
+                { text: "「はい、分かりました！」と特に深く考えず、言われたとおりにテキパキこなす", x: -0.5, y: 0 },
+                { text: "「めんどくさいな…できれば全部代わりにやってくれないかな」と内心思っている", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "完全に自由な休日ができたとき、目覚めて最初にすることは？",
+            options: [
+                { text: "「今日はこれをやる」と決めたスケジュールを頭の中で組み立ててから起き上がる", x: 1.0, y: 0 },
+                { text: "「せっかくだし、思いっきり遠出しようかな」とその日の勢いで行き先を決める", x: 0.5, y: 0 },
+                { text: "特に予定は決めず、誰かからのお誘いやSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
+                { text: "スマホをいじりながら、布団の中で限界までダラダラして一歩も外に出ない", x: -1.0, y: 0 }
+            ]
+        }
+    ];
+
+    const poolPart2 = [
+        {
+            text: "2人きりの静かな空間で、相手と向かい合って座ったときの理想の距離感は？",
+            options: [
+                { text: "自分の好みのペースに合わせて、じれったいほど丁寧に距離を縮めてきてほしい", x: 0.8, y: -0.8 },
+                { text: "「まだ動いちゃダメ」と視線で逃げ場を塞がれ、じわじわと追い詰められたい", x: 0.8, y: 0.8 },
+                { text: "細かいことは気にせず、ただただ深い温もりと心地よさにすっぽり包み込まれたい", x: -0.8, y: -0.8 },
+                { text: "自分の意志とは関係なく、容赦ない圧倒的なアタックで一気に世界を奪われたい", x: -0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "耳元でふとささやかれたとき、一番ゾクッとするニュアンスは？",
+            options: [
+                { text: "「ねぇ、今の私の表情、どう見えてる…？」と、お互いの色気や空気感をじっくり味わう言葉", x: 0.8, y: -0.8 },
+                { text: "「私の言うこと、ちゃんと聞けるよね？」と、有無を言わせず主導権を奪っていく言葉", x: 0.8, y: 0.8 },
+                { text: "「よく頑張りました、よしよし…♡」と、すべてを全肯定して甘やかしてくれる言葉", x: -0.8, y: -0.8 },
+                { text: "「もう逃がさないから…」と、理性がプツンと途切れるような強烈なフレーズ", x: -0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "相手に身動きが取れなくなっているとき、頭のなかで考えていることは？",
+            options: [
+                { text: "「この絶妙な距離感と、最高のムードにこのままうっとり酔いしれていたい…」", x: 0.8, y: -0.8 },
+                { text: "「もっと厳しくして、もっと頭がおかしくなるくらい狂わせてくれ…」", x: 0.8, y: 0.8 },
+                { text: "「このまま時間が止まって、ずっとこの心地よさに包まれていたいのにな…」", x: -0.8, y: -0.8 },
+                { text: "「あばばば…もう何も考えられない…どうにでもして…」", x: -0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "気持ちよさがピークに達して、理性がトローンと溶けかけているときの理想は？",
+            options: [
+                { text: "自分の美意識や空間の心地よさが最高潮に達し、うっとりと満たされた状態でいたい", x: 0.8, y: -0.8 },
+                { text: "相手の手のひらの上で完全にコントロールされ、普段の自分を完全にへし折られたい", x: 0.8, y: 0.8 },
+                { text: "すべてを包み込むような温もりと、絶対的な安心感の中でトロトロにとろけたい", x: -0.8, y: -0.8 },
+                { text: "思考が完全に真っ白になって、自分の意志とは関係なく快感の波に飲み込まれたい", x: -0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "これから濃厚な時間に身を委ねる直前、心の中で密かに願っていることは？",
+            options: [
+                { text: "自分好みの最高のシチュエーションで、スマートにトロッとさせてほしい", x: 0.8, y: -0.8 },
+                { text: "限界まで自分を追い詰めて、普段の理性を粉々に粉砕してほしい", x: 0.8, y: 0.8 },
+                { text: "痛いことや面倒なことは抜きで、とにかく確実にとろけるほど気持ちよくしてほしい", x: -0.8, y: -0.8 },
+                { text: "細かいことはいいから、とにかく脳の配線を焼き切るような強烈な刺激をくれ", x: -0.8, y: 0.8 }
+            ]
+        }
+    ];
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let totalScoreX = 0;
+    let totalScoreY = 0;
+    let userName = "";
+
+    // 配列をランダムにシャッフルする関数
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function startQuiz() {
+        const inputVal = document.getElementById('user-name').value.trim();
+        userName = inputVal !== "" ? inputVal + "ご主人様" : "ご主人様";
+        
+        // 前半プールと後半プールをそれぞれランダムにシャッフルして合体（全10問）
+        const shuffledPart1 = shuffleArray(poolPart1);
+        const shuffledPart2 = shuffleArray(poolPart2);
+        currentQuestions = [...shuffledPart1, ...shuffledPart2];
+
+        currentIndex = 0;
+        totalScoreX = 0;
+        totalScoreY = 0;
+
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (currentIndex >= currentQuestions.length) {
+            showResult();
+            return;
         }
 
-        function showQuestion() {
-            if (currentIndex >= 10) {
-                showResult();
-                return;
-            }
+        const q = currentQuestions[currentIndex];
+        document.getElementById('question-number').innerText = `QUESTION ${currentIndex + 1} / ${currentQuestions.length}`;
+        document.getElementById('question-text').innerText = q.text;
+        
+        const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+        document.getElementById('progress-bar').style.width = progressPercent + '%';
 
-            const q = allQuestions[currentIndex];
-            const isFront = currentIndex < 5;
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
 
-            document.getElementById("progress-indicator").innerText = `${currentIndex + 1} / 10`;
-            document.getElementById("stage-indicator").innerText = isFront 
-                ? `Phase 1 : 傾向判定 (${currentIndex + 1}/5)` 
-                : `Phase 2 : 詳細分析 (${currentIndex - 4}/5)`;
-            
-            document.getElementById("question-container").innerText = q.question;
+        q.options.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectOption(opt.x, opt.y);
+            optionsContainer.appendChild(btn);
+        });
+    }
 
-            if (currentIndex === 0) {
-                setHachiko(`いよいよ診断スタートだワン！${currentDisplayName}と一緒に深層心理を暴いていくワンよ〜！✨`);
-            } else {
-                const rawComment = hachikoComments[Math.floor(Math.random() * hachikoComments.length)];
-                setHachiko(rawComment);
-            }
+    function selectOption(x, y) {
+        totalScoreX += x;
+        totalScoreY += y;
+        currentIndex++;
+        showQuestion();
+    }
 
-            const choicesContainer = document.getElementById("choices-container");
-            choicesContainer.innerHTML = "";
+    function showResult() {
+        document.getElementById('quiz-screen').classList.remove('active');
+        document.getElementById('result-screen').classList.add('active');
+        document.getElementById('progress-bar').style.width = '100%';
 
-            q.choices.forEach(choice => {
-                const btn = document.createElement("button");
-                btn.className = "choice-btn";
-                btn.innerText = choice.text;
-                btn.onclick = () => selectChoice(choice.type);
-                choicesContainer.appendChild(btn);
-            });
+        document.getElementById('greeting-text').innerText = `${userName}の診断結果はこちらです！`;
+
+        let title = "";
+        let subtitle = "";
+        let killerWord = "";
+        let recTitle = "";
+        let recDesc = "";
+        let recUrl = "";
+
+        let posX = 50 + (totalScoreX * 10);
+        let posY = 50 + (totalScoreY * 10);
+        posX = Math.max(10, Math.min(90, posX));
+        posY = Math.max(10, Math.min(90, posY));
+
+        document.getElementById('user-pointer').style.left = posX + '%';
+        document.getElementById('user-pointer').style.top = posY + '%';
+
+        if (totalScoreX >= 0 && totalScoreY < 0) {
+            title = "【あくそふ】タイプ";
+            subtitle = "こだわり強めの上品なお洒落・甘えん坊タイプ";
+            killerWord = "「普段はめちゃくちゃ仕事できて余裕ぶってるくせに、お気に入りのアロマとムードを作られた途端、子犬みたいにトロトロになって『もっと褒めて…♡』ってすり寄ってくるめんどくさい可愛い人」";
+            recTitle = "あくそふ担当：洗練されたお姉さま癒やし枠";
+            recDesc = "あなたの上質なこだわりとプライドを優しく全肯定しつつ、完璧な空間で極上の甘やかしを提供します。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
+        } else if (totalScoreX >= 0 && totalScoreY >= 0) {
+            title = "【あくはー】タイプ";
+            subtitle = "プライド全開のガチドM・調教おねだりタイプ";
+            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かべてブルブル震え出す変態エリート」";
+            recTitle = "あくはー担当：厳しくプライドをへし折るスパルタ枠";
+            recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
+        } else if (totalScoreX < 0 && totalScoreY < 0) {
+            title = "【ぱっそふ】タイプ";
+            subtitle = "すべてをお任せしたい究極の骨抜き・お布団大好きマン";
+            killerWord = "「めんどくさいことは一切人生から排除したい癖に、優しく包み込まれて頭をなでられた瞬間、社会人の尊厳をすべて忘れ去って赤ちゃんのようにトロケ落ちる最強の怠け者」";
+            recTitle = "ぱっそふ担当：全肯定・母性あふれるお世話枠";
+            recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
+        } else {
+            title = "【ぱっはー】タイプ";
+            subtitle = "脳の配線を焼き切られたい快楽ジャンキータイプ";
+            killerWord = "「普段どんなに理知的な顔をして生きている男でも、圧倒的な物量と強烈なアタックの前に叩き伏せられた瞬間、『あばばば…もう何も考えられない…♡』と白目をむいて快楽のモブと化す人」";
+            recTitle = "ぱっはー担当：思考停止・脳汁ぶっかけ強制トランス枠";
+            recDesc = "細かい駆け引きは一切なし！容赦ない強烈な刺激で、あなたの脳の思考回路を完全に焼き切ってくれます。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18605";
         }
 
-        function selectChoice(type) {
-            if (scores[type] !== undefined) {
-                scores[type]++;
-            }
-            currentIndex++;
-            showQuestion();
-        }
+        document.getElementById('result-title').innerText = title;
+        document.getElementById('result-subtitle').innerText = subtitle;
+        document.getElementById('killer-word').innerText = killerWord;
+        document.getElementById('rec-title').innerText = recTitle;
+        document.getElementById('rec-desc').innerText = recDesc;
+        document.getElementById('rec-link').href = recUrl;
+    }
 
-        function showResult() {
-            switchScreen("result-screen");
+    function resetQuiz() {
+        document.getElementById('result-screen').classList.remove('active');
+        document.getElementById('start-screen').classList.add('active');
+        document.getElementById('user-name').value = '';
+    }
+</script>
 
-            let bestType = "AH";
-            let maxScore = -1;
-            for (let type in scores) {
-                if (scores[type] > maxScore) {
-                    maxScore = scores[type];
-                    bestType = type;
-                }
-            }
-
-            setHachiko(`${currentDisplayName}の診断結果が出たワン！お疲れ様だワン♪`);
-
-            const typeNames = {
-                AH: "【AHタイプ】 主導調教型 (Active × Hard)",
-                AS: "【ASタイプ】 主導フェチ型 (Active × Soft)",
-                PH: "【PHタイプ】 お任せ刺激型 (Passive × Hard)",
-                PS: "【PSタイプ】 お任せ癒やし型 (Passive × Soft)"
-            };
-
-            const typeDescriptions = {
-                AH: "あなたは「自分で主導権を握り、強烈な負荷やスリル、拘束を味わいたい」という強い欲求を持つタイプです。自らの意志で圧倒的な世界観やルールを構築し、エキサイティングな状況を自らリードすることに最高の悦びを感じます。妥協を許さない完璧主義な一面があり、ドラマチックで刺激的な展開に身を委ねることで、心の底から満たされる本能を秘めています。",
-                AS: "あなたは「自分の美意識やこだわりを大切にし、甘さや密着を自らデザインしてリードしたい」というタイプです。スタイリッシュで洗練された空気感を好み、スマートに心地よさを追求します。独自の美的センスと細やかな気配りを合わせ持ち、相手との絶妙な距離感をコントロールしながら、優雅でロマンチックな世界観を創り上げることに悦びを見出します。",
-                PH: "あなたは「自分では決めないけれど、容赦ない視覚的・肉体的な刺激や連続アタックで思考を完全にとかされたい」というタイプです。すべてを委ねた先にある、強烈な快楽の渦に溺れることに本能が強く惹かれます。普段の理性から解放され、圧倒的な存在感や容赦ないアプローチによって、思考が真っ白になるような非日常のスリルとトランス状態を求めています。",
-                PS: "あなたは「すべてを相手に委ねて、ひたすら甘やかされたり優しく愛撫されたりして骨抜きにされたい」というタイプです。温もりに包まれ、外界の緊張から解放される至福の癒やしを最も深く求めています。包み込むような優しさと絶対的な安心感の中で、全身の力を抜き去り、心身ともにトロトロにとろけてしまうような極上のリラクゼーション体験がベストマッチです。"
-            };
-
-            const recommendPlans = {
-                AH: "主導権を完全に対等（または支配的）に握り、スリルと緊張感を楽しめる『ハードシチュエーション・カスタム3Pプラン』。演出やルールにこだわり抜いた濃厚な時間をデザインします。",
-                AS: "洗練された空間と甘い密着感を贅沢に味わう『スタイリッシュ・アロマフェチ3Pプラン』。美しい照明と心地よい距離感の中で、五感を満たすスマートな時間を演出します。",
-                PH: "考える余地を与えない連続的な刺激と圧倒的密着で思考をとかす『ハード・ラッシュ快楽3Pプラン』。すべてをお任せにして、極限のトランス状態へと誘います。",
-                PS: "全身を優しく包み込まれ、ひたすら甘やかされて骨抜きになる『極上癒やし・トリートメント3Pプラン』。日常の疲れを完全に忘れさせる、至福のデトックス空間を提供します。"
-            };
-
-            // AS, AH, PS, PH それぞれの個別HPリンクを設定済み
-            const planLinks = {
-                AS: "http://shibuyakarinto.com/profile.php?staff_id=18602",
-                AH: "http://shibuyakarinto.com/profile.php?staff_id=18603",
-                PS: "http://shibuyakarinto.com/profile.php?staff_id=18604",
-                PH: "http://shibuyakarinto.com/profile.php?staff_id=18605"
-            };
-
-            currentBestTypeName = typeNames[bestType];
-
-            document.getElementById("result-name-badge").innerText = currentDisplayName;
-            document.getElementById("result-type").innerText = currentBestTypeName;
-            document.getElementById("result-desc").innerText = typeDescriptions[bestType];
-            document.getElementById("recommend-content").innerText = recommendPlans[bestType];
-            
-            // 診断されたタイプに応じた個別リンクをセット
-            document.getElementById("plan-link-btn").href = planLinks[bestType];
-
-            const tweetText = encodeURIComponent(`${currentDisplayName}の診断結果は「${currentBestTypeName}」でした！✨\n\nハチコと一緒にあなたも本能を診断してみない？\n#ハチコ診断 #深層心理`);
-            const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(window.location.href)}`;
-            document.getElementById("twitter-btn").href = tweetUrl;
-        }
-
-        function switchScreen(screenId) {
-            ["start-screen", "loading-screen", "quiz-screen", "result-screen"].forEach(id => {
-                document.getElementById(id).classList.add("hidden");
-            });
-            document.getElementById(screenId).classList.remove("hidden");
-        }
-    </script>
 </body>
 </html>
