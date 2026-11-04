@@ -290,12 +290,35 @@
             overflow-wrap: break-word;
         }
 
-        /* 座標マップ（文言を大きくスッキリ変更） */
+        /* マップ全体の外枠と軸ラベル用のラッパー */
+        .map-wrapper {
+            position: relative;
+            width: 280px;
+            margin: 15px auto 20px auto;
+        }
+
+        /* 上下左右の軸ラベル（上:A, 下:P, 左:S, 右:H） */
+        .axis-label {
+            position: absolute;
+            font-size: 0.8rem;
+            font-weight: 900;
+            background: var(--text-color);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 6px;
+            z-index: 5;
+        }
+        .label-top { top: -12px; left: 50%; transform: translateX(-50%); }
+        .label-bottom { bottom: -12px; left: 50%; transform: translateX(-50%); }
+        .label-left { left: -14px; top: 50%; transform: translateY(-50%); }
+        .label-right { right: -14px; top: 50%; transform: translateY(-50%); }
+
+        /* 座標マップ本体 */
         .coordinate-plane {
             position: relative;
             width: 260px;
             height: 260px;
-            margin: 15px auto 20px auto;
+            margin: 0 auto;
             background: #ffffff;
             border: 3px solid var(--text-color);
             box-shadow: 4px 4px 0px var(--text-color);
@@ -311,7 +334,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem; /* 文字サイズを大きく調整 */
+            font-size: 0.65rem;
             font-weight: 900;
             text-align: center;
             padding: 4px;
@@ -319,7 +342,6 @@
             line-height: 1.2;
             word-break: keep-all;
         }
-        .quadrant span { font-size: 0.55rem; font-weight: 700; opacity: 0.8; }
         .q-as { top: 0; left: 0; background: rgba(255, 102, 153, 0.15); color: #ff3366; }
         .q-ah { top: 0; right: 0; background: rgba(255, 204, 0, 0.2); color: #d35400; }
         .q-ps { bottom: 0; left: 0; background: rgba(0, 204, 255, 0.15); color: #0984e3; }
@@ -402,8 +424,7 @@
             .speech-bubble { font-size: 1rem; }
             .result-type-title { font-size: 1.8rem; }
             .map-title { font-size: 1rem; }
-            .quadrant { font-size: 0.8rem; }
-            .quadrant span { font-size: 0.6rem; }
+            .quadrant { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -456,19 +477,26 @@
         
         <div class="killer-word-box" id="killer-word"></div>
 
-        <!-- マップ手前の文言（絵文字なし） -->
         <h3 class="map-title">あなたのMタイプ・ポジショニングマップ</h3>
-        <div class="coordinate-plane">
-            <!-- マップ内の文言を大きくスッキリ変更 -->
-            <div class="quadrant q-as">AS型：あくそふ<br><span>(こだわり×ソフト)</span></div>
-            <div class="quadrant q-ah">AH型：あくはー<br><span>(こだわり×ハード)</span></div>
-            <div class="quadrant q-ps">PS型：ぱっそふ<br><span>(丸投げ×ソフト)</span></div>
-            <div class="quadrant q-ph">PH型：ぱっはー<br><span>(丸投げ×ハード)</span></div>
-            <div class="axis-x"></div>
-            <div class="axis-y"></div>
-            
-            <div id="user-pointer" class="user-pointer" style="left: 50%; top: 50%;">
-                <div class="pointer-dot"></div>
+        
+        <!-- 上：A、下：P、左：S、右：H の軸ラベルを配置したマップ構造 -->
+        <div class="map-wrapper">
+            <div class="axis-label label-top">A : こだわり</div>
+            <div class="axis-label label-bottom">P : 丸投げ</div>
+            <div class="axis-label label-left">S : ソフト</div>
+            <div class="axis-label label-right">H : ハード</div>
+
+            <div class="coordinate-plane">
+                <div class="quadrant q-as">AS型<br>極上甘えん坊タイプ</div>
+                <div class="quadrant q-ah">AH型<br>絶対服従タイプ</div>
+                <div class="quadrant q-ps">PS型<br>思考停止タイプ</div>
+                <div class="quadrant q-ph">PH型<br>快楽ジャンキータイプ</div>
+                <div class="axis-x"></div>
+                <div class="axis-y"></div>
+                
+                <div id="user-pointer" class="user-pointer" style="left: 50%; top: 50%;">
+                    <div class="pointer-dot"></div>
+                </div>
             </div>
         </div>
 
@@ -676,28 +704,28 @@
         document.getElementById('user-pointer').style.top = posY + '%';
 
         if (totalScoreX < 0 && totalScoreY < 0) {
-            currentResultTitle = "【AS型】あくそふタイプ";
+            currentResultTitle = "【AS型】極上甘えん坊タイプ";
             subtitle = "こだわり強めの上品なお洒落・甘えん坊M";
             killerWord = "「普段はめちゃくちゃ仕事できて余裕ぶってるくせに、お気に入りのアロマとムードを作られた途端、子犬みたいにトロトロになって『もっと褒めて…♡』ってすり寄ってくるめんどくさい可愛い人」";
             recTitle = "おすすめ：極上アロマ＆じれったいお預け密着コース";
             recDesc = "あなたの上質なこだわりとプライドを優しく全肯定しつつ、完璧な空間で極上の甘やかしを提供します。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
         } else if (totalScoreX >= 0 && totalScoreY < 0) {
-            currentResultTitle = "【AH型】あくはータイプ";
+            currentResultTitle = "【AH型】絶対服従タイプ";
             subtitle = "プライド全開のガチドM・調教おねだりM";
             killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かべてブルブル震え出す変態エリート」";
             recTitle = "おすすめ：プライドへし折りスパルタ調教コース";
             recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
         } else if (totalScoreX < 0 && totalScoreY >= 0) {
-            currentResultTitle = "【PS型】ぱっそふタイプ";
+            currentResultTitle = "【PS型】思考停止タイプ";
             subtitle = "すべてをお任せしたい究極の骨抜き・お布団大好きM";
             killerWord = "「めんどくさいことは一切人生から排除したい癖に、優しく包み込まれて頭をなでられた瞬間、社会人の尊厳をすべて忘れ去って赤ちゃんのようにトロケ落ちる最強の怠け者」";
             recTitle = "おすすめ：全肯定・とろけるお布団お世話コース";
             recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
         } else {
-            currentResultTitle = "【PH型】ぱっはータイプ";
+            currentResultTitle = "【PH型】快楽ジャンキータイプ";
             subtitle = "脳の配線を焼き切られたい快楽ジャンキーM";
             killerWord = "「普段どんなに理知的な顔をして生きている男でも、圧倒的な物量と強烈なアタックの前に叩き伏せられた瞬間、『あばばば…もう何も考えられない…♡』と白目をむいて快楽のモブと化す人」";
             recTitle = "おすすめ：思考停止・脳汁ぶっかけ強制トランスコース";
