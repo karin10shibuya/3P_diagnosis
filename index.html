@@ -2,7 +2,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- スマホで拡大縮小できないように固定 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>4タイプ診断 深層心理から読み解くM度合いチェッカー</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap');
@@ -12,6 +13,7 @@
             --pop-yellow: #ffcc00;
             --pop-blue: #00ccff;
             --pop-purple: #9933ff;
+            --pop-orange: #ff9f43; /* 電話ボタン用の明るいオレンジ */
             --bg-color: #fff0f5;
             --card-bg: #ffffff;
             --text-color: #2d3436;
@@ -175,12 +177,17 @@
             color: #ffffff;
             border-color: #000;
         }
+        /* 電話ボタン：青・黄色以外の明るい色（オレンジ）に変更 */
         .btn-phone {
-            background-color: #ff4757;
-            color: #ffffff;
-            border-color: #ff4757;
+            background-color: var(--pop-orange);
+            color: var(--text-color);
+            border-color: var(--text-color);
             text-decoration: none;
             display: inline-block;
+        }
+        .btn-phone:hover {
+            background-color: #e58e26;
+            color: #ffffff;
         }
 
         .progress-bar-container {
@@ -274,12 +281,13 @@
             line-height: 1.6;
         }
 
+        /* ポップな座標マップ（スマホでもはみ出さないようサイズ調整） */
         .coordinate-plane {
             position: relative;
-            width: 90vw;
-            max-width: 260px;
-            height: 90vw;
-            max-height: 260px;
+            width: 85vw;
+            max-width: 240px;
+            height: 85vw;
+            max-height: 240px;
             margin: 15px auto 20px auto;
             background: #ffffff;
             border: 3px solid var(--text-color);
@@ -295,11 +303,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem; /* はみ出し防止に少し文字サイズを調整 */
             font-weight: 900;
             text-align: center;
-            padding: 5px;
+            padding: 4px;
             box-sizing: border-box;
+            line-height: 1.2;
         }
         .quadrant span { font-size: 0.5rem; font-weight: 700; }
         .q-as { top: 0; left: 0; background: rgba(255, 102, 153, 0.15); color: #ff3366; }
@@ -317,8 +326,8 @@
             z-index: 10;
         }
         .pointer-dot {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             background-color: var(--pop-pink);
             border: 3px solid #ffffff;
@@ -383,8 +392,9 @@
             .subtitle { font-size: 1rem; }
             .speech-bubble { font-size: 1rem; }
             .result-type-title { font-size: 1.8rem; }
-            .quadrant { font-size: 0.8rem; }
-            .quadrant span { font-size: 0.6rem; }
+            .quadrant { font-size: 0.75rem; }
+            .quadrant span { font-size: 0.55rem; }
+            .coordinate-plane { max-width: 260px; max-height: 260px; }
         }
     </style>
 </head>
@@ -406,7 +416,7 @@
     <!-- ② スタート画面 -->
     <div id="start-screen" class="screen start-screen">
         <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
-        <!-- ハチコの下にロゴ画像を入れる場所 (logo.pngを用意してください) -->
+        <!-- ロゴ画像 (logo.pngを用意してください) -->
         <img src="logo.png" alt="ロゴ" class="site-logo" onerror="this.style.display='none'">
         
         <h1>4タイプ診断</h1>
@@ -456,7 +466,8 @@
         <div class="recommendation-box">
             <h4 id="rec-title">おすすめの専用コース・プラン</h4>
             <p id="rec-desc" style="font-size:0.9rem; font-weight:700; color:#57606f; margin:0;"></p>
-            <a id="rec-link" href="#" target="_blank" class="staff-link">このタイプの担当スタッフを見る ↗</a>
+            <!-- ご要望に合わせて文言を変更 -->
+            <a id="rec-link" href="#" target="_blank" class="staff-link">このタイプのオススメコースはこちら ↗</a>
         </div>
 
         <button class="btn" onclick="resetQuiz()" style="margin-top: 25px; max-width: 100%;">もう一度測定する 🔄</button>
@@ -551,7 +562,7 @@
             text: "気持ちよさがピークに達して、理性がトローンと溶けかけているときの理想は？",
             options: [
                 { text: "自分の美意識や空間の心地よさが最高潮に達し、うっとりと満たされた状態でいたい", x: -0.8, y: -0.8 },
-                { text: "相手の手のひらの上で完全にコントロールされ、普段の自分を完全にへし折られたい", x: 0.8, y: -0.8 },
+                { text: "相手の手のひらの上で完全にコントロールされ、普段の自分を完全にへし折られたい", x: 0.8, y: 0.8 },
                 { text: "すべてを包み込むような温もりと、絶対的な安心感の中でトロトロにとろけたい", x: -0.8, y: 0.8 },
                 { text: "思考が完全に真っ白になって、自分の意志とは関係なく快感の波に飲み込まれたい", x: 0.8, y: 0.8 }
             ]
@@ -677,7 +688,7 @@
             subtitle = "すべてをお任せしたい究極の骨抜き・お布団大好きM";
             killerWord = "「めんどくさいことは一切人生から排除したい癖に、優しく包み込まれて頭をなでられた瞬間、社会人の尊厳をすべて忘れ去って赤ちゃんのようにトロケ落ちる最強の怠け者」";
             recTitle = "おすすめ：全肯定・とろけるお布団お世話コース";
-            recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
+            recDesc = "考える力を完全に奪-ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
         } else {
             currentResultTitle = "【PH型】ぱっはータイプ";
