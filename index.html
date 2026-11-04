@@ -1,382 +1,713 @@
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap');
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4タイプ診断 深層心理から読み解くM度合いチェッカー</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap');
 
-:root {
-    --pop-pink: #ff3366;
-    --pop-yellow: #ffcc00;
-    --pop-blue: #00ccff;
-    --pop-purple: #9933ff;
-    --bg-color: #fff0f5;
-    --card-bg: #ffffff;
-    --text-color: #2d3436;
-}
+        :root {
+            --pop-pink: #ff3366;
+            --pop-yellow: #ffcc00;
+            --pop-blue: #00ccff;
+            --pop-purple: #9933ff;
+            --bg-color: #fff0f5;
+            --card-bg: #ffffff;
+            --text-color: #2d3436;
+        }
 
-body {
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    background-color: var(--bg-color);
-    background-image: radial-gradient(#ffccd5 15%, transparent 16%), radial-gradient(#ffccd5 15%, transparent 16%);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
-    color: var(--text-color);
-    margin: 0;
-    padding: 20px 15px 60px 15px; /* 左右のパディングを少し減らして画面を広く使う */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    box-sizing: border-box;
-    position: relative;
-}
+        body {
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffccd5 15%, transparent 16%), radial-gradient(#ffccd5 15%, transparent 16%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px 15px 60px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+        }
 
-.container {
-    width: 100%;
-    max-width: 600px;
-    background: var(--card-bg);
-    border-radius: 24px;
-    border: 4px solid var(--text-color);
-    box-shadow: 6px 6px 0px var(--text-color);
-    padding: 25px; /* 内側の余白を調整 */
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    overflow-x: hidden; /* はみ出し防止 */
-}
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 4px solid var(--text-color);
+            box-shadow: 6px 6px 0px var(--text-color);
+            padding: 25px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            overflow-x: hidden;
+        }
 
-.hachiko-avatar {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 4px solid var(--text-color);
-    object-fit: cover;
-    margin-bottom: 10px;
-    box-shadow: 3px 3px 0px var(--text-color);
-    background: var(--pop-yellow);
-}
+        /* アバター周り・アニメーション */
+        .hachiko-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid var(--text-color);
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 3px 3px 0px var(--text-color);
+            background: var(--pop-yellow);
+        }
 
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-}
-.bounce-anim {
-    animation: bounce 1.5s infinite ease-in-out;
-}
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .bounce-anim {
+            animation: bounce 1.5s infinite ease-in-out;
+        }
 
-/* スマホ表示対策：見出しの基本フォントサイズを調整 */
-h1 {
-    font-size: 1.6rem; /* 相対単位(rem)に変更 */
-    font-weight: 900;
-    color: var(--pop-pink);
-    margin: 0 0 10px 0;
-    text-shadow: 2px 2px 0px var(--text-color);
-}
-.subtitle {
-    font-size: 0.9rem; /* 相対単位(rem)に変更 */
-    font-weight: 700;
-    color: #636e72;
-    margin: 0 0 15px 0;
-}
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--pop-pink);
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 0px var(--text-color);
+        }
+        .subtitle {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #636e72;
+            margin: 0 0 15px 0;
+        }
 
-.site-logo {
-    max-width: 150px;
-    height: auto;
-    margin: 10px auto 15px auto;
-    display: block;
-}
+        .site-logo {
+            max-width: 150px;
+            height: auto;
+            margin: 10px auto 15px auto;
+            display: block;
+        }
 
-.screen {
-    display: none;
-}
-.screen.active {
-    display: block;
-}
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: block;
+        }
 
-.intro-screen {
-    text-align: center;
-}
+        .intro-screen {
+            text-align: center;
+        }
+        .speech-bubble {
+            position: relative;
+            background: #fff9e6;
+            border: 3px solid var(--text-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 15px 0 25px 0;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e272e;
+            text-align: left;
+            line-height: 1.6;
+            box-shadow: 3px 3px 0px var(--text-color);
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 12px 10px;
+            border-style: solid;
+            border-color: transparent transparent var(--text-color) transparent;
+        }
 
-.speech-bubble {
-    position: relative;
-    background: #fff9e6;
-    border: 3px solid var(--text-color);
-    border-radius: 16px;
-    padding: 16px;
-    margin: 15px 0 25px 0;
-    font-size: 0.9rem; /* 相対単位(rem)に変更 */
-    font-weight: 700;
-    color: #1e272e;
-    text-align: left;
-    line-height: 1.6;
-    box-shadow: 3px 3px 0px var(--text-color);
-}
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 0 10px 12px 10px;
-    border-style: solid;
-    border-color: transparent transparent var(--text-color) transparent;
-}
+        .start-screen {
+            text-align: center;
+        }
+        .name-input-box {
+            margin: 20px 0;
+        }
+        .name-input-box input {
+            width: 90%;
+            padding: 12px;
+            font-size: 1rem;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 700;
+            border: 3px solid var(--text-color);
+            border-radius: 12px;
+            text-align: center;
+            outline: none;
+            background: #fff;
+            box-shadow: 3px 3px 0px var(--text-color);
+            box-sizing: border-box;
+        }
 
-.start-screen {
-    text-align: center;
-}
-.name-input-box {
-    margin: 20px 0;
-}
-.name-input-box input {
-    width: 90%; /* 少し広げる */
-    padding: 12px;
-    font-size: 1rem;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    font-weight: 700;
-    border: 3px solid var(--text-color);
-    border-radius: 12px;
-    text-align: center;
-    outline: none;
-    background: #fff;
-    box-shadow: 3px 3px 0px var(--text-color);
-    box-sizing: border-box;
-}
+        .btn {
+            background-color: var(--pop-yellow);
+            color: var(--text-color);
+            border: 3px solid var(--text-color);
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 900;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--text-color);
+            transition: transform 0.1s, box-shadow 0.1s;
+            width: 100%;
+            max-width: 280px;
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--text-color);
+        }
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--text-color);
+        }
 
-.btn {
-    background-color: var(--pop-yellow);
-    color: var(--text-color);
-    border: 3px solid var(--text-color);
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    font-weight: 900;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 4px 4px 0px var(--text-color);
-    transition: transform 0.1s, box-shadow 0.1s;
-    width: 100%;
-    max-width: 280px;
-    margin-top: 15px;
-    box-sizing: border-box;
-}
-.btn:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px var(--text-color);
-}
-.btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0px var(--text-color);
-}
-.btn-x {
-    background-color: #000000;
-    color: #ffffff;
-    border-color: #000;
-}
-.btn-phone {
-    background-color: #ff4757;
-    color: #ffffff;
-    border-color: #ff4757;
-}
+        .btn-x {
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #000;
+        }
+        .btn-phone {
+            background-color: #ff4757;
+            color: #ffffff;
+            border-color: #ff4757;
+            text-decoration: none;
+            display: inline-block;
+        }
 
-.progress-bar-container {
-    background: #dfe6e9;
-    height: 12px;
-    border-radius: 10px;
-    border: 3px solid var(--text-color);
-    margin-bottom: 15px;
-    overflow: hidden;
-}
-.progress-bar {
-    background: var(--pop-blue);
-    height: 100%;
-    width: 0%;
-    transition: width 0.3s ease;
-}
-.question-number {
-    font-size: 0.8rem;
-    color: var(--pop-pink);
-    font-weight: 900;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-}
-.question-text {
-    font-size: 1.1rem;
-    font-weight: 900;
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-.options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.option-btn {
-    background: #ffffff;
-    border: 3px solid var(--text-color);
-    padding: 12px 16px;
-    text-align: left;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    font-weight: 700;
-    color: var(--text-color);
-    cursor: pointer;
-    box-shadow: 3px 3px 0px var(--text-color);
-    transition: all 0.1s;
-    width: 100%;
-    box-sizing: border-box;
-}
-.option-btn:hover {
-    background: #ffeaa7;
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0px var(--text-color);
-}
-.option-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0px var(--text-color);
-}
+        .progress-bar-container {
+            background: #dfe6e9;
+            height: 12px;
+            border-radius: 10px;
+            border: 3px solid var(--text-color);
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: var(--pop-blue);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-number {
+            font-size: 0.8rem;
+            color: var(--pop-pink);
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: #ffffff;
+            border: 3px solid var(--text-color);
+            padding: 12px 16px;
+            text-align: left;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            font-weight: 700;
+            color: var(--text-color);
+            cursor: pointer;
+            box-shadow: 3px 3px 0px var(--text-color);
+            transition: all 0.1s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .option-btn:hover {
+            background: #ffeaa7;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--text-color);
+        }
+        .option-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--text-color);
+        }
 
-.result-screen {
-    text-align: center;
-}
+        .result-screen {
+            text-align: center;
+        }
+        .result-type-title {
+            font-size: 1.4rem;
+            color: var(--pop-pink);
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0px var(--text-color);
+            line-height: 1.3;
+            word-break: keep-all;
+        }
+        .result-type-sub {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--pop-purple);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .killer-word-box {
+            background: #fff9e6;
+            border: 3px solid var(--text-color);
+            box-shadow: 4px 4px 0px var(--text-color);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #d63031;
+            line-height: 1.6;
+        }
 
-/* スマホ表示対策：リザルト画面の各要素を調整 */
-.result-type-title {
-    font-size: 1.4rem; /* 相対単位に変更し、少し縮める */
-    color: var(--pop-pink);
-    font-weight: 900;
-    margin-bottom: 5px;
-    text-shadow: 2px 2px 0px var(--text-color);
-    line-height: 1.3;
-    word-break: keep-all; /* 単語の途中改行を防ぐ */
-}
-.result-type-sub {
-    font-size: 0.95rem; /* 少し縮める */
-    font-weight: 700;
-    color: var(--pop-purple);
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-.killer-word-box {
-    background: #fff9e6;
-    border: 3px solid var(--text-color);
-    box-shadow: 4px 4px 0px var(--text-color);
-    padding: 16px;
-    border-radius: 16px;
-    text-align: left;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-    font-weight: 900;
-    color: #d63031;
-    line-height: 1.6;
-}
+        .coordinate-plane {
+            position: relative;
+            width: 90vw;
+            max-width: 260px;
+            height: 90vw;
+            max-height: 260px;
+            margin: 15px auto 20px auto;
+            background: #ffffff;
+            border: 3px solid var(--text-color);
+            box-shadow: 4px 4px 0px var(--text-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .quadrant {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-align: center;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .quadrant span { font-size: 0.5rem; font-weight: 700; }
+        .q-as { top: 0; left: 0; background: rgba(255, 102, 153, 0.15); color: #ff3366; }
+        .q-ah { top: 0; right: 0; background: rgba(255, 204, 0, 0.2); color: #d35400; }
+        .q-ps { bottom: 0; left: 0; background: rgba(0, 204, 255, 0.15); color: #0984e3; }
+        .q-ph { bottom: 0; right: 0; background: rgba(153, 51, 255, 0.15); color: #6c5ce7; }
+        
+        .axis-x { position: absolute; top: 50%; width: 100%; height: 2px; background: var(--text-color); }
+        .axis-y { position: absolute; left: 50%; height: 100%; width: 2px; background: var(--text-color); }
+        
+        .user-pointer {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+        }
+        .pointer-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--pop-pink);
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 2px var(--text-color), 2px 2px 0px var(--text-color);
+        }
 
-.coordinate-plane {
-    position: relative;
-    width: 90vw; /* スマホ画面の幅に合わせる（ビューポート基準） */
-    max-width: 260px; /* 最大サイズを維持 */
-    height: 90vw; /* 正方形を維持 */
-    max-height: 260px;
-    margin: 15px auto 20px auto;
-    background: #ffffff;
-    border: 3px solid var(--text-color);
-    box-shadow: 4px 4px 0px var(--text-color);
-    border-radius: 16px;
-    overflow: hidden;
-}
-.quadrant {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem; /* フォントサイズを調整 */
-    font-weight: 900;
-    text-align: center;
-    padding: 5px;
-    box-sizing: border-box;
-}
-.quadrant span { font-size: 0.5rem; font-weight: 700; } /* 小さい文字はさらに小さく */
-.q-as { top: 0; left: 0; background: rgba(255, 102, 153, 0.15); color: #ff3366; }
-.q-ah { top: 0; right: 0; background: rgba(255, 204, 0, 0.2); color: #d35400; }
-.q-ps { bottom: 0; left: 0; background: rgba(0, 204, 255, 0.15); color: #0984e3; }
-.q-ph { bottom: 0; right: 0; background: rgba(153, 51, 255, 0.15); color: #6c5ce7; }
+        .recommendation-box {
+            background: #f1f2f6;
+            border: 3px solid var(--text-color);
+            box-shadow: 4px 4px 0px var(--text-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 15px;
+            text-align: left;
+        }
+        .recommendation-box h4 {
+            margin: 0 0 5px 0;
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--text-color);
+        }
+        .staff-link {
+            display: inline-block;
+            background: var(--pop-blue);
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 12px 18px;
+            border: 3px solid var(--text-color);
+            box-shadow: 3px 3px 0px var(--text-color);
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: all 0.1s;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .staff-link:hover {
+            background: #00b894;
+            color: #fff;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--text-color);
+        }
 
-.axis-x { position: absolute; top: 50%; width: 100%; height: 2px; background: var(--text-color); }
-.axis-y { position: absolute; left: 50%; height: 100%; width: 2px; background: var(--text-color); }
+        .site-footer {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #b2bec3;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-.user-pointer {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 10;
-}
-.pointer-dot {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background-color: var(--pop-pink);
-    border: 3px solid #ffffff;
-    box-shadow: 0 0 0 2px var(--text-color), 2px 2px 0px var(--text-color);
-}
+        @media (min-width: 601px) {
+            h1 { font-size: 1.8rem; }
+            .subtitle { font-size: 1rem; }
+            .speech-bubble { font-size: 1rem; }
+            .result-type-title { font-size: 1.8rem; }
+            .quadrant { font-size: 0.8rem; }
+            .quadrant span { font-size: 0.6rem; }
+        }
+    </style>
+</head>
+<body>
 
-.recommendation-box {
-    background: #f1f2f6;
-    border: 3px solid var(--text-color);
-    box-shadow: 4px 4px 0px var(--text-color);
-    border-radius: 16px;
-    padding: 16px;
-    margin-top: 15px;
-    text-align: left;
-}
-.recommendation-box h4 {
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-    font-weight: 900;
-    color: var(--text-color);
-}
-.staff-link {
-    display: inline-block;
-    background: var(--pop-blue);
-    color: var(--text-color);
-    text-decoration: none;
-    padding: 12px 18px;
-    border: 3px solid var(--text-color);
-    box-shadow: 3px 3px 0px var(--text-color);
-    border-radius: 12px;
-    font-weight: 900;
-    font-size: 1rem;
-    margin-top: 10px;
-    transition: all 0.1s;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-.staff-link:hover {
-    background: #00b894;
-    color: #fff;
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0px var(--text-color);
-}
+<div class="container">
+    <!-- ① オープニング画面 -->
+    <div id="intro-screen" class="screen active intro-screen">
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar bounce-anim" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
+        <div class="speech-bubble">
+            やっほー！ご主人様🐾<br>
+            案内役の<strong>ハチコ</strong>だよ！<br><br>
+            このサイトでは、あなたの普段の行動や深層心理から、<strong>「どんな風に愛されたいか（受動Mタイプ）」</strong>を丸裸にしちゃうよ〜♪<br><br>
+            サクッと10問答えるだけで、あなたの変態座標とピッタリなコースが分かっちゃうから、覚悟して進んでね…♡
+        </div>
+        <button class="btn" onclick="goToStartScreen()">次へ進む 🐾</button>
+    </div>
 
-.site-footer {
-    position: absolute;
-    bottom: 8px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: #b2bec3;
-    letter-spacing: 0.5px;
-    pointer-events: none;
-    z-index: -1; /* コンテナの後ろに隠れないように調整 */
-}
+    <!-- ② スタート画面 -->
+    <div id="start-screen" class="screen start-screen">
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
+        <!-- ハチコの下にロゴ画像を入れる場所 (logo.pngを用意してください) -->
+        <img src="logo.png" alt="ロゴ" class="site-logo" onerror="this.style.display='none'">
+        
+        <h1>4タイプ診断</h1>
+        <p class="subtitle">深層心理から読み解くM度合いチェッカー</p>
+        
+        <div class="name-input-box">
+            <input type="text" id="user-name" placeholder="お名前を入力（空欄ならご主人様）">
+        </div>
+        
+        <button class="btn" onclick="startQuiz()">診断を始める 🚀</button>
+    </div>
 
-/* メディアクエリ：タブレットなど広い画面向けの調整（必要であれば） */
-@media (min-width: 601px) {
-    h1 { font-size: 24px; }
-    .subtitle { font-size: 14px; }
-    .speech-bubble { font-size: 15px; }
-    .result-type-title { font-size: 26px; }
-    .quadrant { font-size: 12px; }
-    .quadrant span { font-size: 9px; }
-}
+    <!-- ③ クイズ画面 -->
+    <div id="quiz-screen" class="screen">
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <div id="question-number" class="question-number">QUESTION 1 / 10</div>
+        <div id="question-text" class="question-text">読み込み中...</div>
+        <div id="options-container" class="options-container"></div>
+    </div>
+
+    <!-- ④ リザルト画面 -->
+    <div id="result-screen" class="screen result-screen">
+        <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
+        <div id="greeting-text" class="subtitle" style="font-weight:900; color:var(--pop-pink);"></div>
+        <h2 class="result-type-title" id="result-title"></h2>
+        <div class="result-type-sub" id="result-subtitle"></div>
+        
+        <div class="killer-word-box" id="killer-word"></div>
+
+        <h3 style="font-size:1rem; font-weight:900; margin: 15px 0 5px 0;">🗺️ あなたのMタイプ・ポジショニングマップ</h3>
+        <div class="coordinate-plane">
+            <div class="quadrant q-as">AS型(あくそふ)<br><span>(こだわり×ソフト)</span></div>
+            <div class="quadrant q-ah">AH型(あくはー)<br><span>(こだわり×ハード)</span></div>
+            <div class="quadrant q-ps">PS型(ぱっそふ)<br><span>(丸投げ×ソフト)</span></div>
+            <div class="quadrant q-ph">PH型(ぱっはー)<br><span>(丸投げ×ハード)</span></div>
+            <div class="axis-x"></div>
+            <div class="axis-y"></div>
+            
+            <!-- 文字なしのただの丸い点ポインター -->
+            <div id="user-pointer" class="user-pointer" style="left: 50%; top: 50%;">
+                <div class="pointer-dot"></div>
+            </div>
+        </div>
+
+        <div class="recommendation-box">
+            <h4 id="rec-title">おすすめの専用コース・プラン</h4>
+            <p id="rec-desc" style="font-size:0.9rem; font-weight:700; color:#57606f; margin:0;"></p>
+            <a id="rec-link" href="#" target="_blank" class="staff-link">このタイプの担当スタッフを見る ↗</a>
+        </div>
+
+        <button class="btn" onclick="resetQuiz()" style="margin-top: 25px; max-width: 100%;">もう一度測定する 🔄</button>
+        
+        <!-- Xに投稿ボタン ＆ お店に電話するボタン -->
+        <button class="btn btn-x" onclick="shareOnX()" style="margin-top: 10px; max-width: 100%;">𝕏 (Twitter) に投稿する 📣</button>
+        <a href="tel:03-0000-0000" class="staff-link btn-phone" style="margin-top: 10px; width: 100%; box-sizing: border-box;">📞 お店に電話する</a>
+    </div>
+</div>
+
+<!-- 常に下部に表示するクレジット -->
+<div class="site-footer">かりんと渋谷 presents</div>
+
+<script>
+    const poolPart1 = [
+        {
+            text: "休日に、自分の知らない新しいお店へ行くときの行動は？",
+            options: [
+                { text: "事前にネットやSNSで口コミを徹底的に調べ、一番良さそうな席やメニューを予習してから向かう", x: 1.0, y: 0 },
+                { text: "気になった看板や雰囲気に惹かれて、自分の直感だけでふらっと足を踏み入れる", x: 0.5, y: 0 },
+                { text: "「どこでもいいよ」と言われたら、相手の行きたい提案にニコニコしてそのまま乗っかる", x: -0.5, y: 0 },
+                { text: "正直めんどくさいので、お気に入りの定番の場所以外はあまり行きたくない", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "カフェや飲食店で、注文を決めるときのあなたのスタイルは？",
+            options: [
+                { text: "自分の中で「今日の気分はこれ」と決まっているものがハッキリあり、それをブレずに頼む", x: 1.0, y: 0 },
+                { text: "メニューの見た目やネーミングの面白さに惹かれて、その場のノリで直感的に決める", x: 0.5, y: 0 },
+                { text: "迷ったら周囲の人や連れの「おすすめは何？」と聞いて、そのまま同じものを頼みがち", x: -0.5, y: 0 },
+                { text: "失敗するのが一番嫌なので、一番無難でハズレのない定番メニューを確実に選ぶ", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "グループや仕事で、思い通りにならないトラブルが起きたときは？",
+            options: [
+                { text: "いったん深呼吸して、自分が主導権を握ってスマートに軌道修正しようと動く", x: 1.0, y: 0 },
+                { text: "「なんとかなる精神」でその場のノリと勢いに身を任せ、流れの変化を楽しむ", x: 0.5, y: 0 },
+                { text: "「まぁ、なるようにしかならないか」と、あまり深く考えず周りの動きに合わせる", x: -0.5, y: 0 },
+                { text: "余計な波風を立てたくないので、できるだけ当たり障りないポジションでやり過ごす", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "人から何かを教えてもらうとき、心の中でどう思いがち？",
+            options: [
+                { text: "「自分のやり方や美学とはちょっと違うけど…まぁ、言われた通りにしておくか」", x: 1.0, y: 0 },
+                { text: "「お、それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
+                { text: "「はい、分かりました！」と特に深く考えず、言われたとおりにテキパキこなす", x: -0.5, y: 0 },
+                { text: "「めんどくさいな…できれば全部代わりにやってくれないかな」と内心思っている", x: -1.0, y: 0 }
+            ]
+        },
+        {
+            text: "完全に自由な休日ができたとき、目覚めて最初にすることは？",
+            options: [
+                { text: "「今日はこれをやる」と決めたスケジュールを頭の中で組み立ててから起き上がる", x: 1.0, y: 0 },
+                { text: "「せっかくだし、思いっきり遠出しようかな」とその日の勢いで行き先を決める", x: 0.5, y: 0 },
+                { text: "特に予定は決めず、誰かからのお誘いやSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
+                { text: "スマホをいじりながら、布団の中で限界までダラダラして一歩も外に出ない", x: -1.0, y: 0 }
+            ]
+        }
+    ];
+
+    const poolPart2 = [
+        {
+            text: "2人きりの静かな空間で、相手と向かい合って座ったときの理想の距離感は？",
+            options: [
+                { text: "自分の好みのペースに合わせて、じれったいほど丁寧に距離を縮めてきてほしい", x: -0.8, y: -0.8 },
+                { text: "「まだ動いちゃダメ」と視線で逃げ場を塞がれ、じわじわと追い詰められたい", x: 0.8, y: -0.8 },
+                { text: "細かいことは気にせず、ただただ深い温もりと心地よさにすっぽり包み込まれたい", x: -0.8, y: 0.8 },
+                { text: "自分の意志とは関係なく、容赦ない圧倒的なアタックで一気に世界を奪われたい", x: 0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "耳元でふとささやかれたとき、一番ゾクッとするニュアンスは？",
+            options: [
+                { text: "「ねぇ、今の私の表情、どう見えてる…？」と、お互いの色気や空気感をじっくり味わう言葉", x: -0.8, y: -0.8 },
+                { text: "「私の言うこと、ちゃんと聞けるよね？」と、有無を言わせず主導権を奪っていく言葉", x: 0.8, y: -0.8 },
+                { text: "「よく頑張りました、よしよし…♡」と、すべてを全肯定して甘やかしてくれる言葉", x: -0.8, y: 0.8 },
+                { text: "「もう逃がさないから…」と、理性がプツンと途切れるような強烈なフレーズ", x: 0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "相手に身動きが取れなくなっているとき、頭のなかで考えていることは？",
+            options: [
+                { text: "「この絶妙な距離感と、最高のムードにこのままうっとり酔いしれていたい…」", x: -0.8, y: -0.8 },
+                { text: "「もっと厳しくして、もっと頭がおかしくなるくらい狂わせてくれ…」", x: 0.8, y: -0.8 },
+                { text: "「このまま時間が止まって、ずっとこの心地よさに包まれていたいのにな…」", x: -0.8, y: 0.8 },
+                { text: "「あばばば…もう何も考えられない…どうにでもして…」", x: 0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "気持ちよさがピークに達して、理性がトローンと溶けかけているときの理想は？",
+            options: [
+                { text: "自分の美意識や空間の心地よさが最高潮に達し、うっとりと満たされた状態でいたい", x: -0.8, y: -0.8 },
+                { text: "相手の手のひらの上で完全にコントロールされ、普段の自分を完全にへし折られたい", x: 0.8, y: -0.8 },
+                { text: "すべてを包み込むような温もりと、絶対的な安心感の中でトロトロにとろけたい", x: -0.8, y: 0.8 },
+                { text: "思考が完全に真っ白になって、自分の意志とは関係なく快感の波に飲み込まれたい", x: 0.8, y: 0.8 }
+            ]
+        },
+        {
+            text: "これから濃厚な時間に身を委ねる直前、心の中で密かに願っていることは？",
+            options: [
+                { text: "自分好みの最高のシチュエーションで、スマートにトロッとさせてほしい", x: -0.8, y: -0.8 },
+                { text: "限界まで自分を追い詰めて、普段の理性を粉々に粉砕してほしい", x: 0.8, y: -0.8 },
+                { text: "痛いことや面倒なことは抜きで、とにかく確実にとろけるほど気持ちよくしてほしい", x: -0.8, y: 0.8 },
+                { text: "細かいことはいいから、とにかく脳の配線を焼き切るような強烈な刺激をくれ", x: 0.8, y: 0.8 }
+            ]
+        }
+    ];
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let totalScoreX = 0;
+    let totalScoreY = 0;
+    let userName = "";
+    let currentResultTitle = "";
+
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function goToStartScreen() {
+        document.getElementById('intro-screen').classList.remove('active');
+        document.getElementById('start-screen').classList.add('active');
+    }
+
+    function startQuiz() {
+        const inputVal = document.getElementById('user-name').value.trim();
+        userName = inputVal !== "" ? inputVal + "ご主人様" : "ご主人様";
+        
+        const shuffledPart1 = shuffleArray(poolPart1);
+        const shuffledPart2 = shuffleArray(poolPart2);
+        currentQuestions = [...shuffledPart1, ...shuffledPart2];
+
+        currentIndex = 0;
+        totalScoreX = 0;
+        totalScoreY = 0;
+
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (currentIndex >= currentQuestions.length) {
+            showResult();
+            return;
+        }
+
+        const q = currentQuestions[currentIndex];
+        document.getElementById('question-number').innerText = `QUESTION ${currentIndex + 1} / ${currentQuestions.length}`;
+        document.getElementById('question-text').innerText = q.text;
+        
+        const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+        document.getElementById('progress-bar').style.width = progressPercent + '%';
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        q.options.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectOption(opt.x, opt.y);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(x, y) {
+        totalScoreX += x;
+        totalScoreY += y;
+        currentIndex++;
+        showQuestion();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').classList.remove('active');
+        document.getElementById('result-screen').classList.add('active');
+        document.getElementById('progress-bar').style.width = '100%';
+
+        document.getElementById('greeting-text').innerText = `${userName}のM度測定結果はこちら！`;
+
+        let subtitle = "";
+        let killerWord = "";
+        let recTitle = "";
+        let recDesc = "";
+        let recUrl = "";
+
+        let posX = 50 + (totalScoreX * 8);
+        let posY = 50 + (totalScoreY * 8);
+        posX = Math.max(15, Math.min(85, posX));
+        posY = Math.max(15, Math.min(85, posY));
+
+        document.getElementById('user-pointer').style.left = posX + '%';
+        document.getElementById('user-pointer').style.top = posY + '%';
+
+        if (totalScoreX < 0 && totalScoreY < 0) {
+            currentResultTitle = "【AS型】あくそふタイプ";
+            subtitle = "こだわり強めの上品なお洒落・甘えん坊M";
+            killerWord = "「普段はめちゃくちゃ仕事できて余裕ぶってるくせに、お気に入りのアロマとムードを作られた途端、子犬みたいにトロトロになって『もっと褒めて…♡』ってすり寄ってくるめんどくさい可愛い人」";
+            recTitle = "おすすめ：極上アロマ＆じれったいお預け密着コース";
+            recDesc = "あなたの上質なこだわりとプライドを優しく全肯定しつつ、完璧な空間で極上の甘やかしを提供します。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
+        } else if (totalScoreX >= 0 && totalScoreY < 0) {
+            currentResultTitle = "【AH型】あくはータイプ";
+            subtitle = "プライド全開のガチドM・調教おねだりM";
+            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かべてブルブル震え出す変態エリート」";
+            recTitle = "おすすめ：プライドへし折りスパルタ調教コース";
+            recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
+        } else if (totalScoreX < 0 && totalScoreY >= 0) {
+            currentResultTitle = "【PS型】ぱっそふタイプ";
+            subtitle = "すべてをお任せしたい究極の骨抜き・お布団大好きM";
+            killerWord = "「めんどくさいことは一切人生から排除したい癖に、優しく包み込まれて頭をなでられた瞬間、社会人の尊厳をすべて忘れ去って赤ちゃんのようにトロケ落ちる最強の怠け者」";
+            recTitle = "おすすめ：全肯定・とろけるお布団お世話コース";
+            recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
+        } else {
+            currentResultTitle = "【PH型】ぱっはータイプ";
+            subtitle = "脳の配線を焼き切られたい快楽ジャンキーM";
+            killerWord = "「普段どんなに理知的な顔をして生きている男でも、圧倒的な物量と強烈なアタックの前に叩き伏せられた瞬間、『あばばば…もう何も考えられない…♡』と白目をむいて快楽のモブと化す人」";
+            recTitle = "おすすめ：思考停止・脳汁ぶっかけ強制トランスコース";
+            recDesc = "細かい駆け引きは一切なし！容赦ない強烈な刺激で、あなたの脳の思考回路を完全に焼き切ってくれます。";
+            recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18605";
+        }
+
+        document.getElementById('result-title').innerText = currentResultTitle;
+        document.getElementById('result-subtitle').innerText = subtitle;
+        document.getElementById('killer-word').innerText = killerWord;
+        document.getElementById('rec-title').innerText = recTitle;
+        document.getElementById('rec-desc').innerText = recDesc;
+        document.getElementById('rec-link').href = recUrl;
+    }
+
+    function shareOnX() {
+        const text = encodeURIComponent(`私のMタイプは「${currentResultTitle}」でした！\n深層心理から読み解くM度合いチェッカーで診断してみる🐾\n#かりんと渋谷 #M度チェッカー`);
+        const url = encodeURIComponent(window.location.href);
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    }
+
+    function resetQuiz() {
+        document.getElementById('result-screen').classList.remove('active');
+        document.getElementById('intro-screen').classList.add('active');
+        document.getElementById('user-name').value = '';
+    }
+</script>
+
+</body>
+</html>
