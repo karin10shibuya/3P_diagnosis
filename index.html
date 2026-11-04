@@ -12,7 +12,7 @@
             --pop-yellow: #ffcc00;
             --pop-blue: #00ccff;
             --pop-purple: #9933ff;
-            --pop-orange: #ff9f43; /* 明るいオレンジ */
+            --pop-orange: #ff9f43;
             --bg-color: #fff0f5;
             --card-bg: #ffffff;
             --text-color: #2d3436;
@@ -282,7 +282,6 @@
             line-height: 1.6;
         }
 
-        /* マップ手前の見出し文言の改行崩れを防ぐ設定 */
         .map-title {
             font-size: 0.95rem;
             font-weight: 900;
@@ -291,6 +290,7 @@
             overflow-wrap: break-word;
         }
 
+        /* 座標マップ（文言を大きくスッキリ変更） */
         .coordinate-plane {
             position: relative;
             width: 260px;
@@ -311,15 +311,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.6rem;
+            font-size: 0.75rem; /* 文字サイズを大きく調整 */
             font-weight: 900;
             text-align: center;
-            padding: 2px;
+            padding: 4px;
             box-sizing: border-box;
-            line-height: 1.1;
+            line-height: 1.2;
             word-break: keep-all;
         }
-        .quadrant span { font-size: 0.45rem; font-weight: 700; }
+        .quadrant span { font-size: 0.55rem; font-weight: 700; opacity: 0.8; }
         .q-as { top: 0; left: 0; background: rgba(255, 102, 153, 0.15); color: #ff3366; }
         .q-ah { top: 0; right: 0; background: rgba(255, 204, 0, 0.2); color: #d35400; }
         .q-ps { bottom: 0; left: 0; background: rgba(0, 204, 255, 0.15); color: #0984e3; }
@@ -402,8 +402,8 @@
             .speech-bubble { font-size: 1rem; }
             .result-type-title { font-size: 1.8rem; }
             .map-title { font-size: 1rem; }
-            .quadrant { font-size: 0.75rem; }
-            .quadrant span { font-size: 0.55rem; }
+            .quadrant { font-size: 0.8rem; }
+            .quadrant span { font-size: 0.6rem; }
         }
     </style>
 </head>
@@ -456,13 +456,14 @@
         
         <div class="killer-word-box" id="killer-word"></div>
 
-        <!-- マップ手前の文言（改行崩れ防止クラス付与） -->
-        <h3 class="map-title">🗺️ あなたのMタイプ・ポジショニングマップ</h3>
+        <!-- マップ手前の文言（絵文字なし） -->
+        <h3 class="map-title">あなたのMタイプ・ポジショニングマップ</h3>
         <div class="coordinate-plane">
-            <div class="quadrant q-as">AS型<br>(あくそふ)<br><span>(こだわり×ソフト)</span></div>
-            <div class="quadrant q-ah">AH型<br>(あくはー)<br><span>(こだわり×ハード)</span></div>
-            <div class="quadrant q-ps">PS型<br>(ぱっそふ)<br><span>(丸投げ×ソフト)</span></div>
-            <div class="quadrant q-ph">PH型<br>(ぱっはー)<br><span>(丸投げ×ハード)</span></div>
+            <!-- マップ内の文言を大きくスッキリ変更 -->
+            <div class="quadrant q-as">AS型：あくそふ<br><span>(こだわり×ソフト)</span></div>
+            <div class="quadrant q-ah">AH型：あくはー<br><span>(こだわり×ハード)</span></div>
+            <div class="quadrant q-ps">PS型：ぱっそふ<br><span>(丸投げ×ソフト)</span></div>
+            <div class="quadrant q-ph">PH型：ぱっはー<br><span>(丸投げ×ハード)</span></div>
             <div class="axis-x"></div>
             <div class="axis-y"></div>
             
@@ -519,7 +520,7 @@
             text: "人から何かを教えてもらうとき、心の中でどう思いがち？",
             options: [
                 { text: "「自分のやり方や美学とはちょっと違うけど…まぁ、言われた通りにしておくか」", x: 1.0, y: 0 },
-                { text: "「お, それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
+                { text: "「お、それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
                 { text: "「はい、分かりました！」と特に深く考えず、言われたとおりにテキパキこなす", x: -0.5, y: 0 },
                 { text: "「めんどくさいな…できれば全部代わりにやってくれないかな」と内心思っている", x: -1.0, y: 0 }
             ]
