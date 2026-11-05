@@ -504,7 +504,7 @@
 
             <div class="coordinate-plane">
                 <div class="quadrant q-as">AS型<br>極上甘えん坊タイプ</div>
-                <div class="quadrant q-ah">AH型<br>絶対服従タイプ</div>
+                <div class="quadrant q-ah">AH型<br>歪曲エリートタイプ</div>
                 <div class="quadrant q-ps">PS型<br>思考停止タイプ</div>
                 <div class="quadrant q-ph">PH型<br>快楽ジャンキータイプ</div>
                 <div class="axis-x"></div>
@@ -516,7 +516,6 @@
             </div>
         </div>
 
-        <!-- オススメコース情報（ご指定の内容を反映） -->
         <div class="recommendation-box">
             <h4 id="rec-title">おすすめコース</h4>
             <p id="rec-desc" style="font-size:0.9rem; font-weight:700; color:#57606f; margin:0; white-space: pre-line; line-height: 1.6;"></p>
@@ -575,7 +574,7 @@
             options: [
                 { text: "「今日はこれをやる」と決めたスケジュールを頭の中で組み立ててから起き上がる", x: 1.0, y: 0 },
                 { text: "「せっかくだし、思いっきり遠出しようかな」とその日の勢いで行き先を決める", x: 0.5, y: 0 },
-                { text: "特に予定は決めず、誰かからのお誘いでするSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
+                { text: "特に予定は決めず、誰かからのお誘いやSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
                 { text: "スマホをいじりながら、布団の中で限界までダラダラして一歩も外に出ない", x: -1.0, y: 0 }
             ]
         }
@@ -699,6 +698,37 @@
         showQuestion();
     }
 
+    // スプレッドシートへ結果を送信する関数
+    function sendResultToSheet(name, resultTitle) {
+        // 💡ここにあなたのGASのウェブアプリURLを貼り付けてください
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxFoWIX21qRDFUQ5c_X-xPw4CY6GLC7ll9-sp4BmkjP8_ET1_rvHcnSA9lfqCYCuFA5Dg/exec"; 
+
+        const now = new Date();
+        const timestamp = now.getFullYear() + '/' +
+                          ('0' + (now.getMonth() + 1)).slice(-2) + '/' +
+                          ('0' + now.getDate()).slice(-2) + ' ' +
+                          ('0' + now.getHours()).slice(-2) + ':' +
+                          ('0' + now.getMinutes()).slice(-2) + ':' +
+                          ('0' + now.getSeconds()).slice(-2);
+
+        const payload = {
+            timestamp: timestamp,
+            name: name,
+            resultType: resultTitle
+        };
+
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        }).catch(error => {
+            console.error("スプレッドシート送信エラー:", error);
+        });
+    }
+
     function showResult() {
         document.getElementById('quiz-screen').classList.remove('active');
         document.getElementById('result-screen').classList.add('active');
@@ -728,9 +758,9 @@
             recDesc = "オナクラの王道「乳舐め手コキ」に、ねっとりいやらしい言葉責めでフィニッシュ！\n30分6,500円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
         } else if (totalScoreX >= 0 && totalScoreY < 0) {
-            currentResultTitle = "【AH型】絶対服従タイプ";
-            punchline = "「脳内台本を全否定されて、嬉し涙を流す変態エリート」";
-            featureDesc = "知性やプライドが高く、日頃から完璧なシチュエーションや主導権の攻防を脳内でシミュレーションしがちです。しかし、それを上回る圧倒的な冷徹さと強制力によってすべての防壁を打ち砕かれたとき、強烈なカタルシスと深い満足感を得る特性があります。";
+            currentResultTitle = "【AH型】歪曲エリートタイプ";
+            punchline = "「社会的地位も知性もあるのに、性癖だけが斜め上に歪みきっているエリート」";
+            featureDesc = "日頃から高度な判断や責任を負っている成功者ほど、プライドの高さと知性の裏返しとして性癖が複雑に歪みやすい傾向があります。理性がしっかりしているからこそ、それを徹底的にへし折られ、羞恥と快楽の渦に叩き落とされることにしか得られない強烈なカタルシスを求めています。";
             recTitle = "【AH】四つん這いアナル責めコース";
             recDesc = "普段見られることのないお尻の穴を丸見えに・・・。\n周りをサワサワされて、そのまま女の子の指が入ってくる新感覚！\n最後は四つん這いで・・・！？\n30分5,500円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
@@ -756,6 +786,9 @@
         document.getElementById('rec-title').innerText = recTitle;
         document.getElementById('rec-desc').innerText = recDesc;
         document.getElementById('rec-link').href = recUrl;
+
+        // 💡リザルト表示時にスプレッドシートへ自動送信をを実行
+        sendResultToSheet(userName, currentResultTitle);
     }
 
     function shareOnX() {
