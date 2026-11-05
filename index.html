@@ -261,14 +261,22 @@
             line-height: 1.3;
             word-break: keep-all;
         }
-        .result-type-sub {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--pop-purple);
+        
+        /* 〇〇型のすぐ下の「笑える一言（クリティカルなキャッチコピー）」用スタイル */
+        .result-punchline {
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: #d63031;
+            background: #fff3f3;
+            border: 2px dashed #ff7675;
+            padding: 8px 12px;
+            border-radius: 10px;
             margin-bottom: 15px;
-            line-height: 1.5;
+            display: inline-block;
         }
-        .killer-word-box {
+
+        /* 四角の中の「特徴と特性の真面目な解説」用スタイル */
+        .feature-box {
             background: #fff9e6;
             border: 3px solid var(--text-color);
             box-shadow: 4px 4px 0px var(--text-color);
@@ -276,10 +284,18 @@
             border-radius: 16px;
             text-align: left;
             margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+        .feature-box h4 {
+            margin: 0 0 8px 0;
             font-size: 0.95rem;
             font-weight: 900;
-            color: #d63031;
-            line-height: 1.6;
+            color: var(--pop-pink);
+            border-bottom: 2px solid #ffeaa7;
+            padding-bottom: 4px;
         }
 
         .map-title {
@@ -290,14 +306,12 @@
             overflow-wrap: break-word;
         }
 
-        /* マップ全体の外枠と軸ラベル用のラッパー */
         .map-wrapper {
             position: relative;
             width: 280px;
             margin: 15px auto 20px auto;
         }
 
-        /* 上下左右の軸ラベル（上:A, 下:P, 左:S, 右:H） */
         .axis-label {
             position: absolute;
             font-size: 0.8rem;
@@ -313,7 +327,6 @@
         .label-left { left: -14px; top: 50%; transform: translateY(-50%); }
         .label-right { right: -14px; top: 50%; transform: translateY(-50%); }
 
-        /* 座標マップ本体 */
         .coordinate-plane {
             position: relative;
             width: 260px;
@@ -472,14 +485,21 @@
     <div id="result-screen" class="screen result-screen">
         <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
         <div id="greeting-text" class="subtitle" style="font-weight:900; color:var(--pop-pink);"></div>
-        <h2 class="result-type-title" id="result-title"></h2>
-        <div class="result-type-sub" id="result-subtitle"></div>
         
-        <div class="killer-word-box" id="killer-word"></div>
+        <!-- 〇〇型タイトル -->
+        <h2 class="result-type-title" id="result-title"></h2>
+        
+        <!-- その下のクリティカルな笑える一言 -->
+        <div class="result-punchline" id="result-punchline"></div>
+        
+        <!-- 四角の中：特徴と特性の真面目な解説 -->
+        <div class="feature-box">
+            <h4 id="feature-title">📌 特徴と特性</h4>
+            <p id="feature-desc" style="margin:0;"></p>
+        </div>
 
         <h3 class="map-title">あなたのMタイプ・ポジショニングマップ</h3>
         
-        <!-- 上：A、下：P、左：S、右：H の軸ラベルを配置したマップ構造 -->
         <div class="map-wrapper">
             <div class="axis-label label-top">A : こだわり</div>
             <div class="axis-label label-bottom">P : 丸投げ</div>
@@ -689,8 +709,8 @@
 
         document.getElementById('greeting-text').innerText = `${userName}のM度測定結果はこちら！`;
 
-        let subtitle = "";
-        let killerWord = "";
+        let punchline = "";
+        let featureDesc = "";
         let recTitle = "";
         let recDesc = "";
         let recUrl = "";
@@ -705,37 +725,37 @@
 
         if (totalScoreX < 0 && totalScoreY < 0) {
             currentResultTitle = "【AS型】極上甘えん坊タイプ";
-            subtitle = "こだわり強めの上品なお洒落・甘えん坊M";
-            killerWord = "「普段はめちゃくちゃ仕事できて余裕ぶってるくせに、お気に入りのアロマとムードを作られた途端、子犬みたいにトロトロになって『もっと褒めて…♡』ってすり寄ってくるめんどくさい可愛い人」";
+            punchline = "「お洒落ぶってるくせに、褒められた途端に子犬化するめんどくさい人」";
+            featureDesc = "自分なりの美意識やこだわりを強く持っている一方で、根底には「認められたい・甘えたい」という強い欲求を秘めています。洗練された空間や丁寧なプロセスを好み、相手の絶妙なリードによって徐々にプライドが溶かされていく過程に最高の心地よさを感じます。";
             recTitle = "おすすめ：極上アロマ＆じれったいお預け密着コース";
             recDesc = "あなたの上質なこだわりとプライドを優しく全肯定しつつ、完璧な空間で極上の甘やかしを提供します。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
         } else if (totalScoreX >= 0 && totalScoreY < 0) {
             currentResultTitle = "【AH型】絶対服従タイプ";
-            subtitle = "プライド全開のガチドM・調教おねだりM";
-            killerWord = "「頭の中では完璧な女王様とのシチュエーション台本をガチガチに作り込んでいるのに、いざ冷たくあしらわれて主導権を完全に奪われた瞬間、嬉し涙を浮かべてブルブル震え出す変態エリート」";
+            punchline = "「脳内台本を全否定されて、嬉し涙を流す変態エリート」";
             recTitle = "おすすめ：プライドへし折りスパルタ調教コース";
+            featureDesc = "知性やプライドが高く、日頃から完璧なシチュエーションや主導権の攻防を脳内でシミュレーションしがちです。しかし、それを上回る圧倒的な冷徹さと強制力によってすべての防壁を打ち砕かれたとき、強烈なカタルシスと深い満足感を得る特性があります。";
             recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
         } else if (totalScoreX < 0 && totalScoreY >= 0) {
             currentResultTitle = "【PS型】思考停止タイプ";
-            subtitle = "すべてをお任せしたい究極の骨抜き・お布団大好きM";
-            killerWord = "「めんどくさいことは一切人生から排除したい癖に、優しく包み込まれて頭をなでられた瞬間、社会人の尊厳をすべて忘れ去って赤ちゃんのようにトロケ落ちる最強の怠け者」";
+            punchline = "「面倒なことは全部丸投げして、赤ちゃんでいたい最強の怠け者」";
+            featureDesc = "日常のあらゆる決断や思考のめんどくささから解放されたいという願望が極めて強いタイプです。細かい駆け引きは一切好まず、ただ全身を温もりと安心感に委ね、思考を完全に停止させた状態で甘やかされることに無上の喜びを見出します。";
             recTitle = "おすすめ：全肯定・とろけるお布団お世話コース";
             recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
         } else {
             currentResultTitle = "【PH型】快楽ジャンキータイプ";
-            subtitle = "脳の配線を焼き切られたい快楽ジャンキーM";
-            killerWord = "「普段どんなに理知的な顔をして生きている男でも、圧倒的な物量と強烈なアタックの前に叩き伏せられた瞬間、『あばばば…もう何も考えられない…♡』と白目をむいて快楽のモブと化す人」";
+            punchline = "「強烈な刺激の前に白目をむいて、快楽のモブと化す人」";
             recTitle = "おすすめ：思考停止・脳汁ぶっかけ強制トランスコース";
+            featureDesc = "理性や社会的立場を一時的に完全に忘れ去り、強烈なインパクトと圧倒的な物量による刺激を求めるタイプです。複雑なプロセスや思考を挟む余地のない、本能を直接揺さぶるような強制的なトランス状態に身を委ねることで、最高の解放感を味わいます。";
             recDesc = "細かい駆け引きは一切なし！容赦ない強烈な刺激で、あなたの脳の思考回路を完全に焼き切ってくれます。";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18605";
         }
 
         document.getElementById('result-title').innerText = currentResultTitle;
-        document.getElementById('result-subtitle').innerText = subtitle;
-        document.getElementById('killer-word').innerText = killerWord;
+        document.getElementById('result-punchline').innerText = punchline;
+        document.getElementById('feature-desc').innerText = featureDesc;
         document.getElementById('rec-title').innerText = recTitle;
         document.getElementById('rec-desc').innerText = recDesc;
         document.getElementById('rec-link').href = recUrl;
