@@ -262,7 +262,6 @@
             word-break: keep-all;
         }
         
-        /* 〇〇型のすぐ下の「笑える一言（クリティカルなキャッチコピー）」用スタイル */
         .result-punchline {
             font-size: 0.9rem;
             font-weight: 900;
@@ -275,7 +274,6 @@
             display: inline-block;
         }
 
-        /* 四角の中の「特徴と特性の真面目な解説」用スタイル */
         .feature-box {
             background: #fff9e6;
             border: 3px solid var(--text-color);
@@ -388,10 +386,12 @@
             text-align: left;
         }
         .recommendation-box h4 {
-            margin: 0 0 5px 0;
+            margin: 0 0 8px 0;
             font-size: 1rem;
             font-weight: 900;
             color: var(--text-color);
+            border-bottom: 2px solid #dfe6e9;
+            padding-bottom: 4px;
         }
         .staff-link {
             display: inline-block;
@@ -486,13 +486,9 @@
         <img src="hachiko_face.png" alt="ハチコ" class="hachiko-avatar" onerror="this.src='https://via.placeholder.com/90?text=Hachiko'">
         <div id="greeting-text" class="subtitle" style="font-weight:900; color:var(--pop-pink);"></div>
         
-        <!-- 〇〇型タイトル -->
         <h2 class="result-type-title" id="result-title"></h2>
-        
-        <!-- その下のクリティカルな笑える一言 -->
         <div class="result-punchline" id="result-punchline"></div>
         
-        <!-- 四角の中：特徴と特性の真面目な解説 -->
         <div class="feature-box">
             <h4 id="feature-title">📌 特徴と特性</h4>
             <p id="feature-desc" style="margin:0;"></p>
@@ -520,9 +516,10 @@
             </div>
         </div>
 
+        <!-- オススメコース情報（ご指定の内容を反映） -->
         <div class="recommendation-box">
-            <h4 id="rec-title">おすすめの専用コース・プラン</h4>
-            <p id="rec-desc" style="font-size:0.9rem; font-weight:700; color:#57606f; margin:0;"></p>
+            <h4 id="rec-title">おすすめコース</h4>
+            <p id="rec-desc" style="font-size:0.9rem; font-weight:700; color:#57606f; margin:0; white-space: pre-line; line-height: 1.6;"></p>
             <a id="rec-link" href="#" target="_blank" class="staff-link">このタイプのオススメコースはこちら ↗</a>
         </div>
 
@@ -578,7 +575,7 @@
             options: [
                 { text: "「今日はこれをやる」と決めたスケジュールを頭の中で組み立ててから起き上がる", x: 1.0, y: 0 },
                 { text: "「せっかくだし、思いっきり遠出しようかな」とその日の勢いで行き先を決める", x: 0.5, y: 0 },
-                { text: "特に予定は決めず、誰かからのお誘いやSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
+                { text: "特に予定は決めず、誰かからのお誘いでするSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
                 { text: "スマホをいじりながら、布団の中で限界までダラダラして一歩も外に出ない", x: -1.0, y: 0 }
             ]
         }
@@ -727,29 +724,29 @@
             currentResultTitle = "【AS型】極上甘えん坊タイプ";
             punchline = "「お洒落ぶってるくせに、褒められた途端に子犬化するめんどくさい人」";
             featureDesc = "自分なりの美意識やこだわりを強く持っている一方で、根底には「認められたい・甘えたい」という強い欲求を秘めています。洗練された空間や丁寧なプロセスを好み、相手の絶妙なリードによって徐々にプライドが溶かされていく過程に最高の心地よさを感じます。";
-            recTitle = "おすすめ：極上アロマ＆じれったいお預け密着コース";
-            recDesc = "あなたの上質なこだわりとプライドを優しく全肯定しつつ、完璧な空間で極上の甘やかしを提供します。";
+            recTitle = "【AS】密着乳舐め言葉責めコース";
+            recDesc = "オナクラの王道「乳舐め手コキ」に、ねっとりいやらしい言葉責めでフィニッシュ！\n30分6,500円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18602";
         } else if (totalScoreX >= 0 && totalScoreY < 0) {
             currentResultTitle = "【AH型】絶対服従タイプ";
             punchline = "「脳内台本を全否定されて、嬉し涙を流す変態エリート」";
-            recTitle = "おすすめ：プライドへし折りスパルタ調教コース";
             featureDesc = "知性やプライドが高く、日頃から完璧なシチュエーションや主導権の攻防を脳内でシミュレーションしがちです。しかし、それを上回る圧倒的な冷徹さと強制力によってすべての防壁を打ち砕かれたとき、強烈なカタルシスと深い満足感を得る特性があります。";
-            recDesc = "あなたの高いこだわりやマニアックな脳内台本を完全に見抜いて、容赦なくピリッと調教してくれます。";
+            recTitle = "【AH】四つん這いアナル責めコース";
+            recDesc = "普段見られることのないお尻の穴を丸見えに・・・。\n周りをサワサワされて、そのまま女の子の指が入ってくる新感覚！\n最後は四つん這いで・・・！？\n30分5,500円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18603";
         } else if (totalScoreX < 0 && totalScoreY >= 0) {
             currentResultTitle = "【PS型】思考停止タイプ";
             punchline = "「面倒なことは全部丸投げして、赤ちゃんでいたい最強の怠け者」";
             featureDesc = "日常のあらゆる決断や思考のめんどくささから解放されたいという願望が極めて強いタイプです。細かい駆け引きは一切好まず、ただ全身を温もりと安心感に委ね、思考を完全に停止させた状態で甘やかされることに無上の喜びを見出します。";
-            recTitle = "おすすめ：全肯定・とろけるお布団お世話コース";
-            recDesc = "考える力を完全に奪ってくれる、ふかふかの温もりと圧倒的安心感であなたを骨抜きにします。";
+            recTitle = "【PS】ハピランコース";
+            recDesc = "当店でも大人気のハッピーセット＋オールランジェリーが入った王道コース！視覚的にも触覚的にも楽しめる！初めての方はとりあえずこれ！\n30分7,500円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18604";
         } else {
             currentResultTitle = "【PH型】快楽ジャンキータイプ";
             punchline = "「強烈な刺激の前に白目をむいて、快楽のモブと化す人」";
-            recTitle = "おすすめ：思考停止・脳汁ぶっかけ強制トランスコース";
             featureDesc = "理性や社会的立場を一時的に完全に忘れ去り、強烈なインパクトと圧倒的な物量による刺激を求めるタイプです。複雑なプロセスや思考を挟む余地のない、本能を直接揺さぶるような強制的なトランス状態に身を委ねることで、最高の解放感を味わいます。";
-            recDesc = "細かい駆け引きは一切なし！容赦ない強烈な刺激で、あなたの脳の思考回路を完全に焼き切ってくれます。";
+            recTitle = "【PH】拘束・強制二度ヌキコース";
+            recDesc = "動けない状態に拘束されてやられたい放題責められる・・・！\n自制できないからこそ新たな境地を発見できるかも！\n必ず二度ヌキにチャレンジしていただきます！\n30分5,000円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18605";
         }
 
