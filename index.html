@@ -450,8 +450,8 @@
         <div class="speech-bubble">
             やっほー！ご主人様🐾<br>
             案内役の<strong>ハチコ</strong>だよ！<br><br>
-            このサイトでは、あなたの普段の行動や深層心理から、<strong>「どんな風に愛されたいか（受動Mタイプ）」</strong>を丸裸にしちゃうよ〜♪<br><br>
-            サクッと10問答えるだけで、あなたの変態座標とピッタリなコースが分かっちゃうから、覚悟して進んでね…♡
+            スプレッドシートのストックから、<strong>ランダムで選ばれた10問（性格編5問 ＆ エロ編5問）</strong>が出題されるよ〜♪<br><br>
+            毎回違う問題が出るから、何回でも楽しんでいってね…♡
         </div>
         <button class="btn" onclick="goToStartScreen()">次へ進む 🐾</button>
     </div>
@@ -532,102 +532,6 @@
 <div class="site-footer">かりんと渋谷 presents</div>
 
 <script>
-    const poolPart1 = [
-        {
-            text: "休日に、自分の知らない新しいお店へ行くときの行動は？",
-            options: [
-                { text: "事前にネットやSNSで口コミを徹底的に調べ、一番良さそうな席やメニューを予習してから向かう", x: 1.0, y: 0 },
-                { text: "気になった看板や雰囲気に惹かれて、自分の直感だけでふらっと足を踏み入れる", x: 0.5, y: 0 },
-                { text: "「どこでもいいよ」と言われたら、相手の行きたい提案にニコニコしてそのまま乗っかる", x: -0.5, y: 0 },
-                { text: "正直めんどくさいので、お気に入りの定番の場所以外はあまり行きたくない", x: -1.0, y: 0 }
-            ]
-        },
-        {
-            text: "カフェや飲食店で、注文を決めるときのあなたのスタイルは？",
-            options: [
-                { text: "自分の中で「今日の気分はこれ」と決まっているものがハッキリあり、それをブレずに頼む", x: 1.0, y: 0 },
-                { text: "メニューの見た目やネーミングの面白さに惹かれて、その場のノリで直感的に決める", x: 0.5, y: 0 },
-                { text: "迷ったら周囲の人や連れの「おすすめは何？」と聞いて、そのまま同じものを頼みがち", x: -0.5, y: 0 },
-                { text: "失敗するのが一番嫌なので、一番無難でハズレのない定番メニューを確実に選ぶ", x: -1.0, y: 0 }
-            ]
-        },
-        {
-            text: "グループや仕事で、思い通りにならないトラブルが起きたときは？",
-            options: [
-                { text: "いったん深呼吸して、自分が主導権を握ってスマートに軌道修正しようと動く", x: 1.0, y: 0 },
-                { text: "「なんとかなる精神」でその場のノリと勢いに身を任せ、流れの変化を楽しむ", x: 0.5, y: 0 },
-                { text: "「まぁ、なるようにしかならないか」と、あまり深く考えず周りの動きに合わせる", x: -0.5, y: 0 },
-                { text: "余計な波風を立てたくないので、できるだけ当たり障りないポジションでやり過ごす", x: -1.0, y: 0 }
-            ]
-        },
-        {
-            text: "人から何かを教えてもらうとき、心の中でどう思いがち？",
-            options: [
-                { text: "「自分のやり方や美学とはちょっと違うけど…まぁ、言われた通りにしておくか」", x: 1.0, y: 0 },
-                { text: "「お、それ面白そうだな！」と、新しい刺激やノリをそのまま素直に吸収する", x: 0.5, y: 0 },
-                { text: "「はい、分かりました！」と特に深く考えず、言われたとおりにテキパキこなす", x: -0.5, y: 0 },
-                { text: "「めんどくさいな…できれば全部代わりにやってくれないかな」と内心思っている", x: -1.0, y: 0 }
-            ]
-        },
-        {
-            text: "完全に自由な休日ができたとき、目覚めて最初にすることは？",
-            options: [
-                { text: "「今日はこれをやる」と決めたスケジュールを頭の中で組み立ててから起き上がる", x: 1.0, y: 0 },
-                { text: "「せっかくだし、思いっきり遠出しようかな」とその日の勢いで行き先を決める", x: 0.5, y: 0 },
-                { text: "特に予定は決めず、誰かからのお誘いやSNSの流れる情報にその都度反応する", x: -0.5, y: 0 },
-                { text: "スマホをいじりながら、布団の中で限界までダラダラして一歩も外に出ない", x: -1.0, y: 0 }
-            ]
-        }
-    ];
-
-    const poolPart2 = [
-        {
-            text: "2人きりの静かな空間で、相手と向かい合って座ったときの理想の距離感は？",
-            options: [
-                { text: "自分の好みのペースに合わせて、じれったいほど丁寧に距離を縮めてきてほしい", x: -0.8, y: -0.8 },
-                { text: "「まだ動いちゃダメ」と視線で逃げ場を塞がれ、じわじわと追い詰められたい", x: 0.8, y: -0.8 },
-                { text: "細かいことは気にせず、ただただ深い温もりと心地よさにすっぽり包み込まれたい", x: -0.8, y: 0.8 },
-                { text: "自分の意志とは関係なく、容赦ない圧倒的なアタックで一気に世界を奪われたい", x: 0.8, y: 0.8 }
-            ]
-        },
-        {
-            text: "耳元でふとささやかれたとき、一番ゾクッとするニュアンスは？",
-            options: [
-                { text: "「ねぇ、今の私の表情、どう見えてる…？」と、お互いの色気や空気感をじっくり味わう言葉", x: -0.8, y: -0.8 },
-                { text: "「私の言うこと、ちゃんと聞けるよね？」と、有無を言わせず主導権を奪っていく言葉", x: 0.8, y: -0.8 },
-                { text: "「よく頑張りました、よしよし…♡」と、すべてを全肯定して甘やかしてくれる言葉", x: -0.8, y: 0.8 },
-                { text: "「もう逃がさないから…」と、理性がプツンと途切れるような強烈なフレーズ", x: 0.8, y: 0.8 }
-            ]
-        },
-        {
-            text: "相手に身動きが取れなくなっているとき、頭のなかで考えていることは？",
-            options: [
-                { text: "「この絶妙な距離感と、最高のムードにこのままうっとり酔いしれていたい…」", x: -0.8, y: -0.8 },
-                { text: "「もっと厳しくして、もっと頭がおかしくなるくらい狂わせてくれ…」", x: 0.8, y: -0.8 },
-                { text: "「このまま時間が止まって、ずっとこの心地よさに包まれていたいのにな…」", x: -0.8, y: 0.8 },
-                { text: "「あばばば…もう何も考えられない…どうにでもして…」", x: 0.8, y: 0.8 }
-            ]
-        },
-        {
-            text: "気持ちよさがピークに達して、理性がトローンと溶けかけているときの理想は？",
-            options: [
-                { text: "自分の美意識や空間の心地よさが最高潮に達し、うっとりと満たされた状態でいたい", x: -0.8, y: -0.8 },
-                { text: "相手の手のひらの上で完全にコントロールされ、普段の自分を完全にへし折られたい", x: 0.8, y: -0.8 },
-                { text: "すべてを包み込むような温もりと、絶対的な安心感の中でトロトロにとろけたい", x: -0.8, y: 0.8 },
-                { text: "思考が完全に真っ白になって、自分の意志とは関係なく快感の波に飲み込まれたい", x: 0.8, y: 0.8 }
-            ]
-        },
-        {
-            text: "これから濃厚な時間に身を委ねる直前、心の中で密かに願っていることは？",
-            options: [
-                { text: "自分好みの最高のシチュエーションで、スマートにトロッとさせてほしい", x: -0.8, y: -0.8 },
-                { text: "限界まで自分を追い詰めて、普段の理性を粉々に粉砕してほしい", x: 0.8, y: -0.8 },
-                { text: "痛いことや面倒なことは抜きで、とにかく確実にとろけるほど気持ちよくしてほしい", x: -0.8, y: 0.8 },
-                { text: "細かいことはいいから、とにかく脳の配線を焼き切るような強烈な刺激をくれ", x: 0.8, y: 0.8 }
-            ]
-        }
-    ];
-
     let currentQuestions = [];
     let currentIndex = 0;
     let totalScoreX = 0;
@@ -635,13 +539,16 @@
     let userName = "";
     let currentResultTitle = "";
 
-    function shuffleArray(array) {
-        let arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
+    // 選択肢のタイプ（"AS", "AH", "PS", "PH"など）から座標の増減値（x, y）に変換する関数
+    function convertTypeToScore(typeStr) {
+        let t = typeStr ? typeStr.trim().toUpperCase() : "AS";
+        // デフォルトの割り振りの例：
+        // AS (左上: X-, Y-) | AH (右上: X+, Y-) | PS (左下: X-, Y+) | PH (右下: X+, Y+)
+        if (t === "AS") return { x: -0.8, y: -0.8 };
+        if (t === "AH") return { x: 0.8, y: -0.8 };
+        if (t === "PS") return { x: -0.8, y: 0.8 };
+        if (t === "PH") return { x: 0.8, y: 0.8 };
+        return { x: 0, y: 0 };
     }
 
     function goToStartScreen() {
@@ -649,21 +556,43 @@
         document.getElementById('start-screen').classList.add('active');
     }
 
-    function startQuiz() {
+    // スプレッドシートからランダムに5問ずつ（計10問）取得してスタート
+    async function startQuiz() {
         const inputVal = document.getElementById('user-name').value.trim();
         userName = inputVal !== "" ? inputVal + "ご主人様" : "ご主人様";
         
-        const shuffledPart1 = shuffleArray(poolPart1);
-        const shuffledPart2 = shuffleArray(poolPart2);
-        currentQuestions = [...shuffledPart1, ...shuffledPart2];
+        // 💡ここに【設問用スプレッドシート】のGASウェブアプリのURLを貼り付けてください
+        const QUESTION_GAS_URL = "YOUR_QUESTION_GAS_WEB_APP_URL_HERE"; 
 
-        currentIndex = 0;
-        totalScoreX = 0;
-        totalScoreY = 0;
+        try {
+            // パラメータを分けて Front と Back からそれぞれランダム5問を取得
+            const [frontRes, backRes] = await Promise.all([
+                fetch(`${QUESTION_GAS_URL}?sheet=front`),
+                fetch(`${QUESTION_GAS_URL}?sheet=back`)
+            ]);
 
-        document.getElementById('start-screen').classList.remove('active');
-        document.getElementById('quiz-screen').classList.add('active');
-        showQuestion();
+            const frontQuestions = await frontRes.json();
+            const backQuestions = await backRes.json();
+
+            if (!Array.isArray(frontQuestions) || !Array.isArray(backQuestions)) {
+                throw new Error("データの取得に失敗しました");
+            }
+
+            // 合体して全10問（前半5問・後半5問）にする
+            currentQuestions = [...frontQuestions, ...backQuestions];
+
+            currentIndex = 0;
+            totalScoreX = 0;
+            totalScoreY = 0;
+
+            document.getElementById('start-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            showQuestion();
+
+        } catch (error) {
+            console.error("設問の読み込みエラー:", error);
+            alert("設問の読み込みに失敗しました。通信環境やGASのURLを確認してください。");
+        }
     }
 
     function showQuestion() {
@@ -674,7 +603,7 @@
 
         const q = currentQuestions[currentIndex];
         document.getElementById('question-number').innerText = `QUESTION ${currentIndex + 1} / ${currentQuestions.length}`;
-        document.getElementById('question-text').innerText = q.text;
+        document.getElementById('question-text').innerText = q.question;
         
         const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
         document.getElementById('progress-bar').style.width = progressPercent + '%';
@@ -682,11 +611,13 @@
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
 
-        q.options.forEach((opt) => {
+        q.choices.forEach((choice) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerText = opt.text;
-            btn.onclick = () => selectOption(opt.x, opt.y);
+            btn.innerText = choice.text;
+            
+            const score = convertTypeToScore(choice.type);
+            btn.onclick = () => selectOption(score.x, score.y);
             optionsContainer.appendChild(btn);
         });
     }
@@ -698,10 +629,10 @@
         showQuestion();
     }
 
-    // スプレッドシートへ結果を送信する関数
+    // 結果のデータを記録するスプレッドシートへ自動送信する関数
     function sendResultToSheet(name, resultTitle) {
-        // 💡ここにあなたのGASのウェブアプリURLを貼り付けてください
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxFoWIX21qRDFUQ5c_X-xPw4CY6GLC7ll9-sp4BmkjP8_ET1_rvHcnSA9lfqCYCuFA5Dg/exec"; 
+        // 💡ここに【結果データ用スプレッドシート】のGASウェブアプリのURLを貼り付けてください
+        const RESULT_GAS_URL = "YOUR_RESULT_GAS_WEB_APP_URL_HERE"; 
 
         const now = new Date();
         const timestamp = now.getFullYear() + '/' +
@@ -717,7 +648,7 @@
             resultType: resultTitle
         };
 
-        fetch(WEB_APP_URL, {
+        fetch(RESULT_GAS_URL, {
             method: "POST",
             mode: "no-cors",
             headers: {
@@ -742,8 +673,8 @@
         let recDesc = "";
         let recUrl = "";
 
-        let posX = 50 + (totalScoreX * 8);
-        let posY = 50 + (totalScoreY * 8);
+        let posX = 50 + (totalScoreX * 6);
+        let posY = 50 + (totalScoreY * 6);
         posX = Math.max(15, Math.min(85, posX));
         posY = Math.max(15, Math.min(85, posY));
 
@@ -776,7 +707,7 @@
             punchline = "「強烈な刺激の前に白目をむいて、快楽のモブと化す人」";
             featureDesc = "理性や社会的立場を一時的に完全に忘れ去り、強烈なインパクトと圧倒的な物量による刺激を求めるタイプです。複雑なプロセスや思考を挟む余地のない、本能を直接揺さぶるような強制的なトランス状態に身を委ねることで、最高の解放感を味わいます。";
             recTitle = "【PH】拘束・強制二度ヌキコース";
-            recDesc = "動けない状態に拘束されてやられたい放題責められる・・・！\n自制できないからこそ新たな境地を発見できるかも！\n必ず二度ヌキにチャレンジしていただきます！\n30分5,000円～";
+            recDesc = "動けない状態に拘束されてやられたい放題責められる・・・！\n自制できないからこそ新たな境地を開拓できるかも！\n必ず二度ヌキにチャレンジしていただきます！\n30分5,000円～";
             recUrl = "http://shibuyakarinto.com/profile.php?staff_id=18605";
         }
 
@@ -787,7 +718,7 @@
         document.getElementById('rec-desc').innerText = recDesc;
         document.getElementById('rec-link').href = recUrl;
 
-        // 💡リザルト表示時にスプレッドシートへ自動送信をを実行
+        // 💡リザルト到達時に結果データ用スプレッドシートへ自動送信
         sendResultToSheet(userName, currentResultTitle);
     }
 
